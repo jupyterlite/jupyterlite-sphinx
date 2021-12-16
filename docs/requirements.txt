@@ -1,1 +1,1 @@
-jupyterlite-sphinx
+../
