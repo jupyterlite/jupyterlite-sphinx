@@ -1,17 +1,15 @@
-from docutils.parsers import Parser
+import subprocess
+
+from sphinx.application import Sphinx
 
 
-class JupyterLiteParser(Parser):
-    supported = ('notebook',)
 
-    def parse(self, inputstring, document):
-        print(dir(self))
-
-        print(document)
+def jupyterlite_build(app: Sphinx, error):
+    print("[jupyterlite-sphinx] Running JupyterLite build")
+    subprocess.call(["jupyter", "lite", "build", app.srcdir, app.outdir])
 
 
 def setup(app):
-    print(dir(app))
+    # print(dir(app))
 
-    app.add_source_suffix('.ipynb', 'notebook')
-    app.add_source_parser(JupyterLiteParser)
+    app.connect("config-inited", jupyterlite_build)
