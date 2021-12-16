@@ -5,7 +5,6 @@ extensions = [
 ]
 
 master_doc = 'index'
-source_suffix = '.rst'
 
 # General information about the project.
 project = 'test_docs'
