@@ -10,6 +10,4 @@ def jupyterlite_build(app: Sphinx, error):
 
 
 def setup(app):
-    # print(dir(app))
-
     app.connect("config-inited", jupyterlite_build)
