@@ -13,6 +13,7 @@ from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
 
 
+CONTENT_DIR = "_contents"
 JUPYTERLITE_DIR = "lite"
 
 
@@ -118,9 +119,8 @@ class RetroliteDirective(SphinxDirective):
         notebook_name = os.path.basename(notebook)
 
         notebooks_dir = (
-            Path(self.env.app.outdir)
-            / JUPYTERLITE_DIR
-            / "files"
+            Path(self.env.app.srcdir)
+            / CONTENT_DIR
             / notebook_name
         )
 
@@ -146,6 +146,11 @@ class RetroLiteParser(rst.Parser):
         )
 
 
+def inited(app: Sphinx, error):
+    # Create the content dir
+    os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
+
+
 def jupyterlite_build(app: Sphinx, error):
     print("[jupyterlite-sphinx] Running JupyterLite build")
     subprocess.call(
@@ -153,6 +158,8 @@ def jupyterlite_build(app: Sphinx, error):
             "jupyter",
             "lite",
             "build",
+            "--contents",
+            os.path.join(app.srcdir, CONTENT_DIR),
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
         ]
@@ -160,6 +167,7 @@ def jupyterlite_build(app: Sphinx, error):
 
     # Cleanup
     try:
+        shutil.rmtree(os.path.join(app.srcdir, CONTENT_DIR))
         os.remove(".jupyterlite.doit.db")
     except FileNotFoundError:
         pass
@@ -167,7 +175,9 @@ def jupyterlite_build(app: Sphinx, error):
 
 def setup(app):
     # Build the JupyterLite output
-    app.connect("config-inited", jupyterlite_build)
+    app.connect("config-inited", inited)
+    # We need to build JupyterLite at the end, when all the content was created
+    app.connect("build-finished", jupyterlite_build)
 
     # Initialize RetroLite directive and parser
     app.add_node(
