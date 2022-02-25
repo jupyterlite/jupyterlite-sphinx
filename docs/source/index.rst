@@ -1,7 +1,17 @@
 jupyterlite-sphinx
 ==================
 
+JupyterLab:
+-----------
+
+`JupyterLab <./lite/lab/index.html>`_
+
 Retrolab:
 ---------
 
-.. _a link: ./retro/index.html
+`Retrolab <./lite/retro/index.html>`_
+
+Replite:
+--------
+
+.. replite::
