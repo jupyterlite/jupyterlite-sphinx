@@ -8,6 +8,9 @@ from docutils.nodes import SkipNode, Element
 from sphinx.application import Sphinx
 
 
+JUPYTERLITE_DIR = 'lite'
+
+
 # Used for nodes that do not need to be rendered
 def skip(self, node):
     raise SkipNode
@@ -37,7 +40,7 @@ class RepliteIframe(Element):
         )
 
         return (
-            f'<iframe src="lite/repl/index.html?{options}"'
+            f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
             'width="100%" height="100%"></iframe>'
         )
 
@@ -69,7 +72,7 @@ def jupyterlite_build(app: Sphinx, error):
     print("[jupyterlite-sphinx] Running JupyterLite build")
     subprocess.call([
         "jupyter", "lite", "init",
-        "--output-dir", os.path.join(app.outdir, 'lite')
+        "--output-dir", os.path.join(app.outdir, JUPYTERLITE_DIR)
     ])
 
     # Cleanup
