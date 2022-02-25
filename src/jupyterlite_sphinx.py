@@ -120,12 +120,12 @@ class RetroliteDirective(SphinxDirective):
         notebooks_dir = (
             Path(self.env.app.outdir)
             / JUPYTERLITE_DIR
-            / "retro"
-            / "notebooks"
+            / "files"
             / notebook_name
         )
 
         # Copy the Notebook for RetroLite to find
+        os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
         shutil.copyfile(notebook, str(notebooks_dir))
 
         return [RetroliteIframe(notebook=notebook_name)]
@@ -152,7 +152,7 @@ def jupyterlite_build(app: Sphinx, error):
         [
             "jupyter",
             "lite",
-            "init",
+            "build",
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
         ]
