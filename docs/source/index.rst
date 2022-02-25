@@ -19,34 +19,34 @@ Replite directive:
 .. code-block:: rst
 
     .. replite::
-       :kernel: python3
+       :kernel: python
 
 .. replite::
-   :kernel: python3
+   :kernel: python
 
 .. code-block:: rst
 
     .. replite::
-       :kernel: python3
+       :kernel: python
 
         print('Hello, World!')
 
 .. replite::
-   :kernel: python3
+   :kernel: python
 
     print('Hello, World!')
 
 .. code-block:: rst
 
     .. replite::
-       :kernel: python3
+       :kernel: python
        :toolbar: 1
        :theme: JupyterLab Dark
 
         print('Hello, World!')
 
 .. replite::
-   :kernel: python3
+   :kernel: python
    :toolbar: 1
    :theme: JupyterLab Dark
 
