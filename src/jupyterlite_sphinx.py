@@ -29,9 +29,11 @@ class RepliteIframe(Element):
     """
 
     def __init__(
-            self, rawsource="", *children, replite_options=None, **attributes
+            self, rawsource="", *children, width=None, height=None,
+            replite_options=None, **attributes
             ):
-        super().__init__("", replite_options=replite_options)
+        super().__init__(
+            "", width=width, height=height, replite_options=replite_options)
 
     def html(self):
         replite_options = self["replite_options"]
@@ -39,9 +41,12 @@ class RepliteIframe(Element):
             [f'{key}={value}' for key, value in replite_options.items()]
         )
 
+        width = self["width"] if self["width"] is not None else "100%"
+        height = self["height"] if self["height"] is not None else "100%"
+
         return (
             f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
-            'width="100%" height="100%"></iframe>'
+            f'width="{width}" height="{height}"></iframe>'
         )
 
 
@@ -54,18 +59,25 @@ class RepliteDirective(Directive):
     has_content = True
     required_arguments = 0
     option_spec = {
+        'width': directives.unchanged,
+        'height': directives.unchanged,
         'kernel': directives.unchanged,
         'toolbar': directives.unchanged,
         'theme': directives.unchanged,
     }
 
     def run(self):
-        replite_options = {**self.options}
+        width = self.options.pop('width', None)
+        height = self.options.pop('height', None)
 
         if self.content:
-            replite_options["code"] = ''.join(self.content)
+            self.options["code"] = ''.join(self.content)
 
-        return [RepliteIframe(replite_options=replite_options)]
+        return [
+            RepliteIframe(
+                width=width, height=height, replite_options=self.options
+            )
+        ]
 
 
 def jupyterlite_build(app: Sphinx, error):
