@@ -2,7 +2,7 @@ import os
 
 import subprocess
 
-from docutils.parsers.rst import Directive
+from docutils.parsers.rst import directives, Directive
 from docutils.nodes import SkipNode, Element
 
 from sphinx.application import Sphinx
@@ -31,20 +31,38 @@ class RepliteIframe(Element):
         super().__init__("", replite_options=replite_options)
 
     def html(self):
-        # replite_options = self["replite_options"]
+        replite_options = self["replite_options"]
+        options = '&'.join(
+            [f'{key}={value}' for key, value in replite_options.items()]
+        )
+
         return (
-            '<iframe src="lite/repl/index.html" width="100%" height="100%"></iframe>'
+            f'<iframe src="lite/repl/index.html?{options}"'
+            'width="100%" height="100%"></iframe>'
         )
 
 
 class RepliteDirective(Directive):
+    """The ``.. replite::`` directive.
+
+    Adds a replite console to the docs.
+    """
+
+    has_content = True
+    required_arguments = 0
+    option_spec = {
+        'kernel': directives.unchanged,
+        'toolbar': directives.unchanged,
+        'theme': directives.unchanged,
+    }
 
     def run(self):
-        print('state_machine', self.state_machine)
-        print('content', self.content)
-        print('arguments', self.arguments)
-        # TODO Extract replite options from arguments?
-        return [RepliteIframe(replite_options={})]
+        replite_options = {**self.options}
+
+        if self.content:
+            replite_options["code"] = ''.join(self.content)
+
+        return [RepliteIframe(replite_options=replite_options)]
 
 
 def jupyterlite_build(app: Sphinx, error):
