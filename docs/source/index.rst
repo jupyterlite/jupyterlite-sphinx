@@ -12,10 +12,10 @@ Retrolab:
 `Retrolab <./lite/retro/index.html>`_
 
 .. toctree::
-    :caption: Notebooks rendered with Retrolab
+    :caption: Notebooks rendered with RetroLite:
     :maxdepth: 2
 
-    DocNotebook
+    NotebookLite
 
 Replite directive:
 ------------------
