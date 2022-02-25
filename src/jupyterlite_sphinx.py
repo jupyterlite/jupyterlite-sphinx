@@ -98,7 +98,7 @@ class RetroliteIframe(Element):
         notebook = self["notebook"]
 
         return (
-            f'<iframe src="{JUPYTERLITE_DIR}/retro/notebooks/{notebook}"'
+            f'<iframe src="{JUPYTERLITE_DIR}/retro/notebooks/?path={notebook}"'
             'width="100%" height=1000px></iframe>'
         )
 
