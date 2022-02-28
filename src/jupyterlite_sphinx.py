@@ -168,6 +168,8 @@ def jupyterlite_build(app: Sphinx, error):
             ]
         )
 
+        assert os.path.exists(os.path.join(app.outdir, JUPYTERLITE_DIR, 'api', 'contents', 'all.json'))
+
         print("[jupyterlite-sphinx] JupyterLite build done")
 
     # Cleanup
