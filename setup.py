@@ -9,9 +9,10 @@ setup(
     python_requires='>=3.7',
     install_requires=[
         'docutils',
-        'jupyterlite===0.1.0b0',
+        'jupyterlite',
         'sphinx>=1.8',
         'jupyter_server',
+        'jupyterlab_server',
     ],
     author='Martin Renou',
     author_email='martin.renou@gmail.com',
