@@ -17,6 +17,8 @@ from sphinx.util.docutils import SphinxDirective
 CONTENT_DIR = "_contents"
 JUPYTERLITE_DIR = "lite"
 
+IFRAME_STYLE = "border-width: 1px; border-style: solid;"
+
 
 # Used for nodes that do not need to be rendered
 def skip(self, node):
@@ -57,7 +59,7 @@ class RepliteIframe(Element):
 
         return (
             f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
-            f'width="{width}" height="{height}"></iframe>'
+            f'width="{width}" height="{height}" style="{IFRAME_STYLE}"></iframe>'
         )
 
 
@@ -101,7 +103,7 @@ class RetroliteIframe(Element):
 
         return (
             f'<iframe src="{JUPYTERLITE_DIR}/retro/notebooks/?path={notebook}"'
-            'width="100%" height=1000px></iframe>'
+            f'width="100%" height="1000px" style="{IFRAME_STYLE}"></iframe>'
         )
 
 
