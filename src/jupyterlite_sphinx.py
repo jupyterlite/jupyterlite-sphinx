@@ -160,6 +160,7 @@ def jupyterlite_build(app: Sphinx, error):
                 "jupyter",
                 "lite",
                 "build",
+                "--debug",
                 "--contents",
                 os.path.join(app.srcdir, CONTENT_DIR),
                 "--output-dir",
