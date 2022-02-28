@@ -156,6 +156,10 @@ def jupyterlite_build(app: Sphinx, error):
     if app.builder.format == 'html':
         print("[jupyterlite-sphinx] Running JupyterLite build")
 
+        config = []
+        if app.env.config.jupyterlite_config:
+            config = ["--config", app.env.config.jupyterlite_config]
+
         with tempfile.TemporaryDirectory() as tmp_dir:
             subprocess.check_output(
                 [
@@ -163,6 +167,7 @@ def jupyterlite_build(app: Sphinx, error):
                     "lite",
                     "build",
                     "--debug",
+                    *config,
                     "--lite-dir",
                     tmp_dir,
                     "--contents",
@@ -187,6 +192,9 @@ def setup(app):
     app.connect("config-inited", inited)
     # We need to build JupyterLite at the end, when all the content was created
     app.connect("build-finished", jupyterlite_build)
+
+    # Config options
+    app.add_config_value("jupyterlite_config", None, rebuild="html")
 
     # Initialize RetroLite directive and parser
     app.add_node(
