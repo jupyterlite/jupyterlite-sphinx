@@ -41,8 +41,8 @@ class RepliteIframe(Element):
         self,
         rawsource="",
         *children,
-        width=None,
-        height=None,
+        width="100%",
+        height="100%",
         replite_options=None,
         **attributes,
     ):
@@ -54,12 +54,9 @@ class RepliteIframe(Element):
         replite_options = self["replite_options"]
         options = "&".join([f"{key}={value}" for key, value in replite_options.items()])
 
-        width = self["width"] if self["width"] is not None else "100%"
-        height = self["height"] if self["height"] is not None else "100%"
-
         return (
             f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
-            f'width="{width}" height="{height}" style="{IFRAME_STYLE}"></iframe>'
+            f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
         )
 
 
@@ -80,8 +77,8 @@ class RepliteDirective(SphinxDirective):
     }
 
     def run(self):
-        width = self.options.pop("width", None)
-        height = self.options.pop("height", None)
+        width = self.options.pop("width", "100%")
+        height = self.options.pop("height", "100%")
 
         if self.content:
             self.options["code"] = "".join(self.content)
@@ -95,15 +92,23 @@ class RetroliteIframe(Element):
     Renders an iframe that shows a Notebook with RetroLite.
     """
 
-    def __init__(self, rawsource="", *children, notebook=None, **attributes):
-        super().__init__("", notebook=notebook)
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        width="100%",
+        height="1000px",
+        notebook=None,
+        **attributes,
+    ):
+        super().__init__("", notebook=notebook, width=width, height=height)
 
     def html(self):
         notebook = self["notebook"]
 
         return (
             f'<iframe src="{JUPYTERLITE_DIR}/retro/notebooks/?path={notebook}"'
-            f'width="100%" height="1000px" style="{IFRAME_STYLE}"></iframe>'
+            f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
         )
 
 
@@ -121,17 +126,16 @@ class RetroliteDirective(SphinxDirective):
         notebook = self.arguments[0]
         notebook_name = os.path.basename(notebook)
 
-        notebooks_dir = (
-            Path(self.env.app.srcdir)
-            / CONTENT_DIR
-            / notebook_name
-        )
+        width = self.options.get("width", "100%")
+        height = self.options.get("height", "1000px")
+
+        notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
 
         # Copy the Notebook for RetroLite to find
         os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
         shutil.copyfile(notebook, str(notebooks_dir))
 
-        return [RetroliteIframe(notebook=notebook_name)]
+        return [RetroliteIframe(notebook=notebook_name, width=width, height=height)]
 
 
 class RetroLiteParser(rst.Parser):
@@ -155,7 +159,7 @@ def inited(app: Sphinx, error):
 
 
 def jupyterlite_build(app: Sphinx, error):
-    if app.builder.format == 'html':
+    if app.builder.format == "html":
         print("[jupyterlite-sphinx] Running JupyterLite build")
 
         config = []
