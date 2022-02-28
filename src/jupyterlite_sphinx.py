@@ -1,5 +1,6 @@
 import os
 import shutil
+import tempfile
 
 from pathlib import Path
 
@@ -155,20 +156,21 @@ def jupyterlite_build(app: Sphinx, error):
     if app.builder.format == 'html':
         print("[jupyterlite-sphinx] Running JupyterLite build")
 
-        subprocess.check_output(
-            [
-                "jupyter",
-                "lite",
-                "build",
-                "--debug",
-                "--contents",
-                os.path.join(app.srcdir, CONTENT_DIR),
-                "--output-dir",
-                os.path.join(app.outdir, JUPYTERLITE_DIR),
-            ]
-        )
-
-        assert os.path.exists(os.path.join(app.outdir, JUPYTERLITE_DIR, 'api', 'contents', 'all.json'))
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            subprocess.check_output(
+                [
+                    "jupyter",
+                    "lite",
+                    "build",
+                    "--debug",
+                    "--lite-dir",
+                    tmp_dir,
+                    "--contents",
+                    os.path.join(app.srcdir, CONTENT_DIR),
+                    "--output-dir",
+                    os.path.join(app.outdir, JUPYTERLITE_DIR),
+                ]
+            )
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
