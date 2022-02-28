@@ -55,8 +55,12 @@ It takes the name of the Notebook as argument:
 .. code-block:: rst
 
     .. retrolite:: my_notebook.ipynb
+       :width: 100%
+       :height: 600px
 
 .. retrolite:: my_notebook.ipynb
+   :width: 100%
+   :height: 600px
 
 JupyterLab and RetroLab deployed for you
 ----------------------------------------
