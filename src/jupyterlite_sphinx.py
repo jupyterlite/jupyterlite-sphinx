@@ -153,17 +153,18 @@ def inited(app: Sphinx, error):
 
 def jupyterlite_build(app: Sphinx, error):
     print("[jupyterlite-sphinx] Running JupyterLite build")
-    subprocess.call(
-        [
-            "jupyter",
-            "lite",
-            "build",
-            "--contents",
-            os.path.join(app.srcdir, CONTENT_DIR),
-            "--output-dir",
-            os.path.join(app.outdir, JUPYTERLITE_DIR),
-        ]
-    )
+    if app.builder.format == 'html':
+        subprocess.call(
+            [
+                "jupyter",
+                "lite",
+                "build",
+                "--contents",
+                os.path.join(app.srcdir, CONTENT_DIR),
+                "--output-dir",
+                os.path.join(app.outdir, JUPYTERLITE_DIR),
+            ]
+        )
 
     # Cleanup
     try:
