@@ -6,6 +6,10 @@ A sphinx extension that provides utilities for embedding JupyterLite in your doc
 
 https://jupyterlite-sphinx.readthedocs.io/en/latest
 
+### Example
+
+A practical example is the ipycanvas documentation: https://ipycanvas.readthedocs.io/en/master
+
 ### Installation:
 
 ```bash
