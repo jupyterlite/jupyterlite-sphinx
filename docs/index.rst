@@ -16,7 +16,7 @@ then you need to add the ``jupyterlite-sphinx`` extension to your ``conf.py`` fi
 
     extensions = [
         'jupyterlite_sphinx',
-        # And other extensions
+        # And other sphinx extensions
         # ...
     ]
 
