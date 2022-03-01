@@ -120,7 +120,10 @@ class RetroliteDirective(SphinxDirective):
 
     has_content = False
     required_arguments = 1
-    option_spec = {}
+    option_spec = {
+        "width": directives.unchanged,
+        "height": directives.unchanged,
+    }
 
     def run(self):
         notebook = self.arguments[0]
