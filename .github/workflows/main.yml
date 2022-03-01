@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.9']
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: jupyterlite-sphinx
+        environment-file: dev-environment.yml
+        python-version: ${{ matrix.python-version }}
+        mamba-version: "*"
+        auto-activate-base: false
+        channels: conda-forge
+
+    - name: Install jupyterlite-sphinx
+      run: pip install -e .
+
+    - name: Build docs
+      run: sphinx-build . build -vvv
+      working-directory: docs
+
+    - name: Test PEP8
+      run: black --check src

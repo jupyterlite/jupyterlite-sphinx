@@ -1,0 +1,13 @@
+name: jupyterlite-sphinx-dev
+channels:
+    - conda-forge
+dependencies:
+    - pip
+    - jupyter_server
+    - jupyterlab_server
+    - pydata-sphinx-theme
+    - docutils
+    - sphinx
+    - black
+    - pip:
+        - jupyterlite
