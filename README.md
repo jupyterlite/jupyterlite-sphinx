@@ -1,6 +1,6 @@
-# JupyterLite sphinx (Work in progress)
+# JupyterLite Sphinx
 
-A sphinx extension that provides utilities for embedding JupyterLite in your docs
+A Sphinx extension that provides utilities for embedding JupyterLite in your docs
 
 ### Docs
 
