@@ -106,8 +106,14 @@ class RetroliteIframe(Element):
     def html(self):
         notebook = self["notebook"]
 
+        src = (
+            f"{JUPYTERLITE_DIR}/retro/notebooks/?path={notebook}"
+            if notebook is not None
+            else f"{JUPYTERLITE_DIR}/retro"
+        )
+
         return (
-            f'<iframe src="{JUPYTERLITE_DIR}/retro/notebooks/?path={notebook}"'
+            f'<iframe src="{src}"'
             f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
         )
 
@@ -119,31 +125,34 @@ class RetroliteDirective(SphinxDirective):
     """
 
     has_content = False
-    required_arguments = 1
+    optional_arguments = 1
     option_spec = {
         "width": directives.unchanged,
         "height": directives.unchanged,
     }
 
     def run(self):
-        notebook = self.arguments[0]
-
-        # If we didn't get an absolute path,
-        # try to find the Notebook relatively to the source
-        if not os.path.isabs(notebook):
-            source_location = os.path.dirname(self.get_source_info()[0])
-            notebook = os.path.join(source_location, notebook)
-
-        notebook_name = os.path.basename(notebook)
-
         width = self.options.get("width", "100%")
         height = self.options.get("height", "1000px")
 
-        notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
+        if self.arguments:
+            notebook = self.arguments[0]
 
-        # Copy the Notebook for RetroLite to find
-        os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
-        shutil.copyfile(notebook, str(notebooks_dir))
+            # If we didn't get an absolute path,
+            # try to find the Notebook relatively to the source
+            if not os.path.isabs(notebook):
+                source_location = os.path.dirname(self.get_source_info()[0])
+                notebook = os.path.join(source_location, notebook)
+
+            notebook_name = os.path.basename(notebook)
+
+            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
+
+            # Copy the Notebook for RetroLite to find
+            os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
+            shutil.copyfile(notebook, str(notebooks_dir))
+        else:
+            notebook_name = None
 
         return [RetroliteIframe(notebook=notebook_name, width=width, height=height)]
 

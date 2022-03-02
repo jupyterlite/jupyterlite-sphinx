@@ -62,6 +62,19 @@ It takes the name of the Notebook as argument:
    :width: 100%
    :height: 600px
 
+Or you can simply show the filetree:
+
+.. code-block:: rst
+
+    .. retrolite::
+       :width: 100%
+       :height: 600px
+
+.. retrolite::
+   :width: 100%
+   :height: 600px
+
+
 JupyterLab and RetroLab deployed for you
 ----------------------------------------
 
