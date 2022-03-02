@@ -86,12 +86,7 @@ class RepliteDirective(SphinxDirective):
         return [RepliteIframe(width=width, height=height, replite_options=self.options)]
 
 
-class RetroliteIframe(Element):
-    """Appended to the doctree by the RetroliteDirective directive
-
-    Renders an iframe that shows a Notebook with RetroLite.
-    """
-
+class _LiteIframe(Element):
     def __init__(
         self,
         rawsource="",
@@ -107,9 +102,9 @@ class RetroliteIframe(Element):
         notebook = self["notebook"]
 
         src = (
-            f"{JUPYTERLITE_DIR}/retro/notebooks/?path={notebook}"
+            f"{JUPYTERLITE_DIR}/{self.lite_app}/{self.notebooks_path}?path={notebook}"
             if notebook is not None
-            else f"{JUPYTERLITE_DIR}/retro"
+            else f"{JUPYTERLITE_DIR}/{self.lite_app}"
         )
 
         return (
@@ -118,11 +113,27 @@ class RetroliteIframe(Element):
         )
 
 
-class RetroliteDirective(SphinxDirective):
-    """The ``.. retrolite::`` directive.
+class JupyterLiteIframe(_LiteIframe):
+    """Appended to the doctree by the JupyterliteDirective directive
 
-    Renders a Notebook with RetroLite in the docs.
+    Renders an iframe that shows a Notebook with JupyterLite.
     """
+
+    lite_app = "lab"
+    notebooks_path = ""
+
+
+class RetroLiteIframe(_LiteIframe):
+    """Appended to the doctree by the RetroliteDirective directive
+
+    Renders an iframe that shows a Notebook with RetroLite.
+    """
+
+    lite_app = "retro"
+    notebooks_path = "notebooks/"
+
+
+class _LiteDirective(SphinxDirective):
 
     has_content = False
     optional_arguments = 1
@@ -154,7 +165,25 @@ class RetroliteDirective(SphinxDirective):
         else:
             notebook_name = None
 
-        return [RetroliteIframe(notebook=notebook_name, width=width, height=height)]
+        return [self.iframe_cls(notebook=notebook_name, width=width, height=height)]
+
+
+class JupyterLiteDirective(_LiteDirective):
+    """The ``.. jupyterlite::`` directive.
+
+    Renders a Notebook with JupyterLite in the docs.
+    """
+
+    iframe_cls = JupyterLiteIframe
+
+
+class RetroLiteDirective(_LiteDirective):
+    """The ``.. retrolite::`` directive.
+
+    Renders a Notebook with RetroLite in the docs.
+    """
+
+    iframe_cls = RetroLiteIframe
 
 
 class RetroLiteParser(rst.Parser):
@@ -213,7 +242,6 @@ def jupyterlite_build(app: Sphinx, error):
 
 
 def setup(app):
-    # Build the JupyterLite output
     app.connect("config-inited", inited)
     # We need to build JupyterLite at the end, when all the content was created
     app.connect("build-finished", jupyterlite_build)
@@ -221,17 +249,27 @@ def setup(app):
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
 
-    # Initialize RetroLite directive and parser
+    # Initialize RetroLite and JupyterLite directives
     app.add_node(
-        RetroliteIframe,
+        RetroLiteIframe,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),
         text=(skip, None),
         man=(skip, None),
     )
-    app.add_directive("retrolite", RetroliteDirective)
+    app.add_directive("retrolite", RetroLiteDirective)
+    app.add_node(
+        JupyterLiteIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_directive("jupyterlite", JupyterLiteDirective)
 
+    # Initialize RetroLite parser
     app.add_source_parser(RetroLiteParser)
     app.add_source_suffix(".ipynb", "jupyterlite_notebook")
 
