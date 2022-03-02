@@ -127,6 +127,13 @@ class RetroliteDirective(SphinxDirective):
 
     def run(self):
         notebook = self.arguments[0]
+
+        # If we didn't get an absolute path,
+        # try to find the Notebook relatively to the source
+        if not os.path.isabs(notebook):
+            source_location = os.path.dirname(self.get_source_info()[0])
+            notebook = os.path.join(source_location, notebook)
+
         notebook_name = os.path.basename(notebook)
 
         width = self.options.get("width", "100%")
