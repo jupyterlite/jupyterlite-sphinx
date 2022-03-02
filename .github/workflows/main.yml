@@ -36,12 +36,5 @@ jobs:
         auto-activate-base: false
         channels: conda-forge
 
-    - name: Install jupyterlite-sphinx
-      run: pip install -e .
-
-    - name: Build docs
-      run: sphinx-build . build -vvv
-      working-directory: docs
-
     - name: Test PEP8
       run: black --check src
