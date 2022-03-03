@@ -3,13 +3,16 @@ jupyterlite-sphinx
 
 A Sphinx extension that provides utilities for embedding JupyterLite in your docs.
 
-``jupyterlite-sphinx`` makes a full deployment of JupyterLite for you, you can access the JupyterLab UI and RetroLab UI following the
-``./lite/lab/index.html`` and ``./lite/retro/index.html`` relative URLs:
+``jupyterlite-sphinx`` brings the power of JupyterLite to your Sphinx documentation. It makes a full JupyterLite deployment in your docs and provide some utilities for using that deployment easily.
 
-`JupyterLab <./lite/lab/index.html>`_
+.. replite::
+   :kernel: python
+   :toolbar: 0
+   :theme: JupyterLab Light
+   :width: 100%
+   :height: 600px
 
-`Retrolab <./lite/retro/index.html>`_
-
+    print('Hello from a JupyterLite console!')
 
 .. toctree::
     :caption: Installation
@@ -25,3 +28,4 @@ A Sphinx extension that provides utilities for embedding JupyterLite in your doc
     jupyterlite
     retrolite
     replite
+    full
