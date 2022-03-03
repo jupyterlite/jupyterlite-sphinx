@@ -5,6 +5,7 @@ extensions = [
 ]
 
 html_theme = "pydata_sphinx_theme"
+html_logo = "_static/icon.svg"
 
 jupyterlite_config = "jupyterlite_config.json"
 
