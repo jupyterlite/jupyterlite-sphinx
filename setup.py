@@ -14,9 +14,9 @@ setup(
         'jupyter_server',
         'jupyterlab_server',
     ],
-    author='Martin Renou',
-    author_email='martin.renou@gmail.com',
+    author='JupyterLite Contributors',
+    author_email='',
     description='Sphinx extension for deploying JupyterLite',
-    license='MIT',
+    license='BSD-3-Clause',
     zip_safe=True,
 )
