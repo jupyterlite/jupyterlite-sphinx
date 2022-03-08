@@ -198,7 +198,10 @@ class _LiteDirective(SphinxDirective):
 
             # Copy the Notebook for RetroLite to find
             os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
-            shutil.copyfile(notebook, str(notebooks_dir))
+            try:
+                shutil.copyfile(notebook, str(notebooks_dir))
+            except shutil.SameFileError:
+                pass
         else:
             notebook_name = None
 
@@ -267,7 +270,25 @@ def jupyterlite_build(app: Sphinx, error):
         if app.env.config.jupyterlite_config:
             config = ["--config", app.env.config.jupyterlite_config]
 
+        contents = []
+        if app.env.config.jupyterlite_contents:
+            for content in app.env.config.jupyterlite_contents:
+                contents.extend(["--contents", content])
+
         command = [
+                    "jupyter",
+                    "lite",
+                    "build",
+                    "--debug",
+                    *config,
+                    *contents,
+                    "--contents",
+                    os.path.join(app.srcdir, CONTENT_DIR),
+                    "--output-dir",
+                    os.path.join(app.outdir, JUPYTERLITE_DIR),
+                ]
+
+        [
             "jupyter",
             "lite",
             "build",
@@ -310,6 +331,7 @@ def setup(app):
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", None, rebuild="html")
+    app.add_config_value("jupyterlite_contents", None, rebuild="html")
 
     # Initialize RetroLite and JupyterLite directives
     app.add_node(
