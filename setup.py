@@ -10,7 +10,7 @@ setup(
     install_requires=[
         'docutils',
         'jupyterlite',
-        'sphinx>=1.8',
+        'sphinx>=4,<5',
         'jupyter_server',
         'jupyterlab_server',
     ],
