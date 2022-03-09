@@ -201,9 +201,15 @@ class RetroLiteParser(rst.Parser):
         )
 
 
-def inited(app: Sphinx, error):
+def inited(app: Sphinx, config):
     # Create the content dir
     os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
+
+    if (
+        ".ipynb" not in config.source_suffix
+        and ".ipynb" not in app.registry.source_suffix
+    ):
+        app.add_source_suffix(".ipynb", "jupyterlite_notebook")
 
 
 def jupyterlite_build(app: Sphinx, error):
@@ -242,6 +248,9 @@ def jupyterlite_build(app: Sphinx, error):
 
 
 def setup(app):
+    # Initialize RetroLite parser
+    app.add_source_parser(RetroLiteParser)
+
     app.connect("config-inited", inited)
     # We need to build JupyterLite at the end, when all the content was created
     app.connect("build-finished", jupyterlite_build)
@@ -268,10 +277,6 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("jupyterlite", JupyterLiteDirective)
-
-    # Initialize RetroLite parser
-    app.add_source_parser(RetroLiteParser)
-    app.add_source_suffix(".ipynb", "jupyterlite_notebook")
 
     # Initialize Replite directive
     app.add_node(
