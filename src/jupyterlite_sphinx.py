@@ -213,6 +213,10 @@ def inited(app: Sphinx, config):
 
 
 def jupyterlite_build(app: Sphinx, error):
+    if error is not None:
+        # Do not build JupyterLite
+        return
+
     if app.builder.format == "html":
         print("[jupyterlite-sphinx] Running JupyterLite build")
 
