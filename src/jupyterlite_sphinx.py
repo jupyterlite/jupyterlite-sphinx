@@ -43,15 +43,26 @@ class RepliteIframe(Element):
         *children,
         width="100%",
         height="100%",
+        content=[],
         replite_options=None,
         **attributes,
     ):
         super().__init__(
-            "", width=width, height=height, replite_options=replite_options
+            "",
+            width=width,
+            height=height,
+            content=content,
+            replite_options=replite_options,
         )
 
     def html(self):
         replite_options = self["replite_options"]
+
+        code_lines = [line.strip().replace(" ", "%20") for line in self["content"]]
+        code = "%0A".join(code_lines)
+
+        replite_options["code"] = code
+
         options = "&".join([f"{key}={value}" for key, value in replite_options.items()])
 
         return (
@@ -80,10 +91,14 @@ class RepliteDirective(SphinxDirective):
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "100%")
 
-        if self.content:
-            self.options["code"] = "".join(self.content)
-
-        return [RepliteIframe(width=width, height=height, replite_options=self.options)]
+        return [
+            RepliteIframe(
+                width=width,
+                height=height,
+                content=self.content,
+                replite_options=self.options,
+            )
+        ]
 
 
 class _LiteIframe(Element):

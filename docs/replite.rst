@@ -8,18 +8,28 @@ This directive takes the same options as the ``replite`` package, see https://gi
 
     .. replite::
        :kernel: python
-       :toolbar: 1
-       :theme: JupyterLab Light
-       :width: 100%
        :height: 600px
 
-        print('Hello, World!')
+      import matplotlib.pyplot as plt
+      import numpy as np
+
+      x = np.linspace(0, 2 * np.pi, 200)
+      y = np.sin(x)
+
+      fig, ax = plt.subplots()
+      ax.plot(x, y)
+      plt.show()
 
 .. replite::
    :kernel: python
-   :toolbar: 1
-   :theme: JupyterLab Light
-   :width: 100%
    :height: 600px
 
-    print('Hello, World!')
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, 2 * np.pi, 200)
+    y = np.sin(x)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    plt.show()
