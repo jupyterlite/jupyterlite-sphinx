@@ -66,7 +66,7 @@ class RepliteIframe(Element):
         options = "&".join([f"{key}={value}" for key, value in replite_options.items()])
 
         return (
-            f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
+            f'<iframe src="/{JUPYTERLITE_DIR}/repl/index.html?{options}"'
             f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
         )
 
@@ -117,9 +117,9 @@ class _LiteIframe(Element):
         notebook = self["notebook"]
 
         src = (
-            f"{JUPYTERLITE_DIR}/{self.lite_app}/{self.notebooks_path}?path={notebook}"
+            f"/{JUPYTERLITE_DIR}/{self.lite_app}/{self.notebooks_path}?path={notebook}"
             if notebook is not None
-            else f"{JUPYTERLITE_DIR}/{self.lite_app}"
+            else f"/{JUPYTERLITE_DIR}/{self.lite_app}"
         )
 
         return (
