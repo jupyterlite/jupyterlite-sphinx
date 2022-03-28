@@ -4,6 +4,8 @@ import tempfile
 
 from pathlib import Path
 
+from urllib.parse import quote
+
 import subprocess
 
 from docutils.parsers.rst import directives
@@ -58,12 +60,14 @@ class RepliteIframe(Element):
     def html(self):
         replite_options = self["replite_options"]
 
-        code_lines = [line.strip().replace(" ", "%20") for line in self["content"]]
-        code = "%0A".join(code_lines)
+        code_lines = [line.strip() for line in self["content"]]
+        code = "\n".join(code_lines)
 
         replite_options["code"] = code
 
-        options = "&".join([f"{key}={value}" for key, value in replite_options.items()])
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in replite_options.items()]
+        )
 
         return (
             f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
