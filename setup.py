@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='jupyterlite-sphinx',
-    version='0.4.4',
+    version='0.4.5',
     package_dir={'': 'src'},
     py_modules=['jupyterlite_sphinx'],
     python_requires='>=3.7',
