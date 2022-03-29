@@ -60,7 +60,8 @@ class RepliteIframe(Element):
     def html(self):
         replite_options = self["replite_options"]
 
-        code_lines = [line.strip() for line in self["content"]]
+        # Remove empty lines
+        code_lines = ["" if not line.strip() else line for line in self["content"]]
         code = "\n".join(code_lines)
 
         replite_options["code"] = code
