@@ -12,7 +12,7 @@ A Sphinx extension that provides utilities for embedding JupyterLite in your doc
    :width: 100%
    :height: 600px
 
-    print("Hello from a JupyterLite console!")
+   print("Hello from a JupyterLite console!")
 
 .. toctree::
     :caption: Installation
