@@ -6,9 +6,9 @@ This directive takes the same options as the ``replite`` package, see https://gi
 
 .. code-block:: rst
 
-    .. replite::
-       :kernel: python
-       :height: 600px
+   .. replite::
+      :kernel: python
+      :height: 600px
 
       import matplotlib.pyplot as plt
       import numpy as np
@@ -24,12 +24,12 @@ This directive takes the same options as the ``replite`` package, see https://gi
    :kernel: python
    :height: 600px
 
-    import matplotlib.pyplot as plt
-    import numpy as np
+   import matplotlib.pyplot as plt
+   import numpy as np
 
-    x = np.linspace(0, 2 * np.pi, 200)
-    y = np.sin(x)
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
 
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
-    plt.show()
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
