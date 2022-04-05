@@ -25,7 +25,7 @@ A Sphinx extension that provides utilities for embedding JupyterLite in your doc
     :caption: Usage
     :maxdepth: 2
 
-    jupyterlite
-    retrolite
-    replite
+    directives/jupyterlite
+    directives/retrolite
+    directives/replite
     full

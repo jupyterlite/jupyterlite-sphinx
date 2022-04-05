@@ -43,6 +43,7 @@ class RepliteIframe(Element):
         self,
         rawsource="",
         *children,
+        prefix=JUPYTERLITE_DIR,
         width="100%",
         height="100%",
         content=[],
@@ -51,6 +52,7 @@ class RepliteIframe(Element):
     ):
         super().__init__(
             "",
+            prefix=prefix,
             width=width,
             height=height,
             content=content,
@@ -71,7 +73,7 @@ class RepliteIframe(Element):
         )
 
         return (
-            f'<iframe src="{JUPYTERLITE_DIR}/repl/index.html?{options}"'
+            f'<iframe src="{self["prefix"]}/repl/index.html?{options}"'
             f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
         )
 
@@ -96,8 +98,14 @@ class RepliteDirective(SphinxDirective):
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "100%")
 
+        prefix = os.path.relpath(
+            os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
+            os.path.dirname(self.get_source_info()[0]),
+        )
+
         return [
             RepliteIframe(
+                prefix=prefix,
                 width=width,
                 height=height,
                 content=self.content,
@@ -111,20 +119,23 @@ class _LiteIframe(Element):
         self,
         rawsource="",
         *children,
+        prefix=JUPYTERLITE_DIR,
         width="100%",
         height="1000px",
         notebook=None,
         **attributes,
     ):
-        super().__init__("", notebook=notebook, width=width, height=height)
+        super().__init__(
+            "", prefix=prefix, notebook=notebook, width=width, height=height
+        )
 
     def html(self):
         notebook = self["notebook"]
 
         src = (
-            f"{JUPYTERLITE_DIR}/{self.lite_app}/{self.notebooks_path}?path={notebook}"
+            f'{self["prefix"]}/{self.lite_app}/{self.notebooks_path}?path={notebook}'
             if notebook is not None
-            else f"{JUPYTERLITE_DIR}/{self.lite_app}"
+            else f'{self["prefix"]}/{self.lite_app}'
         )
 
         return (
@@ -166,13 +177,18 @@ class _LiteDirective(SphinxDirective):
         width = self.options.get("width", "100%")
         height = self.options.get("height", "1000px")
 
+        source_location = os.path.dirname(self.get_source_info()[0])
+
+        prefix = os.path.relpath(
+            os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR), source_location
+        )
+
         if self.arguments:
             notebook = self.arguments[0]
 
             # If we didn't get an absolute path,
             # try to find the Notebook relatively to the source
             if not os.path.isabs(notebook):
-                source_location = os.path.dirname(self.get_source_info()[0])
                 notebook = os.path.join(source_location, notebook)
 
             notebook_name = os.path.basename(notebook)
@@ -185,7 +201,11 @@ class _LiteDirective(SphinxDirective):
         else:
             notebook_name = None
 
-        return [self.iframe_cls(notebook=notebook_name, width=width, height=height)]
+        return [
+            self.iframe_cls(
+                prefix=prefix, notebook=notebook_name, width=width, height=height
+            )
+        ]
 
 
 class JupyterLiteDirective(_LiteDirective):
