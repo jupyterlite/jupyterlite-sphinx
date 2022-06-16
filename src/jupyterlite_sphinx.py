@@ -168,6 +168,7 @@ class _LiteDirective(SphinxDirective):
 
     has_content = False
     optional_arguments = 1
+    final_argument_whitespace = True
     option_spec = {
         "width": directives.unchanged,
         "height": directives.unchanged,
