@@ -14,6 +14,7 @@ from docutils.parsers import rst
 
 from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
+from sphinx.parsers import RSTParser
 
 
 CONTENT_DIR = "_contents"
@@ -184,12 +185,11 @@ class _LiteDirective(SphinxDirective):
         )
 
         if self.arguments:
-            notebook = self.arguments[0]
-
-            # If we didn't get an absolute path,
-            # try to find the Notebook relatively to the source
-            if not os.path.isabs(notebook):
-                notebook = os.path.join(source_location, notebook)
+            # As with other directives like literalinclude, an absolute path is
+            # assumed to be relative to the document root, and a relative path
+            # is assumed to be relative to the source file
+            rel_filename, notebook = self.env.relfn2path(self.arguments[0])
+            self.env.note_dependency(rel_filename)
 
             notebook_name = os.path.basename(notebook)
 
@@ -226,7 +226,7 @@ class RetroLiteDirective(_LiteDirective):
     iframe_cls = RetroLiteIframe
 
 
-class RetroLiteParser(rst.Parser):
+class RetroLiteParser(RSTParser):
     """Sphinx source parser for Jupyter notebooks.
 
     Shows the Notebook using retrolite."""
@@ -235,8 +235,10 @@ class RetroLiteParser(rst.Parser):
 
     def parse(self, inputstring, document):
         title = os.path.splitext(os.path.basename(document.current_source))[0]
+        # Make the "absolute" filename relative to the source root
+        filename = "/" + os.path.relpath(document.current_source, self.env.app.srcdir)
         super().parse(
-            f"{title}\n{'=' * len(title)}\n.. retrolite:: {document.current_source}",
+            f"{title}\n{'=' * len(title)}\n.. retrolite:: {filename}",
             document,
         )
 
