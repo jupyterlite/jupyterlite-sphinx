@@ -282,7 +282,7 @@ def jupyterlite_build(app: Sphinx, error):
                     "--output-dir",
                     os.path.join(app.outdir, JUPYTERLITE_DIR),
                 ],
-                check=True
+                check=True,
             )
 
         print("[jupyterlite-sphinx] JupyterLite build done")
