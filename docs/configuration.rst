@@ -17,7 +17,7 @@ The ``jupyterlite_config.json`` containing the following:
     {
         "LiteBuildConfig": {
             "federated_extensions": [
-                "https://github.com/conda-forge/releases/releases/download/noarch/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2",
+                "https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2",
             ],
             "ignore_sys_prefix": true,
             "piplite_urls": [
