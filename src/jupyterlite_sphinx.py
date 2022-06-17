@@ -268,7 +268,7 @@ def jupyterlite_build(app: Sphinx, error):
             config = ["--config", app.env.config.jupyterlite_config]
 
         with tempfile.TemporaryDirectory() as tmp_dir:
-            subprocess.check_output(
+            subprocess.run(
                 [
                     "jupyter",
                     "lite",
@@ -281,7 +281,8 @@ def jupyterlite_build(app: Sphinx, error):
                     os.path.join(app.srcdir, CONTENT_DIR),
                     "--output-dir",
                     os.path.join(app.outdir, JUPYTERLITE_DIR),
-                ]
+                ],
+                check=True,
             )
 
         print("[jupyterlite-sphinx] JupyterLite build done")

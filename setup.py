@@ -9,7 +9,7 @@ setup(
     python_requires='>=3.7',
     install_requires=[
         'docutils',
-        'jupyterlite',
+        'jupyterlite[piplite]',
         'sphinx>=4,<5',
         'jupyter_server',
         'jupyterlab_server',
