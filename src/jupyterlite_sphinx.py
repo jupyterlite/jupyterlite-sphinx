@@ -267,23 +267,27 @@ def jupyterlite_build(app: Sphinx, error):
         if app.env.config.jupyterlite_config:
             config = ["--config", app.env.config.jupyterlite_config]
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            subprocess.run(
-                [
-                    "jupyter",
-                    "lite",
-                    "build",
-                    "--debug",
-                    *config,
-                    "--lite-dir",
-                    tmp_dir,
-                    "--contents",
-                    os.path.join(app.srcdir, CONTENT_DIR),
-                    "--output-dir",
-                    os.path.join(app.outdir, JUPYTERLITE_DIR),
-                ],
-                check=True,
-            )
+        command = [
+            "jupyter",
+            "lite",
+            "build",
+            "--debug",
+            *config,
+            "--contents",
+            os.path.join(app.srcdir, CONTENT_DIR),
+            "--output-dir",
+            os.path.join(app.outdir, JUPYTERLITE_DIR),
+        ]
+
+        if app.env.config.jupyterlite_dir:
+            command.extend(["--lite-dir", app.env.config.jupyterlite_dir])
+
+            subprocess.run(command, check=True)
+        else:
+            with tempfile.TemporaryDirectory() as tmp_dir:
+                command.extend(["--lite-dir", tmp_dir])
+
+                subprocess.run(command, check=True)
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
@@ -305,6 +309,7 @@ def setup(app):
 
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
+    app.add_config_value("jupyterlite_dir", None, rebuild="html")
 
     # Initialize RetroLite and JupyterLite directives
     app.add_node(
