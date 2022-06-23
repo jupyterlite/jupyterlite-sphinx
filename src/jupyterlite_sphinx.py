@@ -276,17 +276,17 @@ def jupyterlite_build(app: Sphinx, error):
                 contents.extend(["--contents", content])
 
         command = [
-                    "jupyter",
-                    "lite",
-                    "build",
-                    "--debug",
-                    *config,
-                    *contents,
-                    "--contents",
-                    os.path.join(app.srcdir, CONTENT_DIR),
-                    "--output-dir",
-                    os.path.join(app.outdir, JUPYTERLITE_DIR),
-                ]
+            "jupyter",
+            "lite",
+            "build",
+            "--debug",
+            *config,
+            *contents,
+            "--contents",
+            os.path.join(app.srcdir, CONTENT_DIR),
+            "--output-dir",
+            os.path.join(app.outdir, JUPYTERLITE_DIR),
+        ]
 
         [
             "jupyter",
