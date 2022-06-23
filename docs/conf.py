@@ -8,7 +8,7 @@ html_theme = "pydata_sphinx_theme"
 html_logo = "_static/icon.svg"
 
 jupyterlite_config = "jupyterlite_config.json"
-jupyterlite_contents = ["./custom_contents"]
+jupyterlite_contents = "./custom_contents"
 
 master_doc = 'index'
 
