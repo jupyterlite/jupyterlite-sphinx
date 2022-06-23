@@ -1,16 +1,16 @@
 # JupyterLite Sphinx
 
-A Sphinx extension that provides utilities for embedding JupyterLite in your docs
+A Sphinx extension that provides utilities for embedding [JupyterLite](https://jupyterlite.readthedocs.io) in your documentation.
 
-### Docs
+## Docs
 
-https://jupyterlite-sphinx.readthedocs.io/en/latest
+https://jupyterlite-sphinx.readthedocs.io
 
-### Example
+## Example
 
-A practical example is the ipycanvas documentation: https://ipycanvas.readthedocs.io/en/master
+Practical examples are in the [ipycanvas](https://ipycanvas.readthedocs.io) and [ipyleaflet](https://ipyleaflet.readthedocs.io) documentation.
 
-### Installation:
+## Installation:
 
 ```bash
 pip install jupyterlite-sphinx
