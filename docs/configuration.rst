@@ -1,6 +1,32 @@
 Configuration
 =============
 
+JupyterLite-sphinx can be configured in your ``conf.py`` file by setting some global Python variables:
+
+JupyterLite content
+-------------------
+
+You can embed custom content (notebooks and data files) in your JupyterLite build by providing the following config:
+
+.. code-block:: python
+
+    jupyterlite_content = "./path/to/my/notebooks/"
+
+JupyterLite dir
+---------------
+
+By default, jupyterlite-sphinx runs the ``jupyter lite build`` command in a temporary directory, you can overwrite this behavior and ask jupyterlite to build in a given directory:
+
+.. code-block:: python
+
+    # Build in the current directory
+    jupyterlite_dir = "."
+
+This allows for jupyterlite to automatically pick-up some paths https://jupyterlite.readthedocs.io/en/latest/reference/cli.html#the-lite-dir
+
+JupyterLite config
+------------------
+
 You can provide `custom configuration <https://jupyterlite.readthedocs.io/en/latest/configuring.html>`_ to your JupyterLite deployment.
 
 For example, if you want to have bqplot working in this deployment, you need to install the bqplot federated extension
