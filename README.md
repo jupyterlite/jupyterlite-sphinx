@@ -4,7 +4,7 @@ A Sphinx extension that provides utilities for embedding [JupyterLite](https://j
 
 ## Docs
 
-https://jupyterlite-sphinx.readthedocs.io/en/latest
+https://jupyterlite-sphinx.readthedocs.io
 
 ## Example
 
