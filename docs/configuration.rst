@@ -10,7 +10,7 @@ You can embed custom content (notebooks and data files) in your JupyterLite buil
 
 .. code-block:: python
 
-    jupyterlite_content = "./path/to/my/notebooks/"
+    jupyterlite_contents = "./path/to/my/notebooks/"
 
 JupyterLite dir
 ---------------
