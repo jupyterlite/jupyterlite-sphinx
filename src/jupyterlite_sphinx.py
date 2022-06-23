@@ -272,13 +272,13 @@ def jupyterlite_build(app: Sphinx, error):
 
         contents = []
         if app.env.config.jupyterlite_contents:
-            contents = app.env.config.jupyterlite_contents
+            jupyterlite_contents = app.env.config.jupyterlite_contents
 
             if isinstance(contents, str):
-                contents.extend(["--contents", contents])
+                contents.extend(["--contents", jupyterlite_contents])
 
             if isinstance(contents, (tuple, list)):
-                for content in contents:
+                for content in jupyterlite_contents:
                     contents.extend(["--contents", content])
 
         command = [
