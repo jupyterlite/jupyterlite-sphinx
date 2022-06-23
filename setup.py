@@ -1,9 +1,15 @@
 from setuptools import setup
 
 
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
 setup(
     name='jupyterlite-sphinx',
     version='0.4.9',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     package_dir={'': 'src'},
     py_modules=['jupyterlite_sphinx'],
     python_requires='>=3.7',
