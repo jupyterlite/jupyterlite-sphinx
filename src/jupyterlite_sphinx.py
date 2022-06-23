@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+from warnings import warn
 
 from pathlib import Path
 
@@ -10,7 +11,6 @@ import subprocess
 
 from docutils.parsers.rst import directives
 from docutils.nodes import SkipNode, Element
-from docutils.parsers import rst
 
 from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
@@ -266,19 +266,33 @@ def jupyterlite_build(app: Sphinx, error):
     if app.builder.format == "html":
         print("[jupyterlite-sphinx] Running JupyterLite build")
 
-        config = []
+        jupyter_lite_config = app.env.config.jupyter_lite_config
+        jupyter_lite_contents = app.env.config.jupyter_lite_contents
+        jupyter_lite_dir = app.env.config.jupyter_lite_dir
+
         if app.env.config.jupyterlite_config:
-            config = ["--config", app.env.config.jupyterlite_config]
+            warn(
+                "jupyterlite_config config option is deprecated, please use jupyter_lite_config instead"
+            )
+            jupyter_lite_config = app.env.config.jupyterlite_config
+
+        if app.env.config.jupyterlite_dir:
+            warn(
+                "jupyterlite_dir config option is deprecated, please use jupyter_lite_dir instead"
+            )
+            jupyter_lite_dir = app.env.config.jupyterlite_dir
+
+        config = []
+        if jupyter_lite_config:
+            config = ["--config", jupyter_lite_config]
 
         contents = []
-        if app.env.config.jupyterlite_contents:
-            jupyterlite_contents = app.env.config.jupyterlite_contents
+        if jupyter_lite_contents:
+            if isinstance(jupyter_lite_contents, str):
+                contents.extend(["--contents", jupyter_lite_contents])
 
-            if isinstance(jupyterlite_contents, str):
-                contents.extend(["--contents", jupyterlite_contents])
-
-            if isinstance(jupyterlite_contents, (tuple, list)):
-                for content in jupyterlite_contents:
+            if isinstance(jupyter_lite_contents, (tuple, list)):
+                for content in jupyter_lite_contents:
                     contents.extend(["--contents", content])
 
         command = [
@@ -306,8 +320,8 @@ def jupyterlite_build(app: Sphinx, error):
             os.path.join(app.outdir, JUPYTERLITE_DIR),
         ]
 
-        if app.env.config.jupyterlite_dir:
-            command.extend(["--lite-dir", app.env.config.jupyterlite_dir])
+        if jupyter_lite_dir:
+            command.extend(["--lite-dir", jupyter_lite_dir])
 
             subprocess.run(command, check=True)
         else:
@@ -336,8 +350,10 @@ def setup(app):
 
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
+    app.add_config_value("jupyter_lite_config", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", None, rebuild="html")
-    app.add_config_value("jupyterlite_contents", None, rebuild="html")
+    app.add_config_value("jupyter_lite_dir", None, rebuild="html")
+    app.add_config_value("jupyter_lite_contents", None, rebuild="html")
 
     # Initialize RetroLite and JupyterLite directives
     app.add_node(
