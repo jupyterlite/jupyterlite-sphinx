@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='jupyterlite-sphinx',
-    version='0.4.9',
+    version='0.5.0',
     long_description=long_description,
     long_description_content_type='text/markdown',
     package_dir={'': 'src'},
