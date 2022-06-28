@@ -10,7 +10,7 @@ You can embed custom content (notebooks and data files) in your JupyterLite buil
 
 .. code-block:: python
 
-    jupyterlite_contents = ["./path/to/my/notebooks/", "my_other_notebook.ipynb"]
+    jupyter_lite_contents = ["./path/to/my/notebooks/", "my_other_notebook.ipynb"]
 
 JupyterLite dir
 ---------------
@@ -20,7 +20,7 @@ By default, jupyterlite-sphinx runs the ``jupyter lite build`` command in a temp
 .. code-block:: python
 
     # Build in the current directory
-    jupyterlite_dir = "."
+    jupyter_lite_dir = "."
 
 This allows for jupyterlite to automatically pick-up some paths https://jupyterlite.readthedocs.io/en/latest/reference/cli.html#the-lite-dir
 
