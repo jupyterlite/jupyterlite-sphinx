@@ -34,9 +34,9 @@ and you can serve the bqplot wheel to ``piplite``, this is done by telling your 
 
 .. code-block:: python
 
-    jupyterlite_config = "jupyterlite_config.json"
+    jupyter_lite_config = "jupyter_lite_config.json"
 
-The ``jupyterlite_config.json`` containing the following:
+The ``jupyter_lite_config.json`` containing the following:
 
 .. code-block:: json
 
