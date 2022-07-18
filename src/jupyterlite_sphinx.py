@@ -269,7 +269,11 @@ def jupyterlite_build(app: Sphinx, error):
         jupyterlite_config = app.env.config.jupyterlite_config
         jupyterlite_contents = app.env.config.jupyterlite_contents
         if jupyterlite_contents is not None:
-            jupyterlite_contents = [match for pattern in jupyterlite_contents for match in glob.glob(pattern)]
+            jupyterlite_contents = [
+                match
+                for pattern in jupyterlite_contents
+                for match in glob.glob(pattern)
+            ]
         jupyterlite_dir = app.env.config.jupyterlite_dir
 
         config = []
