@@ -37,4 +37,4 @@ jobs:
         channels: conda-forge
 
     - name: Test PEP8
-      run: black --check src
+      run: black --check jupyterlite_sphinx

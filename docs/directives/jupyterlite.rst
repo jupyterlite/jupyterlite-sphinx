@@ -8,10 +8,14 @@ JupyterLite directive
     .. jupyterlite::
        :width: 100%
        :height: 600px
+       :prompt: Try JupyterLite!
+       :prompt_color: #00aa42
 
 .. jupyterlite::
    :width: 100%
    :height: 600px
+   :prompt: Try JupyterLite!
+   :prompt_color: #00aa42
 
 You can also pass a Notebook file to open automatically:
 
@@ -20,7 +24,11 @@ You can also pass a Notebook file to open automatically:
     .. jupyterlite:: my_notebook.ipynb
        :width: 100%
        :height: 600px
+       :prompt: Try JupyterLite!
+       :prompt_color: #00aa42
 
 .. jupyterlite:: my_notebook.ipynb
    :width: 100%
    :height: 600px
+   :prompt: Try JupyterLite!
+   :prompt_color: #00aa42

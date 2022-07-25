@@ -1,4 +1,5 @@
 import os
+from uuid import uuid4
 import shutil
 import tempfile
 from warnings import warn
@@ -15,13 +16,13 @@ from docutils.nodes import SkipNode, Element
 
 from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
+from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
 
+HERE = Path(__file__).parent
 
 CONTENT_DIR = "_contents"
 JUPYTERLITE_DIR = "lite"
-
-IFRAME_STYLE = "border-width: 1px; border-style: solid;"
 
 
 # Used for nodes that do not need to be rendered
@@ -35,12 +36,7 @@ def visit_element_html(self, node):
     raise SkipNode
 
 
-class RepliteIframe(Element):
-    """Appended to the doctree by the RepliteDirective directive
-
-    Renders an iframe that shows a replite console.
-    """
-
+class _LiteIframe(Element):
     def __init__(
         self,
         rawsource="",
@@ -48,8 +44,11 @@ class RepliteIframe(Element):
         prefix=JUPYTERLITE_DIR,
         width="100%",
         height="100%",
+        prompt=False,
+        prompt_color=None,
         content=[],
-        replite_options=None,
+        notebook=None,
+        lite_options={},
         **attributes,
     ):
         super().__init__(
@@ -57,27 +56,86 @@ class RepliteIframe(Element):
             prefix=prefix,
             width=width,
             height=height,
+            prompt=prompt,
+            prompt_color=prompt_color,
             content=content,
-            replite_options=replite_options,
+            notebook=notebook,
+            lite_options=lite_options,
         )
 
     def html(self):
-        replite_options = self["replite_options"]
+        lite_options = self["lite_options"]
 
-        # Remove empty lines
-        code_lines = ["" if not line.strip() else line for line in self["content"]]
-        code = "\n".join(code_lines)
+        if self["content"]:
+            code_lines = ["" if not line.strip() else line for line in self["content"]]
+            code = "\n".join(code_lines)
 
-        replite_options["code"] = code
+            lite_options["code"] = code
+
+        app_path = self.lite_app
+        if self["notebook"] is not None:
+            lite_options["path"] = self["notebook"]
+            app_path = f"{self.lite_app}{self.notebooks_path}"
 
         options = "&".join(
-            [f"{key}={quote(value)}" for key, value in replite_options.items()]
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
+        iframe_src = f'{self["prefix"]}/{app_path}{f"?{options}" if options else ""}'
+
+        if self["prompt"]:
+            prompt = (
+                self["prompt"] if isinstance(self["prompt"], str) else "Try It Live!"
+            )
+            prompt_color = (
+                self["prompt_color"] if self["prompt_color"] is not None else "#f7dc1e"
+            )
+
+            placeholder_id = uuid4()
+            container_style = f'width: {self["width"]}; height: {self["height"]};'
+
+            return (
+                f"<div class=\"jupyterlite_sphinx_iframe_container\" style=\"{container_style}\" onclick=window.jupyterliteShowIframe('{placeholder_id}','{iframe_src}')>"
+                f'  <div id={placeholder_id} class="jupyterlite_sphinx_try_it_button jupyterlite_sphinx_try_it_button_unclicked" style="background-color: {prompt_color};">'
+                f"    {prompt}"
+                "   </div>"
+                "</div>"
+            )
+
         return (
-            f'<iframe src="{self["prefix"]}/repl/index.html?{options}"'
-            f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
+            f'<iframe src="{iframe_src}"'
+            f'width="{self["width"]}" height="{self["height"]}" class="jupyterlite_sphinx_raw_iframe"></iframe>'
         )
+
+
+class RepliteIframe(_LiteIframe):
+    """Appended to the doctree by the RepliteDirective directive
+
+    Renders an iframe that shows a repl with JupyterLite.
+    """
+
+    lite_app = "repl/index.html"
+    notebooks_path = ""
+
+
+class JupyterLiteIframe(_LiteIframe):
+    """Appended to the doctree by the JupyterliteDirective directive
+
+    Renders an iframe that shows a Notebook with JupyterLite.
+    """
+
+    lite_app = "lab/"
+    notebooks_path = ""
+
+
+class RetroLiteIframe(_LiteIframe):
+    """Appended to the doctree by the RetroliteDirective directive
+
+    Renders an iframe that shows a Notebook with RetroLite.
+    """
+
+    lite_app = "retro/"
+    notebooks_path = "notebooks/"
 
 
 class RepliteDirective(SphinxDirective):
@@ -94,11 +152,16 @@ class RepliteDirective(SphinxDirective):
         "kernel": directives.unchanged,
         "toolbar": directives.unchanged,
         "theme": directives.unchanged,
+        "prompt": directives.unchanged,
+        "prompt_color": directives.unchanged,
     }
 
     def run(self):
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "100%")
+
+        prompt = self.options.pop("prompt", False)
+        prompt_color = self.options.pop("prompt_color", None)
 
         prefix = os.path.relpath(
             os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
@@ -110,60 +173,12 @@ class RepliteDirective(SphinxDirective):
                 prefix=prefix,
                 width=width,
                 height=height,
+                prompt=prompt,
+                prompt_color=prompt_color,
                 content=self.content,
-                replite_options=self.options,
+                lite_options=self.options,
             )
         ]
-
-
-class _LiteIframe(Element):
-    def __init__(
-        self,
-        rawsource="",
-        *children,
-        prefix=JUPYTERLITE_DIR,
-        width="100%",
-        height="1000px",
-        notebook=None,
-        **attributes,
-    ):
-        super().__init__(
-            "", prefix=prefix, notebook=notebook, width=width, height=height
-        )
-
-    def html(self):
-        notebook = self["notebook"]
-
-        src = (
-            f'{self["prefix"]}/{self.lite_app}/{self.notebooks_path}?path={notebook}'
-            if notebook is not None
-            else f'{self["prefix"]}/{self.lite_app}'
-        )
-
-        return (
-            f'<iframe src="{src}"'
-            f'width="{self["width"]}" height="{self["height"]}" style="{IFRAME_STYLE}"></iframe>'
-        )
-
-
-class JupyterLiteIframe(_LiteIframe):
-    """Appended to the doctree by the JupyterliteDirective directive
-
-    Renders an iframe that shows a Notebook with JupyterLite.
-    """
-
-    lite_app = "lab"
-    notebooks_path = ""
-
-
-class RetroLiteIframe(_LiteIframe):
-    """Appended to the doctree by the RetroliteDirective directive
-
-    Renders an iframe that shows a Notebook with RetroLite.
-    """
-
-    lite_app = "retro"
-    notebooks_path = "notebooks/"
 
 
 class _LiteDirective(SphinxDirective):
@@ -174,11 +189,17 @@ class _LiteDirective(SphinxDirective):
     option_spec = {
         "width": directives.unchanged,
         "height": directives.unchanged,
+        "theme": directives.unchanged,
+        "prompt": directives.unchanged,
+        "prompt_color": directives.unchanged,
     }
 
     def run(self):
-        width = self.options.get("width", "100%")
-        height = self.options.get("height", "1000px")
+        width = self.options.pop("width", "100%")
+        height = self.options.pop("height", "1000px")
+
+        prompt = self.options.pop("prompt", False)
+        prompt_color = self.options.pop("prompt_color", None)
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
@@ -208,7 +229,13 @@ class _LiteDirective(SphinxDirective):
 
         return [
             self.iframe_cls(
-                prefix=prefix, notebook=notebook_name, width=width, height=height
+                prefix=prefix,
+                notebook=notebook_name,
+                width=width,
+                height=height,
+                prompt=prompt,
+                prompt_color=prompt_color,
+                lite_options=self.options,
             )
         ]
 
@@ -367,3 +394,12 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
+
+    # CSS and JS assets
+    copy_asset(str(HERE / "jupyterlite_sphinx.css"), str(Path(app.outdir) / "_static"))
+    copy_asset(str(HERE / "jupyterlite_sphinx.js"), str(Path(app.outdir) / "_static"))
+
+    app.add_css_file("https://fonts.googleapis.com/css?family=Vibur")
+    app.add_css_file("jupyterlite_sphinx.css")
+
+    app.add_js_file("jupyterlite_sphinx.js")
