@@ -59,3 +59,15 @@ Then you should be able to show Notebooks working with bqplot!
     .. retrolite:: bqplot.ipynb
 
 .. retrolite:: bqplot.ipynb
+
+Disable the ``.ipynb`` docs source binding
+------------------------------------------
+
+By default, jupyterlite-sphinx binds the ``.ipynb`` source suffix so that it renders Notebooks included in the doctree with JupyterLite.
+This is known to bring warnings with plugins like sphinx-gallery, or to conflict with nbsphinx.
+
+You can disable this behavior by setting the following config:
+
+.. code-block:: python
+
+    jupyterlite_bind_ipynb_suffix = False
