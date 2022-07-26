@@ -15,14 +15,24 @@ A Sphinx extension that provides utilities for embedding JupyterLite in your doc
    print("Hello from a JupyterLite console!")
 
 .. toctree::
-    :caption: Installation
     :maxdepth: 2
 
     installation
     configuration
 
+Usage
+-----
+
+``jupyterlite-sphinx`` provides a collection of directives that allows you to embed the different JupyterLite UIs directly in your documentation page.
+Each of those directives can be configured with the following options:
+
+- ``width`` (default ``"100%"``) the width of the UI
+- ``height`` (default ``"600px"``) the height of the UI
+- ``theme`` (default ``None``) the JupyterLab theme to use
+- ``prompt`` (default ``False``) whether or not to lazy-load the UI. If the value is a string, it will use this value for the prompt button.
+- ``prompt_color`` (default ``#f7dc1e``) The color of the prompt button, if there is one.
+
 .. toctree::
-    :caption: Usage
     :maxdepth: 2
 
     directives/jupyterlite

@@ -8,10 +8,12 @@ RetroLite directive
     .. retrolite::
        :width: 100%
        :height: 600px
+       :prompt: Try Retrolite!
 
 .. retrolite::
    :width: 100%
    :height: 600px
+   :prompt: Try Retrolite!
 
 You can also pass a Notebook file to open:
 
@@ -20,7 +22,9 @@ You can also pass a Notebook file to open:
     .. retrolite:: my_notebook.ipynb
        :width: 100%
        :height: 600px
+       :prompt: Try Retrolite!
 
 .. retrolite:: my_notebook.ipynb
    :width: 100%
    :height: 600px
+   :prompt: Try Retrolite!
