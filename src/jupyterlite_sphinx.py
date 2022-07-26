@@ -253,7 +253,8 @@ def inited(app: Sphinx, config):
     os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
 
     if (
-        ".ipynb" not in config.source_suffix
+        config.jupyterlite_bind_ipynb_suffix
+        and ".ipynb" not in config.source_suffix
         and ".ipynb" not in app.registry.source_suffix
     ):
         app.add_source_suffix(".ipynb", "jupyterlite_notebook")
@@ -334,6 +335,7 @@ def setup(app):
     app.add_config_value("jupyterlite_config", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", None, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
+    app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
 
     # Initialize RetroLite and JupyterLite directives
     app.add_node(
