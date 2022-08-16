@@ -300,7 +300,7 @@ def jupyterlite_build(app: Sphinx, error):
             jupyterlite_contents = [
                 match
                 for pattern in jupyterlite_contents
-                for match in glob.glob(pattern)
+                for match in glob.glob(pattern, recursive=True)
             ]
         jupyterlite_dir = app.env.config.jupyterlite_dir
 
