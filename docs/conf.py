@@ -14,4 +14,4 @@ jupyterlite_bind_ipynb_suffix = False
 master_doc = 'index'
 
 # General information about the project.
-project = 'JupyterLite sphinx extension'
+project = 'JupyterLite Sphinx extension'
