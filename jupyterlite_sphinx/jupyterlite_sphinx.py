@@ -296,26 +296,27 @@ def jupyterlite_build(app: Sphinx, error):
         print("[jupyterlite-sphinx] Running JupyterLite build")
         jupyterlite_config = app.env.config.jupyterlite_config
         jupyterlite_contents = app.env.config.jupyterlite_contents
-        if jupyterlite_contents is not None:
-            jupyterlite_contents = [
-                match
-                for pattern in jupyterlite_contents
-                for match in glob.glob(pattern, recursive=True)
-            ]
         jupyterlite_dir = app.env.config.jupyterlite_dir
 
         config = []
         if jupyterlite_config:
             config = ["--config", jupyterlite_config]
 
-        contents = []
-        if jupyterlite_contents:
-            if isinstance(jupyterlite_contents, str):
-                contents.extend(["--contents", jupyterlite_contents])
+        if jupyterlite_contents is None:
+            jupyterlite_contents = []
+        elif isinstance(jupyterlite_contents, str):
+            jupyterlite_contents = [jupyterlite_contents]
 
-            if isinstance(jupyterlite_contents, (tuple, list)):
-                for content in jupyterlite_contents:
-                    contents.extend(["--contents", content])
+        # Expand globs in the contents strings
+        jupyterlite_contents = [
+            match
+            for pattern in jupyterlite_contents
+            for match in glob.glob(pattern, recursive=True)
+        ]
+
+        contents = []
+        for content in jupyterlite_contents:
+            contents.extend(["--contents", content])
 
         command = [
             "jupyter",
