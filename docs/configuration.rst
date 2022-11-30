@@ -29,7 +29,8 @@ This allows for jupyterlite to automatically pick-up some paths https://jupyterl
 JupyterLite config
 ------------------
 
-You can provide `custom configuration <https://jupyterlite.readthedocs.io/en/latest/configuring.html>`_ to your JupyterLite deployment.
+You can provide `custom configuration <https://jupyterlite.readthedocs.io/en/latest/howto/index.html#configuring-a-jupyterlite-deployment>`_
+to your JupyterLite deployment.
 
 For example, if you want to have bqplot working in this deployment, you need to install the bqplot federated extension
 and you can serve the bqplot wheel to ``piplite``, this is done by telling your ``conf.py`` where to look for the jupyterlite config:
