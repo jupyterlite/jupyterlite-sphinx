@@ -18,7 +18,9 @@
         "https://conda.anaconda.org/conda-forge/noarch/theme-darcula-3.1.1-pyh3684270_0.tar.bz2",
         "https://github.com/jupyterlite/p5-kernel/releases/download/v0.1.0a12/jupyterlite_p5_kernel-0.1.0a12-py3-none-any.whl"
       ],
-      "ignore_sys_prefix": true,
+      "ignore_sys_prefix": true
+    },
+    "PipliteAddon": {
       "piplite_urls": [
         "https://files.pythonhosted.org/packages/py2.py3/a/asttokens/asttokens-2.0.5-py2.py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py2.py3/b/backcall/backcall-0.2.0-py2.py3-none-any.whl",
