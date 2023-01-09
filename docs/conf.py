@@ -15,3 +15,16 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'JupyterLite Sphinx extension'
+
+# theme configuration 
+html_theme_options = {
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/jupyterlite/jupyterlite-sphinx",
+            "icon": "fa-brands fa-github",
+        }
+    ]
+}
+
+
