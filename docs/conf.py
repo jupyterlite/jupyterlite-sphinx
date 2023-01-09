@@ -17,7 +17,7 @@ master_doc = 'index'
 project = 'JupyterLite Sphinx extension'
 
 # theme configuration 
-html_theme_option = {
+html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
