@@ -48,7 +48,9 @@ The ``jupyterlite_config.json`` containing the following:
             "federated_extensions": [
                 "https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2",
             ],
-            "ignore_sys_prefix": true,
+            "ignore_sys_prefix": true
+        }
+        "PipliteAddon": {
             "piplite_urls": [
                 "https://files.pythonhosted.org/packages/py2.py3/b/bqplot/bqplot-0.12.33-py2.py3-none-any.whl",
             ]
