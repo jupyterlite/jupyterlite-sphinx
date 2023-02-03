@@ -15,7 +15,7 @@ setup(
     install_requires=[
         'docutils',
         'jupyterlite[piplite]',
-        'sphinx>=4,<5',
+        'sphinx>=4',
         'jupyter_server',
         'jupyterlab_server',
     ],

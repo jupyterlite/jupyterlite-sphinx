@@ -32,9 +32,9 @@ jobs:
         activate-environment: jupyterlite-sphinx
         environment-file: dev-environment.yml
         python-version: ${{ matrix.python-version }}
-        mamba-version: "*"
+        miniforge-variant: Mambaforge
+        miniforge-version: latest
         auto-activate-base: false
-        channels: conda-forge
 
     - name: Test PEP8
       run: black --check jupyterlite_sphinx

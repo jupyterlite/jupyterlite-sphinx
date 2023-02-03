@@ -182,7 +182,6 @@ class RepliteDirective(SphinxDirective):
 
 
 class _LiteDirective(SphinxDirective):
-
     has_content = False
     optional_arguments = 1
     final_argument_whitespace = True
