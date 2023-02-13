@@ -7,7 +7,7 @@ name = "jupyterlite-sphinx"
 dynamic = ["version"]
 description = "Sphinx extension for deploying JupyterLite"
 readme = "README.md"
-license = "BSD-3-Clause"
+license = { file = "LICENSE" }
 requires-python = ">=3.7"
 authors = [
     { name = "JupyterLite Contributors", email = "" },
