@@ -10,7 +10,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
 authors = [
-    { name = "JupyterLite Contributors", email = "" },
+    { name = "JupyterLite Contributors" },
 ]
 dependencies = [
     "docutils",
