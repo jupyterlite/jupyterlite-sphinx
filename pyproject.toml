@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jupyterlite-sphinx"
-version = "0.7.3"
+dynamic = ["version"]
 description = "Sphinx extension for deploying JupyterLite"
 readme = "README.md"
 license = "BSD-3-Clause"
@@ -19,6 +19,9 @@ dependencies = [
     "jupyterlite[piplite]",
     "sphinx>=4",
 ]
+
+[tool.hatch.version]
+path = "jupyterlite_sphinx/__init__.py"
 
 [tool.hatch.build.targets.sdist]
 include = [
