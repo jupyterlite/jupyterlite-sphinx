@@ -20,6 +20,9 @@ dependencies = [
     "sphinx>=4",
 ]
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.hatch.version]
 path = "jupyterlite_sphinx/__init__.py"
 
