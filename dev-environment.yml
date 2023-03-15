@@ -10,4 +10,6 @@ dependencies:
     - sphinx
     - black
     - pip:
-        - jupyterlite-core @ https://jupyterlite--994.org.readthedocs.build/en/994/_static/jupyterlite_core-0.1.0b18-py3-none-any.whl
+        - jupyterlite-core==0.1.0b19
+        - jupyterlite-pyodide-kernel==0.0.5
+
