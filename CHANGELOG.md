@@ -6,6 +6,23 @@
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/0.7.3...51e489426a2e0026bcbc7207c87764bcd936d78b))
 
+⚠️ `jupyterlite-sphinx` now depends on `jupyterlite-core` ⚠️
+
+`jupyterlite-sphinx` now depends on the `jupyterlite-core` package instead of `jupyterlite`.
+
+The `jupyterlite-core` package provides the core functionality for building JupyterLite websites CLI [extension points](https://jupyterlite.readthedocs.io/en/latest/howto/extensions/cli-addons.html). Currently it only includes a JavaScript kernel that runs in Web Worker. If you would like to include a Python kernel in your deployment you will have to add it to your dependencies, for example with:
+
+```
+python -m pip install jupyterlite-pyodide-kernel
+```
+
+Or next to the `jupyterlite-sphinx` dependency:
+
+```
+jupyterlite-sphinx
+jupyterlite-pyodide-kernel
+```
+
 ### Maintenance and upkeep improvements
 
 - Depend on `jupyterlite-core` [#89](https://github.com/jupyterlite/jupyterlite-sphinx/pull/89) ([@jtpio](https://github.com/jtpio))
