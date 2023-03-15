@@ -2,6 +2,23 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.8.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/0.7.3...51e489426a2e0026bcbc7207c87764bcd936d78b))
+
+### Maintenance and upkeep improvements
+
+- Depend on `jupyterlite-core` [#89](https://github.com/jupyterlite/jupyterlite-sphinx/pull/89) ([@jtpio](https://github.com/jtpio))
+- Add releaser workflows and changelog [#86](https://github.com/jupyterlite/jupyterlite-sphinx/pull/86) ([@jtpio](https://github.com/jtpio))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-02-03&to=2023-03-15&type=c))
+
+[@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2023-02-03..2023-03-15&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.7.3
 
 ([full changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/b8a4dec...6ccb288))
@@ -21,8 +38,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2022-08-17&to=2023-02-03&type=c))
 
 [@12rambau](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3A12rambau+updated%3A2022-08-17..2023-02-03&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2022-08-17..2023-02-03&type=Issues) | [@lesteve](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Alesteve+updated%3A2022-08-17..2023-02-03&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2022-08-17..2023-02-03&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.7.2
 
@@ -276,8 +291,6 @@
 ### Contributors to this release
 
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2022-02-25&to=2022-02-28&type=c))
-
-
 
 ## 0.2.0
 
