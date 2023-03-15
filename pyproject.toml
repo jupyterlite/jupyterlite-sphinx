@@ -16,9 +16,12 @@ dependencies = [
     "docutils",
     "jupyter_server",
     "jupyterlab_server",
-    "jupyterlite[piplite]",
+    "jupyterlite-core >=0.1.0b19",
     "sphinx>=4",
 ]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.version]
 path = "jupyterlite_sphinx/__init__.py"

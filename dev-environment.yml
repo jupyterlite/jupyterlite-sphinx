@@ -10,4 +10,5 @@ dependencies:
     - sphinx
     - black
     - pip:
-        - jupyterlite
+        - jupyterlite-core==0.1.0b19
+
