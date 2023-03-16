@@ -39,6 +39,6 @@ Each of those directives can be configured with the following options:
 directives/jupyterlite
 directives/retrolite
 directives/replite
-changelog
 full
+changelog
 ```
