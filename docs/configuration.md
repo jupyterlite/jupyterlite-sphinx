@@ -42,6 +42,7 @@ The `jupyterlite_config.json` containing the following:
     "LiteBuildConfig": {
         "federated_extensions": [
             "https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2",
+            "https://github.com/jupyterlite/pyodide-kernel/releases/download/v0.0.5/jupyterlite_pyodide_kernel-0.0.5-py3-none-any.whl"
         ],
         "ignore_sys_prefix": true
     }
@@ -52,6 +53,9 @@ The `jupyterlite_config.json` containing the following:
     }
 }
 ```
+
+The example above also includes the Pyodide kernel for JupyterLite as a `federated_extensions`.
+See the [JupyterLite documentation](https://jupyterlite.readthedocs.io/en/latest/howto/index.html) to learn more about configuring your environment.
 
 Then you should be able to show Notebooks working with bqplot!
 
