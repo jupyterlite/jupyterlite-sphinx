@@ -20,6 +20,12 @@ dependencies = [
     "sphinx>=4",
 ]
 
+[project.optional-dependencies]
+docs = [
+    "myst_parser",
+    "pydata-sphinx-theme",
+]
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
