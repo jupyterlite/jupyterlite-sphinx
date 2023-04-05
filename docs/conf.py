@@ -37,3 +37,5 @@ html_theme_options = {
 
 # Copy the markdown file here
 shutil.copy(ROOT / "CHANGELOG.md", HERE / "changelog.md")
+
+suppress_warnings = ["myst.xref_missing"]
