@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Sphinx extension for deploying JupyterLite"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 authors = [
     { name = "JupyterLite Contributors" },
 ]
@@ -16,12 +16,15 @@ dependencies = [
     "docutils",
     "jupyter_server",
     "jupyterlab_server",
-    "jupyterlite-core >=0.1.0b19",
+    "jupyterlite-core >=0.1.0",
     "sphinx>=4",
 ]
 
-[tool.hatch.metadata]
-allow-direct-references = true
+[project.optional-dependencies]
+docs = [
+    "myst_parser",
+    "pydata-sphinx-theme",
+]
 
 [tool.hatch.version]
 path = "jupyterlite_sphinx/__init__.py"
