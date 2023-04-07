@@ -5,9 +5,8 @@ dependencies:
     - pip
     - jupyter_server
     - jupyterlab_server
+    - jupyterlite-core >=0.1.0,<0.2
     - pydata-sphinx-theme
     - docutils
     - sphinx
     - black
-    - pip:
-        - jupyterlite-core==0.1.0
