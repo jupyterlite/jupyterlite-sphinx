@@ -4,3 +4,4 @@ jupyterlite_sphinx/jupyterlite_sphinx.egg-info
 docs/build
 build
 dist
+.jupyterlite.doit.db
