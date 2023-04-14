@@ -6,6 +6,16 @@ You can install `jupyterlite-sphinx` with `pip`:
 pip install jupyterlite-sphinx
 ```
 
+`jupyterlite-sphinx` is also available on `conda-forge`. You can install it with `conda` or `mamba`:
+
+```bash
+# with conda
+conda install -c conda-forge jupyterlite-sphinx
+
+# with mamba
+mamba install -c conda-forge jupyterlite-sphinx
+```
+
 then you need to add the `jupyterlite-sphinx` extension to your `conf.py` file of your sphinx docs:
 
 ```python
