@@ -21,6 +21,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+dev = [
+    "hatch",
+]
+
 docs = [
     "myst_parser",
     "pydata-sphinx-theme",
@@ -33,3 +37,9 @@ path = "jupyterlite_sphinx/__init__.py"
 include = [
     "/jupyterlite_sphinx",
 ]
+
+[tool.hatch.envs.docs]
+features = ["docs"]
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -W -b html docs docs/build/html"
+serve = "python -m http.server --directory docs/build/html"

@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-import shutil
-
-from pathlib import Path
-
-HERE = Path(__file__).parent
-ROOT = HERE.parent
-
 
 extensions = [
     'jupyterlite_sphinx',
@@ -34,8 +27,5 @@ html_theme_options = {
         }
     ]
 }
-
-# Copy the markdown file here
-shutil.copy(ROOT / "CHANGELOG.md", HERE / "changelog.md")
 
 suppress_warnings = ["myst.xref_missing"]
