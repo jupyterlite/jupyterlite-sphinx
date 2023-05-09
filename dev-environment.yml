@@ -10,3 +10,5 @@ dependencies:
     - docutils
     - sphinx
     - black
+    - pip:
+        - jupyterlite-xeus-python >=0.8.1,<0.9.0
