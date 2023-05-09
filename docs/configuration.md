@@ -49,43 +49,8 @@ dependencies:
 You can provide [custom configuration](https://jupyterlite.readthedocs.io/en/latest/howto/index.html#configuring-a-jupyterlite-deployment)
 to your JupyterLite deployment.
 
-For example, if you want to have bqplot working in this deployment, you need to install the bqplot federated extension
-and you can serve the bqplot wheel to `piplite`, this is done by telling your `conf.py` where to look for the jupyterlite config:
-
 ```python
 jupyterlite_config = "jupyterlite_config.json"
-```
-
-The `jupyterlite_config.json` containing the following:
-
-```json
-{
-    "LiteBuildConfig": {
-        "federated_extensions": [
-            "https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2",
-            "https://github.com/jupyterlite/pyodide-kernel/releases/download/v0.0.5/jupyterlite_pyodide_kernel-0.0.5-py3-none-any.whl"
-        ],
-        "ignore_sys_prefix": true
-    }
-    "PipliteAddon": {
-        "piplite_urls": [
-            "https://files.pythonhosted.org/packages/py2.py3/b/bqplot/bqplot-0.12.33-py2.py3-none-any.whl",
-        ]
-    }
-}
-```
-
-The example above also includes the Pyodide kernel for JupyterLite as a `federated_extensions`.
-See the [JupyterLite documentation](https://jupyterlite.readthedocs.io/en/latest/howto/index.html) to learn more about configuring your environment.
-
-Then you should be able to show Notebooks working with bqplot!
-
-```rst
-.. retrolite:: bqplot.ipynb
-```
-
-```{eval-rst}
-.. retrolite:: bqplot.ipynb
 ```
 
 ## Disable the `.ipynb` docs source binding
