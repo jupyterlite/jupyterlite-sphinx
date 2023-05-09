@@ -36,52 +36,29 @@ def visit_element_html(self, node):
     raise SkipNode
 
 
-class _LiteIframe(Element):
+class _PromptedIframe(Element):
     def __init__(
         self,
         rawsource="",
         *children,
-        prefix=JUPYTERLITE_DIR,
+        iframe_src="",
         width="100%",
         height="100%",
         prompt=False,
         prompt_color=None,
-        content=[],
-        notebook=None,
-        lite_options={},
         **attributes,
     ):
         super().__init__(
             "",
-            prefix=prefix,
+            iframe_src=iframe_src,
             width=width,
             height=height,
             prompt=prompt,
             prompt_color=prompt_color,
-            content=content,
-            notebook=notebook,
-            lite_options=lite_options,
         )
 
     def html(self):
-        lite_options = self["lite_options"]
-
-        if self["content"]:
-            code_lines = ["" if not line.strip() else line for line in self["content"]]
-            code = "\n".join(code_lines)
-
-            lite_options["code"] = code
-
-        app_path = self.lite_app
-        if self["notebook"] is not None:
-            lite_options["path"] = self["notebook"]
-            app_path = f"{self.lite_app}{self.notebooks_path}"
-
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
-
-        iframe_src = f'{self["prefix"]}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = self["iframe_src"]
 
         if self["prompt"]:
             prompt = (
@@ -106,6 +83,37 @@ class _LiteIframe(Element):
             f'<iframe src="{iframe_src}"'
             f'width="{self["width"]}" height="{self["height"]}" class="jupyterlite_sphinx_raw_iframe"></iframe>'
         )
+
+
+class _LiteIframe(_PromptedIframe):
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        content=[],
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+        if content:
+            code_lines = ["" if not line.strip() else line for line in content]
+            code = "\n".join(code_lines)
+
+            lite_options["code"] = code
+
+        app_path = self.lite_app
+        if notebook is not None:
+            lite_options["path"] = notebook
+            app_path = f"{self.lite_app}{self.notebooks_path}"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
 
 class RepliteIframe(_LiteIframe):
@@ -137,6 +145,30 @@ class RetroLiteIframe(_LiteIframe):
     lite_app = "retro/"
     notebooks_path = "notebooks/"
 
+
+class VoiciIframe(_PromptedIframe):
+    """Appended to the doctree by the VoiciDirective directive
+
+    Renders an iframe that shows a Notebook with Voici.
+    """
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+        app_path = f"voici/render/{self.notebooks_path}"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
 class RepliteDirective(SphinxDirective):
     """The ``.. replite::`` directive.
@@ -255,6 +287,15 @@ class RetroLiteDirective(_LiteDirective):
     """
 
     iframe_cls = RetroLiteIframe
+
+
+class VoiciDirective(_LiteDirective):
+    """The ``.. voici::`` directive.
+
+    Renders a Notebook with Voici in the docs.
+    """
+
+    iframe_cls = VoiciIframe
 
 
 class RetroLiteParser(RSTParser):
