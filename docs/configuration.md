@@ -21,6 +21,29 @@ By default, jupyterlite-sphinx runs the `jupyter lite build` command in the docs
 jupyterlite_dir = "/path/to/your/lite/dir"
 ```
 
+## Pre-installed packages
+
+In order to have Python packages pre-installed in the kernel environment, you can use [jupyterlite-xeus-python](https://xeus-python-kernel.readthedocs.io).
+
+You would need `jupyterlite-xeus-python` installed in your docs build environment.
+
+You can pre-install packages by adding an `environment.yml` file in the docs directory, this file will be found automatically by xeus-python which will pre-build the environment when running the jupyter lite build.
+
+Furthermore, this automatically installs any labextension that it founds, for example installing ipyleaflet will make ipyleaflet work without the need to manually install the jupyter-leaflet labextension.
+
+Say you want to install NumPy, Matplotlib and ipycanvas, it can be done by creating the environment.yml file with the following content:
+
+```yml
+name: xeus-python-kernel
+channels:
+  - https://repo.mamba.pm/emscripten-forge
+  - https://repo.mamba.pm/conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - ipycanvas
+```
+
 ## JupyterLite config
 
 You can provide [custom configuration](https://jupyterlite.readthedocs.io/en/latest/howto/index.html#configuring-a-jupyterlite-deployment)
