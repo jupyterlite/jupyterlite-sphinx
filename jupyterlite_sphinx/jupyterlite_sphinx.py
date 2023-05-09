@@ -151,6 +151,7 @@ class VoiciIframe(_PromptedIframe):
 
     Renders an iframe that shows a Notebook with Voici.
     """
+
     def __init__(
         self,
         rawsource="",
@@ -169,6 +170,7 @@ class VoiciIframe(_PromptedIframe):
         iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
+
 
 class RepliteDirective(SphinxDirective):
     """The ``.. replite::`` directive.
