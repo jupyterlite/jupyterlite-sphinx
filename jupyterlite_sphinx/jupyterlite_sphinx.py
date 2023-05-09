@@ -328,17 +328,11 @@ def jupyterlite_build(app: Sphinx, error):
             os.path.join(app.srcdir, CONTENT_DIR),
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
+            "--lite-dir",
+            jupyterlite_dir,
         ]
 
-        if jupyterlite_dir:
-            command.extend(["--lite-dir", jupyterlite_dir])
-
-            subprocess.run(command, check=True)
-        else:
-            with tempfile.TemporaryDirectory() as tmp_dir:
-                command.extend(["--lite-dir", tmp_dir])
-
-                subprocess.run(command, check=True)
+        subprocess.run(command, cwd=app.srcdir, check=True)
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
@@ -360,7 +354,7 @@ def setup(app):
 
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
-    app.add_config_value("jupyterlite_dir", None, rebuild="html")
+    app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
 

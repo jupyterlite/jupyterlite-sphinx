@@ -14,14 +14,12 @@ jupyterlite_contents = ["./path/to/my/notebooks/", "my_other_notebook.ipynb"]
 
 ## JupyterLite dir
 
-By default, jupyterlite-sphinx runs the `jupyter lite build` command in a temporary directory, you can overwrite this behavior and ask jupyterlite to build in a given directory:
+By default, jupyterlite-sphinx runs the `jupyter lite build` command in the docs directory, you can overwrite this behavior and ask jupyterlite to build in a given directory:
 
 ```python
 # Build in the current directory
-jupyterlite_dir = "."
+jupyterlite_dir = "/path/to/your/lite/dir"
 ```
-
-This allows for jupyterlite to automatically pick-up some paths <https://jupyterlite.readthedocs.io/en/latest/reference/cli.html#the-lite-dir>
 
 ## JupyterLite config
 
