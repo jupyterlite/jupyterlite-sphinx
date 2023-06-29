@@ -21,48 +21,36 @@ By default, jupyterlite-sphinx runs the `jupyter lite build` command in the docs
 jupyterlite_dir = "/path/to/your/lite/dir"
 ```
 
+## Pre-installed packages
+
+In order to have Python packages pre-installed in the kernel environment, you can use [jupyterlite-xeus-python](https://xeus-python-kernel.readthedocs.io).
+
+You would need `jupyterlite-xeus-python` installed in your docs build environment.
+
+You can pre-install packages by adding an `environment.yml` file in the docs directory, this file will be found automatically by xeus-python which will pre-build the environment when running the jupyter lite build.
+
+Furthermore, this automatically installs any labextension that it founds, for example installing ipyleaflet will make ipyleaflet work without the need to manually install the jupyter-leaflet labextension.
+
+Say you want to install NumPy, Matplotlib and ipycanvas, it can be done by creating the environment.yml file with the following content:
+
+```yml
+name: xeus-python-kernel
+channels:
+  - https://repo.mamba.pm/emscripten-forge
+  - https://repo.mamba.pm/conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - ipycanvas
+```
+
 ## JupyterLite config
 
 You can provide [custom configuration](https://jupyterlite.readthedocs.io/en/latest/howto/index.html#configuring-a-jupyterlite-deployment)
 to your JupyterLite deployment.
 
-For example, if you want to have bqplot working in this deployment, you need to install the bqplot federated extension
-and you can serve the bqplot wheel to `piplite`, this is done by telling your `conf.py` where to look for the jupyterlite config:
-
 ```python
 jupyterlite_config = "jupyterlite_config.json"
-```
-
-The `jupyterlite_config.json` containing the following:
-
-```json
-{
-    "LiteBuildConfig": {
-        "federated_extensions": [
-            "https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.33-pyhd8ed1ab_0.tar.bz2",
-            "https://github.com/jupyterlite/pyodide-kernel/releases/download/v0.0.5/jupyterlite_pyodide_kernel-0.0.5-py3-none-any.whl"
-        ],
-        "ignore_sys_prefix": true
-    }
-    "PipliteAddon": {
-        "piplite_urls": [
-            "https://files.pythonhosted.org/packages/py2.py3/b/bqplot/bqplot-0.12.33-py2.py3-none-any.whl",
-        ]
-    }
-}
-```
-
-The example above also includes the Pyodide kernel for JupyterLite as a `federated_extensions`.
-See the [JupyterLite documentation](https://jupyterlite.readthedocs.io/en/latest/howto/index.html) to learn more about configuring your environment.
-
-Then you should be able to show Notebooks working with bqplot!
-
-```rst
-.. retrolite:: bqplot.ipynb
-```
-
-```{eval-rst}
-.. retrolite:: bqplot.ipynb
 ```
 
 ## Disable the `.ipynb` docs source binding

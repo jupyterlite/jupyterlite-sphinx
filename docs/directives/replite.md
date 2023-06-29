@@ -5,7 +5,7 @@ This directive takes extra options which are the same options as the `replite` p
 
 ```rst
 .. replite::
-   :kernel: python
+   :kernel: xeus-python
    :height: 600px
    :prompt: Try Replite!
    :prompt_color: #dc3545
@@ -23,7 +23,7 @@ This directive takes extra options which are the same options as the `replite` p
 
 ```{eval-rst}
 .. replite::
-   :kernel: python
+   :kernel: xeus-python
    :height: 600px
    :prompt: Try Replite!
    :prompt_color: #dc3545
