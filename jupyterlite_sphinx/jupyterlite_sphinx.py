@@ -23,6 +23,8 @@ HERE = Path(__file__).parent
 
 CONTENT_DIR = "_contents"
 JUPYTERLITE_DIR = "lite"
+# Using a global variable, is there a better way?
+APPS = []
 
 
 # Used for nodes that do not need to be rendered
@@ -191,6 +193,9 @@ class RepliteDirective(SphinxDirective):
     }
 
     def run(self):
+        if not "repl" in APPS:
+            APPS.append("repl")
+
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "100%")
 
@@ -281,6 +286,12 @@ class JupyterLiteDirective(_LiteDirective):
 
     iframe_cls = JupyterLiteIframe
 
+    def run(self):
+        if not "lab" in APPS:
+            APPS.append("lab")
+
+        return super().run()
+
 
 class RetroLiteDirective(_LiteDirective):
     """The ``.. retrolite::`` directive.
@@ -289,6 +300,12 @@ class RetroLiteDirective(_LiteDirective):
     """
 
     iframe_cls = RetroLiteIframe
+
+    def run(self):
+        if not "retro" in APPS:
+            APPS.append("retro")
+
+        return super().run()
 
 
 class VoiciDirective(_LiteDirective):
@@ -308,6 +325,9 @@ class VoiciDirective(_LiteDirective):
             raise RuntimeError(
                 "Voici must be installed if you want to make use of the voici directive: pip install voici"
             )
+
+        if not "voici" in APPS:
+            APPS.append("voici")
 
         return super().run()
 
@@ -372,27 +392,24 @@ def jupyterlite_build(app: Sphinx, error):
         for content in jupyterlite_contents:
             contents.extend(["--contents", content])
 
+        apps = []
+        for app in APPS:
+            apps.extend(["--apps", app])
+
         command = [
             "jupyter",
             "lite",
             "build",
             "--debug",
             *config,
+            *apps,
             *contents,
             "--contents",
             os.path.join(app.srcdir, CONTENT_DIR),
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
             "--lite-dir",
-            jupyterlite_dir,
-            "--apps",
-            "lab",
-            "--apps",
-            "retro",
-            "--apps",
-            "repl",
-            "--apps",
-            "voici"
+            jupyterlite_dir
         ]
 
         subprocess.run(command, cwd=app.srcdir, check=True)
