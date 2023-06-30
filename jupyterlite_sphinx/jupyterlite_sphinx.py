@@ -299,6 +299,14 @@ class VoiciDirective(_LiteDirective):
 
     iframe_cls = VoiciIframe
 
+    def run(self):
+        try:
+            import voici
+        except ImportError:
+            raise RuntimeError('Voici must be installed if you want to make use of the voici directive: pip install voici')
+
+        super().run()
+
 
 class RetroLiteParser(RSTParser):
     """Sphinx source parser for Jupyter notebooks.
@@ -431,6 +439,17 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
+
+    # Initialize Voici directive
+    app.add_node(
+        VoiciIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_directive("voici", VoiciDirective)
 
     # CSS and JS assets
     copy_asset(str(HERE / "jupyterlite_sphinx.css"), str(Path(app.outdir) / "_static"))
