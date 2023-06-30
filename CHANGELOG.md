@@ -2,6 +2,36 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.9.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.8.0...e22a7e66b17cb87c499487f28761f4fa32f8b061))
+
+### Enhancements made
+
+- Add Voici directive [#100](https://github.com/jupyterlite/jupyterlite-sphinx/pull/100) ([@martinRenou](https://github.com/martinRenou))
+- Default lite directory to the docs directory [#99](https://github.com/jupyterlite/jupyterlite-sphinx/pull/99) ([@martinRenou](https://github.com/martinRenou))
+- Use xeus-python in docs [#98](https://github.com/jupyterlite/jupyterlite-sphinx/pull/98) ([@martinRenou](https://github.com/martinRenou))
+
+### Maintenance and upkeep improvements
+
+- Update to `jupyterlite-core==0.1.0`, require Python 3.8 [#96](https://github.com/jupyterlite/jupyterlite-sphinx/pull/96) ([@jtpio](https://github.com/jtpio))
+
+### Documentation improvements
+
+- Add conda instructions and docs scripts [#97](https://github.com/jupyterlite/jupyterlite-sphinx/pull/97) ([@jtpio](https://github.com/jtpio))
+- Update docs to mention adding other kernels [#94](https://github.com/jupyterlite/jupyterlite-sphinx/pull/94) ([@jtpio](https://github.com/jtpio))
+- Add changelog to the docs, more markdown [#93](https://github.com/jupyterlite/jupyterlite-sphinx/pull/93) ([@jtpio](https://github.com/jtpio))
+- Convert docs to Markdown [#92](https://github.com/jupyterlite/jupyterlite-sphinx/pull/92) ([@jtpio](https://github.com/jtpio))
+- Add notice about `jupyterlite-core` in the changelog [#91](https://github.com/jupyterlite/jupyterlite-sphinx/pull/91) ([@jtpio](https://github.com/jtpio))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-03-15&to=2023-06-30&type=c))
+
+[@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2023-03-15..2023-06-30&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2023-03-15..2023-06-30&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.8.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/0.7.3...51e489426a2e0026bcbc7207c87764bcd936d78b))
@@ -33,8 +63,6 @@ jupyterlite-pyodide-kernel
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-02-03&to=2023-03-15&type=c))
 
 [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2023-02-03..2023-03-15&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.7.3
 
