@@ -393,8 +393,8 @@ def jupyterlite_build(app: Sphinx, error):
             contents.extend(["--contents", content])
 
         apps = []
-        for app in APPS:
-            apps.extend(["--apps", app])
+        for jlite_app in APPS:
+            apps.extend(["--apps", jlite_app])
 
         command = [
             "jupyter",
