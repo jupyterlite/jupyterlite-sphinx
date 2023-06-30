@@ -163,7 +163,10 @@ class VoiciIframe(_PromptedIframe):
         lite_options={},
         **attributes,
     ):
-        app_path = f"voici/render/{notebook.replace('.ipynb', '.html')}"
+        if notebook is not None:
+            app_path = f"voici/render/{notebook.replace('.ipynb', '.html')}"
+        else:
+            app_path = "voici/tree"
 
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
@@ -315,8 +318,6 @@ class VoiciDirective(_LiteDirective):
     """
 
     iframe_cls = VoiciIframe
-
-    required_arguments = 1
 
     def run(self):
         try:
