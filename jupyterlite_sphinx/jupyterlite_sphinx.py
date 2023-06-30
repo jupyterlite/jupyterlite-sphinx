@@ -385,6 +385,14 @@ def jupyterlite_build(app: Sphinx, error):
             os.path.join(app.outdir, JUPYTERLITE_DIR),
             "--lite-dir",
             jupyterlite_dir,
+            "--apps",
+            "lab",
+            "--apps",
+            "retro",
+            "--apps",
+            "repl",
+            "--apps",
+            "voici"
         ]
 
         subprocess.run(command, cwd=app.srcdir, check=True)
