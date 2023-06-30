@@ -161,7 +161,7 @@ class VoiciIframe(_PromptedIframe):
         lite_options={},
         **attributes,
     ):
-        app_path = f"voici/render/{self.notebooks_path}"
+        app_path = f"voici/render/{notebook}"
 
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
