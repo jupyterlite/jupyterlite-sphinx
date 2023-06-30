@@ -299,6 +299,8 @@ class VoiciDirective(_LiteDirective):
 
     iframe_cls = VoiciIframe
 
+    required_arguments = 1
+
     def run(self):
         try:
             import voici
