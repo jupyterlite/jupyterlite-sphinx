@@ -305,7 +305,9 @@ class VoiciDirective(_LiteDirective):
         try:
             import voici
         except ImportError:
-            raise RuntimeError('Voici must be installed if you want to make use of the voici directive: pip install voici')
+            raise RuntimeError(
+                "Voici must be installed if you want to make use of the voici directive: pip install voici"
+            )
 
         super().run()
 
