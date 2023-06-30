@@ -309,7 +309,7 @@ class VoiciDirective(_LiteDirective):
                 "Voici must be installed if you want to make use of the voici directive: pip install voici"
             )
 
-        super().run()
+        return super().run()
 
 
 class RetroLiteParser(RSTParser):
