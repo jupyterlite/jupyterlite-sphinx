@@ -23,6 +23,8 @@ HERE = Path(__file__).parent
 
 CONTENT_DIR = "_contents"
 JUPYTERLITE_DIR = "lite"
+# Using a global variable, is there a better way?
+APPS = []
 
 
 # Used for nodes that do not need to be rendered
@@ -36,52 +38,29 @@ def visit_element_html(self, node):
     raise SkipNode
 
 
-class _LiteIframe(Element):
+class _PromptedIframe(Element):
     def __init__(
         self,
         rawsource="",
         *children,
-        prefix=JUPYTERLITE_DIR,
+        iframe_src="",
         width="100%",
         height="100%",
         prompt=False,
         prompt_color=None,
-        content=[],
-        notebook=None,
-        lite_options={},
         **attributes,
     ):
         super().__init__(
             "",
-            prefix=prefix,
+            iframe_src=iframe_src,
             width=width,
             height=height,
             prompt=prompt,
             prompt_color=prompt_color,
-            content=content,
-            notebook=notebook,
-            lite_options=lite_options,
         )
 
     def html(self):
-        lite_options = self["lite_options"]
-
-        if self["content"]:
-            code_lines = ["" if not line.strip() else line for line in self["content"]]
-            code = "\n".join(code_lines)
-
-            lite_options["code"] = code
-
-        app_path = self.lite_app
-        if self["notebook"] is not None:
-            lite_options["path"] = self["notebook"]
-            app_path = f"{self.lite_app}{self.notebooks_path}"
-
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
-
-        iframe_src = f'{self["prefix"]}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = self["iframe_src"]
 
         if self["prompt"]:
             prompt = (
@@ -106,6 +85,37 @@ class _LiteIframe(Element):
             f'<iframe src="{iframe_src}"'
             f'width="{self["width"]}" height="{self["height"]}" class="jupyterlite_sphinx_raw_iframe"></iframe>'
         )
+
+
+class _LiteIframe(_PromptedIframe):
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        content=[],
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+        if content:
+            code_lines = ["" if not line.strip() else line for line in content]
+            code = "\n".join(code_lines)
+
+            lite_options["code"] = code
+
+        app_path = self.lite_app
+        if notebook is not None:
+            lite_options["path"] = notebook
+            app_path = f"{self.lite_app}{self.notebooks_path}"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
 
 class RepliteIframe(_LiteIframe):
@@ -138,6 +148,35 @@ class RetroLiteIframe(_LiteIframe):
     notebooks_path = "notebooks/"
 
 
+class VoiciIframe(_PromptedIframe):
+    """Appended to the doctree by the VoiciDirective directive
+
+    Renders an iframe that shows a Notebook with Voici.
+    """
+
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+        if notebook is not None:
+            app_path = f"voici/render/{notebook.replace('.ipynb', '.html')}"
+        else:
+            app_path = "voici/tree"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
+
+
 class RepliteDirective(SphinxDirective):
     """The ``.. replite::`` directive.
 
@@ -157,6 +196,9 @@ class RepliteDirective(SphinxDirective):
     }
 
     def run(self):
+        if not "repl" in APPS:
+            APPS.append("repl")
+
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "100%")
 
@@ -247,6 +289,12 @@ class JupyterLiteDirective(_LiteDirective):
 
     iframe_cls = JupyterLiteIframe
 
+    def run(self):
+        if not "lab" in APPS:
+            APPS.append("lab")
+
+        return super().run()
+
 
 class RetroLiteDirective(_LiteDirective):
     """The ``.. retrolite::`` directive.
@@ -255,6 +303,34 @@ class RetroLiteDirective(_LiteDirective):
     """
 
     iframe_cls = RetroLiteIframe
+
+    def run(self):
+        if not "retro" in APPS:
+            APPS.append("retro")
+
+        return super().run()
+
+
+class VoiciDirective(_LiteDirective):
+    """The ``.. voici::`` directive.
+
+    Renders a Notebook with Voici in the docs.
+    """
+
+    iframe_cls = VoiciIframe
+
+    def run(self):
+        try:
+            import voici
+        except ImportError:
+            raise RuntimeError(
+                "Voici must be installed if you want to make use of the voici directive: pip install voici"
+            )
+
+        if not "voici" in APPS:
+            APPS.append("voici")
+
+        return super().run()
 
 
 class RetroLiteParser(RSTParser):
@@ -317,12 +393,17 @@ def jupyterlite_build(app: Sphinx, error):
         for content in jupyterlite_contents:
             contents.extend(["--contents", content])
 
+        apps = []
+        for jlite_app in APPS:
+            apps.extend(["--apps", jlite_app])
+
         command = [
             "jupyter",
             "lite",
             "build",
             "--debug",
             *config,
+            *apps,
             *contents,
             "--contents",
             os.path.join(app.srcdir, CONTENT_DIR),
@@ -388,6 +469,17 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
+
+    # Initialize Voici directive
+    app.add_node(
+        VoiciIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_directive("voici", VoiciDirective)
 
     # CSS and JS assets
     copy_asset(str(HERE / "jupyterlite_sphinx.css"), str(Path(app.outdir) / "_static"))
