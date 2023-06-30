@@ -163,7 +163,7 @@ class VoiciIframe(_PromptedIframe):
         lite_options={},
         **attributes,
     ):
-        app_path = f"voici/render/{notebook.replace(".ipynb", ".html")}"
+        app_path = f"voici/render/{notebook.replace('.ipynb', '.html')}"
 
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
@@ -409,7 +409,7 @@ def jupyterlite_build(app: Sphinx, error):
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
             "--lite-dir",
-            jupyterlite_dir
+            jupyterlite_dir,
         ]
 
         subprocess.run(command, cwd=app.srcdir, check=True)
