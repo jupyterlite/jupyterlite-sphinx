@@ -19,12 +19,15 @@ from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
 
+try:
+    import voici
+except ImportError:
+    voici = None
+
 HERE = Path(__file__).parent
 
 CONTENT_DIR = "_contents"
 JUPYTERLITE_DIR = "lite"
-# Using a global variable, is there a better way?
-APPS = []
 
 
 # Used for nodes that do not need to be rendered
@@ -196,9 +199,6 @@ class RepliteDirective(SphinxDirective):
     }
 
     def run(self):
-        if not "repl" in APPS:
-            APPS.append("repl")
-
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "100%")
 
@@ -289,12 +289,6 @@ class JupyterLiteDirective(_LiteDirective):
 
     iframe_cls = JupyterLiteIframe
 
-    def run(self):
-        if not "lab" in APPS:
-            APPS.append("lab")
-
-        return super().run()
-
 
 class RetroLiteDirective(_LiteDirective):
     """The ``.. retrolite::`` directive.
@@ -303,12 +297,6 @@ class RetroLiteDirective(_LiteDirective):
     """
 
     iframe_cls = RetroLiteIframe
-
-    def run(self):
-        if not "retro" in APPS:
-            APPS.append("retro")
-
-        return super().run()
 
 
 class VoiciDirective(_LiteDirective):
@@ -320,15 +308,10 @@ class VoiciDirective(_LiteDirective):
     iframe_cls = VoiciIframe
 
     def run(self):
-        try:
-            import voici
-        except ImportError:
+        if voici is None:
             raise RuntimeError(
                 "Voici must be installed if you want to make use of the voici directive: pip install voici"
             )
-
-        if not "voici" in APPS:
-            APPS.append("voici")
 
         return super().run()
 
@@ -393,9 +376,7 @@ def jupyterlite_build(app: Sphinx, error):
         for content in jupyterlite_contents:
             contents.extend(["--contents", content])
 
-        apps = []
-        for jlite_app in APPS:
-            apps.extend(["--apps", jlite_app])
+        voici_option = [] if voici is None else ["--apps", "voici"]
 
         command = [
             "jupyter",
@@ -403,12 +384,18 @@ def jupyterlite_build(app: Sphinx, error):
             "build",
             "--debug",
             *config,
-            *apps,
             *contents,
             "--contents",
             os.path.join(app.srcdir, CONTENT_DIR),
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
+            "--apps",
+            "lab",
+            "--apps",
+            "retro",
+            "--apps",
+            "repl",
+            *voici_option,
             "--lite-dir",
             jupyterlite_dir,
         ]
