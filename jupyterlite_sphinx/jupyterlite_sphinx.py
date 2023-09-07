@@ -61,7 +61,7 @@ class _PromptedIframe(Element):
             height=height,
             prompt=prompt,
             prompt_color=prompt_color,
-            search_params=search_params
+            search_params=search_params,
         )
 
     def html(self):
@@ -79,7 +79,7 @@ class _PromptedIframe(Element):
             placeholder_id = uuid4()
             container_style = f'width: {self["width"]}; height: {self["height"]};'
 
-            return (f"""
+            return f"""
                 <div
                     class=\"jupyterlite_sphinx_iframe_container\"
                     style=\"{container_style}\"
@@ -96,7 +96,7 @@ class _PromptedIframe(Element):
                     {prompt}
                     </div>
                 </div>
-            """)
+            """
 
         return (
             f'<iframe src="{iframe_src}"'
@@ -257,10 +257,9 @@ class _LiteDirective(SphinxDirective):
         prompt = self.options.pop("prompt", False)
         prompt_color = self.options.pop("prompt_color", None)
 
-        search_params = list(map(
-            str.strip,
-            self.options.pop("search_params", "").split(",")
-        ))
+        search_params = list(
+            map(str.strip, self.options.pop("search_params", "").split(","))
+        )
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
