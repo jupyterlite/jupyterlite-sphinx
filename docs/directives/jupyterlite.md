@@ -35,3 +35,8 @@ You can also pass a Notebook file to open automatically:
    :prompt: Try JupyterLite!
    :prompt_color: #00aa42
 ```
+
+
+The directive `search_params` allows to transfer some search parameters from the documentation URL to the Jupyterlite URL.\
+Jupyterlite is than able to these parameters from its own URL.\
+For example `:search_params: param1, param2` will transfer the parameters *param1* and *param2*.
