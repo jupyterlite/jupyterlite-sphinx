@@ -11,3 +11,19 @@ window.jupyterliteShowIframe = (tryItButtonId, iframeSrc) => {
   tryItButton.classList.remove('jupyterlite_sphinx_try_it_button_unclicked');
   tryItButton.classList.add('jupyterlite_sphinx_try_it_button_clicked');
 }
+
+window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
+  const baseURL = window.location.origin;
+  const iframeUrl = new URL(iframeSrc, baseURL);
+
+  let pageParams = new URLSearchParams(window.location.search);
+
+  params.forEach(param => {
+    value = pageParams.get(param);
+    if (value !== null) {
+      iframeUrl.searchParams.append(param, value);
+    }
+  });
+
+  return iframeUrl.toString().replace(baseURL, '');
+}

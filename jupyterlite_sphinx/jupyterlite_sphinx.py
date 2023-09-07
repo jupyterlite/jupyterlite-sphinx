@@ -51,6 +51,7 @@ class _PromptedIframe(Element):
         height="100%",
         prompt=False,
         prompt_color=None,
+        search_params=[],
         **attributes,
     ):
         super().__init__(
@@ -60,10 +61,12 @@ class _PromptedIframe(Element):
             height=height,
             prompt=prompt,
             prompt_color=prompt_color,
+            search_params=search_params
         )
 
     def html(self):
         iframe_src = self["iframe_src"]
+        search_params = self["search_params"]
 
         if self["prompt"]:
             prompt = (
@@ -76,13 +79,24 @@ class _PromptedIframe(Element):
             placeholder_id = uuid4()
             container_style = f'width: {self["width"]}; height: {self["height"]};'
 
-            return (
-                f"<div class=\"jupyterlite_sphinx_iframe_container\" style=\"{container_style}\" onclick=window.jupyterliteShowIframe('{placeholder_id}','{iframe_src}')>"
-                f'  <div id={placeholder_id} class="jupyterlite_sphinx_try_it_button jupyterlite_sphinx_try_it_button_unclicked" style="background-color: {prompt_color};">'
-                f"    {prompt}"
-                "   </div>"
-                "</div>"
-            )
+            return (f"""
+                <div
+                    class=\"jupyterlite_sphinx_iframe_container\"
+                    style=\"{container_style}\"
+                    onclick=\"window.jupyterliteShowIframe(
+                        '{placeholder_id}',
+                        window.jupyterliteConcatSearchParams('{iframe_src}',{search_params})
+                    )\"
+                >
+                    <div
+                        id={placeholder_id}
+                        class=\"jupyterlite_sphinx_try_it_button jupyterlite_sphinx_try_it_button_unclicked\"
+                        style=\"background-color: {prompt_color};\"
+                    >
+                    {prompt}
+                    </div>
+                </div>
+            """)
 
         return (
             f'<iframe src="{iframe_src}"'
@@ -233,6 +247,7 @@ class _LiteDirective(SphinxDirective):
         "theme": directives.unchanged,
         "prompt": directives.unchanged,
         "prompt_color": directives.unchanged,
+        "search_params": directives.unchanged,
     }
 
     def run(self):
@@ -241,6 +256,11 @@ class _LiteDirective(SphinxDirective):
 
         prompt = self.options.pop("prompt", False)
         prompt_color = self.options.pop("prompt_color", None)
+
+        search_params = list(map(
+            str.strip,
+            self.options.pop("search_params", "").split(",")
+        ))
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
@@ -276,6 +296,7 @@ class _LiteDirective(SphinxDirective):
                 height=height,
                 prompt=prompt,
                 prompt_color=prompt_color,
+                search_params=search_params,
                 lite_options=self.options,
             )
         ]
