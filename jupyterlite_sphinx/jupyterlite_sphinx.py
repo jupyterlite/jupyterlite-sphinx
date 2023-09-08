@@ -4,6 +4,7 @@ import shutil
 import tempfile
 from warnings import warn
 import glob
+import re
 
 from pathlib import Path
 
@@ -501,13 +502,15 @@ def setup(app):
 
 
 def search_params_parser(search_params: str) -> str:
+    pattern = re.compile(r"^\[(?:\s*[\"']{1}([^=\s\,&=\?\/]+)[\"']{1}\s*\,?)+\]$")
     if not search_params:
         return ""
     if search_params in ["True", "False"]:
         return search_params.lower()
-    elif search_params.startswith("[") and search_params.endswith("]"):
+    elif pattern.match(search_params):
         return search_params.replace('"', "'")
     else:
         raise SyntaxError(
-            'The search_params directive must be either True, False or ["param1", "param2"]'
+            'The search_params directive must be either True, False or ["param1", "param2"].\n'
+            'The params name shouldn\'t contain any of the following characters ["\\", "\'", """, ",", "?", "=", "&", " ").'
         )
