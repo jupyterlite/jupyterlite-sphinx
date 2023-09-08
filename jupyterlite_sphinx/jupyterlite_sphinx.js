@@ -18,6 +18,9 @@ window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
 
   let pageParams = new URLSearchParams(window.location.search);
 
+  if (params.includes('=all')) {
+    params = Array.from(pageParams.keys());
+  }
   params.forEach(param => {
     value = pageParams.get(param);
     if (value !== null) {
