@@ -85,7 +85,7 @@ class _PromptedIframe(Element):
                     style=\"{container_style}\"
                     onclick=\"window.jupyterliteShowIframe(
                         '{placeholder_id}',
-                        window.jupyterliteConcatSearchParams('{iframe_src}',{search_params})
+                        window.jupyterliteConcatSearchParams('{iframe_src}', {search_params})
                     )\"
                 >
                     <div
@@ -210,6 +210,7 @@ class RepliteDirective(SphinxDirective):
         "theme": directives.unchanged,
         "prompt": directives.unchanged,
         "prompt_color": directives.unchanged,
+        "search_params": directives.unchanged,
     }
 
     def run(self):
@@ -218,6 +219,8 @@ class RepliteDirective(SphinxDirective):
 
         prompt = self.options.pop("prompt", False)
         prompt_color = self.options.pop("prompt_color", None)
+
+        search_params = search_params_parser(self.options.pop("search_params", ""))
 
         prefix = os.path.relpath(
             os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
@@ -232,6 +235,7 @@ class RepliteDirective(SphinxDirective):
                 prompt=prompt,
                 prompt_color=prompt_color,
                 content=self.content,
+                search_params=search_params,
                 lite_options=self.options,
             )
         ]
@@ -257,9 +261,7 @@ class _LiteDirective(SphinxDirective):
         prompt = self.options.pop("prompt", False)
         prompt_color = self.options.pop("prompt_color", None)
 
-        search_params = list(
-            map(str.strip, self.options.pop("search_params", "").split(","))
-        )
+        search_params = search_params_parser(self.options.pop("search_params", ""))
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
@@ -496,3 +498,16 @@ def setup(app):
     app.add_css_file("jupyterlite_sphinx.css")
 
     app.add_js_file("jupyterlite_sphinx.js")
+
+
+def search_params_parser(search_params: str) -> str:
+    if not search_params:
+        return ""
+    if search_params in ["True", "False"]:
+        return search_params.lower()
+    elif search_params.startswith("[") and search_params.endswith("]"):
+        return search_params.replace('"', "'")
+    else:
+        raise SyntaxError(
+            'The search_params directive must be either True, False or ["param1", "param2"]'
+        )
