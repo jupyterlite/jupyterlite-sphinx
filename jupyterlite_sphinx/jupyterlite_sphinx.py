@@ -510,7 +510,7 @@ def search_params_parser(search_params: str) -> str:
     elif pattern.match(search_params):
         return search_params.replace('"', "'")
     else:
-        raise SyntaxError(
+        raise ValueError(
             'The search_params directive must be either True, False or ["param1", "param2"].\n'
             'The params name shouldn\'t contain any of the following characters ["\\", "\'", """, ",", "?", "=", "&", " ").'
         )
