@@ -221,7 +221,7 @@ class RepliteDirective(SphinxDirective):
         prompt = self.options.pop("prompt", False)
         prompt_color = self.options.pop("prompt_color", None)
 
-        search_params = search_params_parser(self.options.pop("search_params", ""))
+        search_params = search_params_parser(self.options.pop("search_params", False))
 
         prefix = os.path.relpath(
             os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
@@ -504,7 +504,7 @@ def setup(app):
 def search_params_parser(search_params: str) -> str:
     pattern = re.compile(r"^\[(?:\s*[\"']{1}([^=\s\,&=\?\/]+)[\"']{1}\s*\,?)+\]$")
     if not search_params:
-        return ""
+        return "false"
     if search_params in ["True", "False"]:
         return search_params.lower()
     elif pattern.match(search_params):

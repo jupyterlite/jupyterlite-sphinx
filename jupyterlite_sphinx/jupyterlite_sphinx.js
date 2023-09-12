@@ -33,6 +33,5 @@ window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
     }
   });
 
-  let iframeSrc = iframeUrl.toString().replace(baseURL, '');
-  return iframeSrc.replace(/^\//, '');
+  return iframeUrl.toString().replace(`${baseURL}/`, '');
 }
