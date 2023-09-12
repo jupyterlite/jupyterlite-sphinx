@@ -52,7 +52,7 @@ class _PromptedIframe(Element):
         height="100%",
         prompt=False,
         prompt_color=None,
-        search_params=[],
+        search_params="false",
         **attributes,
     ):
         super().__init__(
@@ -262,7 +262,7 @@ class _LiteDirective(SphinxDirective):
         prompt = self.options.pop("prompt", False)
         prompt_color = self.options.pop("prompt_color", None)
 
-        search_params = search_params_parser(self.options.pop("search_params", ""))
+        search_params = search_params_parser(self.options.pop("search_params", False))
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
