@@ -34,7 +34,7 @@ window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
   });
 
   if (iframeUrl.searchParams.size) {
-    return `${iframeSrc}?${iframeUrl.searchParams.toString()}`;
+    return `${iframeSrc.split('?')[0]}?${iframeUrl.searchParams.toString()}`;
   } else {
     return iframeSrc;
   }
