@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.9.3
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.9.2...551a58744536dca3d51e657b1d7ddcb5da102510))
+
+### Bugs fixed
+
+- Fix search params [#109](https://github.com/jupyterlite/jupyterlite-sphinx/pull/109) ([@brichet](https://github.com/brichet))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-09-11&to=2023-09-13&type=c))
+
+[@brichet](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Abrichet+updated%3A2023-09-11..2023-09-13&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.9.2
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.9.1...d69ce1f546d58cb81cb7a976358712a440f842d1))
@@ -15,8 +31,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-07-24&to=2023-09-11&type=c))
 
 [@brichet](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Abrichet+updated%3A2023-07-24..2023-09-11&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2023-07-24..2023-09-11&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.9.1
 
