@@ -455,7 +455,7 @@ class TryExamplesDirective(SphinxDirective):
         # Iframe container (initially hidden)
         iframe_container_div = (
             f"<div id=\"{iframe_div_id}\" "
-            f"class=\"try_examples_iframe_container hidden\" "
+            f"class=\"jupyterlite_sphinx_iframe_container hidden\" "
             f"style=\"{container_style}\"></div>"
         )
         iframe_container = nodes.raw('', iframe_container_div, format='html')
