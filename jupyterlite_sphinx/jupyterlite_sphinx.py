@@ -23,7 +23,7 @@ from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
 
-from .examples_to_notebook import examples_to_notebook
+from ._try_examples import examples_to_notebook, insert_try_examples_directive
 
 try:
     import voici
@@ -465,6 +465,24 @@ class TryExamplesDirective(SphinxDirective):
         return [outer_container]
 
 
+def _process_docstring_examples(app, docname, source):
+    source_path = app.env.doc2path(docname)
+    if source_path.endswith(".py"):
+        source[0] = insert_try_examples_directive(source[0])
+
+
+def _process_autodoc_docstrings(app, what, name, obj, options, lines):
+    modified_lines = insert_try_examples_directive(lines)
+    lines.clear()
+    lines.extend(modified_lines)
+
+
+def conditional_process_examples(app, config):
+    if config.global_enable_try_examples:
+        app.connect("source-read", _process_docstring_examples)
+        app.connect("autodoc-process-docstring", _process_autodoc_docstrings)
+
+
 def inited(app: Sphinx, config):
     # Create the content dir
     os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
@@ -602,6 +620,8 @@ def setup(app):
 
     # Initialize TryExamples directive
     app.add_directive("try_examples", TryExamplesDirective)
+    app.add_config_value('global_enable_try_examples', default=False, rebuild=True)
+    app.connect('config-inited', conditional_process_examples)
 
     # CSS and JS assets
     copy_asset(str(HERE / "jupyterlite_sphinx.css"), str(Path(app.outdir) / "_static"))

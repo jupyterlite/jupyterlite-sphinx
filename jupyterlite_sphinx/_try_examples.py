@@ -138,3 +138,116 @@ def _process_latex(md_text):
             equation_lines = []
 
     return "\n".join(wrapped_lines)
+
+
+# https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html#docstring-sections
+_non_example_docstring_section_headers = (
+    "Args",
+    "Arguments",
+    "Attention",
+    "Attributes",
+    "Caution",
+    "Danger",
+    "Error",
+    "Hint",
+    "Important",
+    "Keyword Args",
+    "Keyword Arguments",
+    "Methods",
+    "Note",
+    "Notes",
+    "Other Parameters",
+    "Parameters",
+    "Return",
+    "Returns",
+    "Raise",
+    "Raises",
+    "References",
+    "See Also",
+    "Tip",
+    "Todo",
+    "Warning",
+    "Warnings",
+    "Warns",
+    "Yield",
+    "Yields",
+)
+
+
+_examples_start_pattern = re.compile(r".. (rubric|admonition):: Examples")
+_next_section_pattern = re.compile(
+    "|".join(
+        rf".. (rubric|admonition)::\s*{header}"
+        for header in _non_example_docstring_section_headers
+    )
+)
+
+
+def insert_try_examples_directive(lines):
+    """Adds try_examples directive to Examples section of a docstring.
+
+    Hack to allow for a config option to enable try_examples functionality
+    in all Examples sections (unless a comment "..! disable_try_examples" is
+    added explicitly after the section header.)
+
+
+    Parameters
+    ----------
+    docstring : list of str
+        Lines of a docstring at time of "autodoc-process-docstring", with section
+        headers denoted by `.. rubric::` or `.. admonition::`.
+        
+
+    Returns
+    -------
+    list of str
+        Updated version of the input docstring which has a try_examples directive
+        inserted in the Examples section (if one exists) with all Examples content
+        indented beneath it. Does nothing if the comment "..! disable_try_examples"
+        is included at the top of the Examples section. Also a no-op if the
+        try_examples directive is already included.
+    """
+        # Search for the "Examples" section start
+    for left_index, line in enumerate(lines):
+        if _examples_start_pattern.search(line):
+            break
+    else:
+        # No examples section found
+        return lines
+
+    # Increment to the line after "Examples"
+    left_index += 1
+
+    # Skip empty lines to get to the first content line after "Examples"
+    while left_index < len(lines) and not lines[left_index].strip():
+        left_index += 1
+
+    # If reached the end of the docstring without finding non-empty line
+    if left_index == len(lines):
+        return lines
+
+    # Check for the "..! disable_try_examples" directive
+    if lines[left_index].strip() == "..! disable_try_examples":
+        return lines
+
+    # Check if the ".. try_examples::" directive already exists
+    if ".. try_examples::" in lines[left_index]:
+        return lines
+
+    # Find the end of the Examples section
+    right_index = left_index
+    while right_index < len(lines) and not _next_section_pattern.search(
+        lines[right_index]
+    ):
+        right_index += 1
+
+    # Add the ".. try_examples::" directive and indent the content of the Examples section
+    new_lines = (
+        lines[:left_index]
+        + [".. try_examples::", ""]
+        + ["    " + line for line in lines[left_index:right_index]]
+        + [""]
+        + lines[right_index:]
+    )
+
+    return new_lines
