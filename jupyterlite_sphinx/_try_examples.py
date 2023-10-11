@@ -49,7 +49,7 @@ def examples_to_notebook(input_lines):
     output_line = None
 
     for line in input_lines:
-        line = line.strip()
+        line = line.rstrip("\n")
         if line.startswith(">>>"):
             # This line is code
             # If there is any pending markdown text, add it to the notebook
@@ -61,7 +61,7 @@ def examples_to_notebook(input_lines):
                 md_lines = []  # Reset markdown lines
             # Add this line to the code
             code_lines.append(line[4:])  # Remove '>>> ' prefix
-        elif line.strip() == "" and code_lines:
+        elif line.rstrip("\n") == "" and code_lines:
             # This line is blank, so it is the end of a code cell
             # If there is any pending code, add it to the notebook
             code_text = "\n".join(code_lines)
@@ -114,24 +114,25 @@ def _process_latex(md_text):
     equation_lines = []
 
     for line in lines:
-        stripped_line = line.strip()
-        if stripped_line == ".. math::":
+        if line.strip() == ".. math::":
             in_math_block = True
             continue  # Skip the '.. math::' line
 
         if in_math_block:
-            if stripped_line == "":
+            if line.strip() == "":
                 if equation_lines:
                     # Join and wrap the equations, then reset
                     wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
                     equation_lines = []
             elif line.startswith(" ") or line.startswith("\t"):
-                equation_lines.append(stripped_line)
+                equation_lines.append(line.strip())
         else:
             wrapped_lines.append(line)
 
         # If you leave the indented block, the math block ends
-        if in_math_block and not (line.startswith(" ") or line.startswith("\t")):
+        if in_math_block and not (
+            line.startswith(" ") or line.startswith("\t") or line.strip() == ""
+        ):
             in_math_block = False
             if equation_lines:
                 wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
@@ -196,7 +197,7 @@ def insert_try_examples_directive(lines):
     docstring : list of str
         Lines of a docstring at time of "autodoc-process-docstring", with section
         headers denoted by `.. rubric::` or `.. admonition::`.
-        
+
 
     Returns
     -------
@@ -207,7 +208,7 @@ def insert_try_examples_directive(lines):
         is included at the top of the Examples section. Also a no-op if the
         try_examples directive is already included.
     """
-        # Search for the "Examples" section start
+    # Search for the "Examples" section start
     for left_index, line in enumerate(lines):
         if _examples_start_pattern.search(line):
             break
