@@ -390,19 +390,11 @@ class TryExamplesDirective(SphinxDirective):
         lite_app = "retro/"
         notebooks_path = "notebooks/"
 
-        # Instantiate doctest directive so we can get it's html output
-        doctest = DoctestDirective(
-            self.name,
-            self.arguments,
-            self.options,
-            self.content,
-            self.lineno,
-            self.content_offset,
-            self.block_text,
-            self.state,
-            self.state_machine,
-        )
-        example_node = doctest.run()[0]
+        # Parse the original content to create nodes
+        content_node = nodes.container()
+        self.state.nested_parse(self.content, self.content_offset, content_node)
+        examples_div_id = uuid4()
+        content_node['ids'].append(examples_div_id)
 
         if notebook_unique_name is None:
             nb = examples_to_notebook(self.content)
@@ -423,34 +415,9 @@ class TryExamplesDirective(SphinxDirective):
             [f"{key}={quote(value)}" for key, value in self.options.items()]
         )
 
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
-
-        container_style = f'width: {width}; height: {height};'
-        examples_div_id = uuid4()
         iframe_div_id = uuid4()
-
-        outer_container = nodes.container()
-
-        # Start the outer container with raw HTML
-        examples_container_div = (
-            f"<div class=\"examples_container\" id=\"{examples_div_id}\">"
-        )
-        start_examples_container = nodes.raw('', examples_container_div, format='html')
-        outer_container += start_examples_container
-
-        # Button with the onclick event
-        button_html = (
-            f"<button onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
-            f"'{iframe_div_id}','{iframe_src}')\">"
-            "Try it!</button>"
-        )
-        button_node = nodes.raw('', button_html, format='html')
-        outer_container += example_node
-        outer_container += button_node
-
-        # End the examples container
-        end_examples_container = nodes.raw('', "</div>", format='html')
-        outer_container += end_examples_container
+        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        container_style = f'width: {width}; height: {height};'
 
         # Iframe container (initially hidden)
         iframe_container_div = (
@@ -459,10 +426,17 @@ class TryExamplesDirective(SphinxDirective):
             f"style=\"{container_style}\"></div>"
         )
         iframe_container = nodes.raw('', iframe_container_div, format='html')
-        outer_container += iframe_container
+
+                # Button with the onclick event
+        button_html = (
+            f"<button onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
+            f"'{iframe_div_id}','{iframe_src}')\">"
+            "Try it!</button>"
+        )
+        button_node = nodes.raw('', button_html, format='html')
 
         # Return the outer container node
-        return [outer_container]
+        return [content_node, iframe_container, button_node]
 
 
 def _process_docstring_examples(app, docname, source):
