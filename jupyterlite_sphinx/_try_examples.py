@@ -47,10 +47,16 @@ def examples_to_notebook(input_lines):
     code_lines = []
     md_lines = []
     output_line = None
+    inside_multiline_code_block = False
+
 
     for line in input_lines:
         line = line.rstrip("\n")
         if line.startswith(">>>"):
+            if inside_multiline_code_block:
+                # End of a multiline code block.
+                inside_multiline_code_block = False
+
             # This line is code
             # If there is any pending markdown text, add it to the notebook
             if md_lines:
@@ -61,6 +67,10 @@ def examples_to_notebook(input_lines):
                 md_lines = []  # Reset markdown lines
             # Add this line to the code
             code_lines.append(line[4:])  # Remove '>>> ' prefix
+        elif line.startswith("...") and code_lines:
+            # This is a continuation of a multiline code block.
+            inside_multiline_code_block = True
+            code_lines.append(line[4:])
         elif line.rstrip("\n") == "" and code_lines:
             # This line is blank, so it is the end of a code cell
             # If there is any pending code, add it to the notebook
