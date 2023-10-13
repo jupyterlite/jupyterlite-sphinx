@@ -390,11 +390,13 @@ class TryExamplesDirective(SphinxDirective):
         lite_app = "retro/"
         notebooks_path = "notebooks/"
 
+        content_container_node = nodes.container(classes=["try_examples_outer_container"])
+        examples_div_id = uuid4()
+        content_container_node['ids'].append(examples_div_id)
         # Parse the original content to create nodes
         content_node = nodes.container()
         self.state.nested_parse(self.content, self.content_offset, content_node)
-        examples_div_id = uuid4()
-        content_node['ids'].append(examples_div_id)
+        content_container_node += content_node
 
         if notebook_unique_name is None:
             nb = examples_to_notebook(self.content)
@@ -409,34 +411,61 @@ class TryExamplesDirective(SphinxDirective):
                 nbf.write(nb, f)
 
         self.options["path"] = notebook_unique_name
-
         app_path = f"{lite_app}{notebooks_path}"
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in self.options.items()]
         )
 
+        iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
         iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
         container_style = f'width: {width}; height: {height};'
 
-        # Iframe container (initially hidden)
+        # Parent container (initially hidden)
+        iframe_parent_container_div_start = (
+            f"<div id=\"{iframe_parent_div_id}\" "
+            f"class=\"try_examples_outer_container hidden\">"
+        )
+
+        iframe_parent_container_div_end = "</div>"
+
         iframe_container_div = (
             f"<div id=\"{iframe_div_id}\" "
-            f"class=\"jupyterlite_sphinx_iframe_container hidden\" "
-            f"style=\"{container_style}\"></div>"
+            f"class=\"jupyterlite_sphinx_iframe_container\" "
+            f"style=\"{container_style}\">"
+            f"</div>"
         )
-        iframe_container = nodes.raw('', iframe_container_div, format='html')
 
-                # Button with the onclick event
-        button_html = (
-            f"<button onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
-            f"'{iframe_div_id}','{iframe_src}')\">"
-            "Try it!</button>"
+        # Button with the onclick event to swap embedded notebook back to examples.
+        go_back_button_html = (
+            "<button class=\"try_examples_button\" "
+            f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
+            f"'{iframe_parent_div_id}')\">"
+            "Go Back</button>"
         )
-        button_node = nodes.raw('', button_html, format='html')
+
+        # Combine everything
+        notebook_container_html = (
+            iframe_parent_container_div_start
+            + iframe_container_div
+            + go_back_button_html
+            + iframe_parent_container_div_end
+        )
+        notebook_container = nodes.raw('', notebook_container_html, format='html')
+
+        # Button with the onclick event to swap examples with embedded notebook.
+        try_it_button_html = (
+            "<button class=\"try_examples_button\" "
+            f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
+            f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}')\">"
+            "Try it with JupyterLite!</button>"
+        )
+        try_it_button_node = nodes.raw('', try_it_button_html, format='html')
+        # Add the button to the content_container_node
+        content_container_node += try_it_button_node
 
         # Return the outer container node
-        return [content_node, iframe_container, button_node]
+        return [content_container_node, notebook_container]
 
 
 def _process_docstring_examples(app, docname, source):

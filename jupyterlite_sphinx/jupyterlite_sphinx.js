@@ -41,15 +41,34 @@ window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
 }
 
 
-window.tryExamplesShowIframe = (examplesContainerId, iframeContainerId, iframeSrc) => {
-    const examples_container = document.getElementById(examplesContainerId)
+window.tryExamplesShowIframe = (
+    examplesContainerId, iframeContainerId, iframeParentContainerId, iframeSrc
+) => {
+    const examples_container = document.getElementById(examplesContainerId);
+    const iframe_parent_container = document.getElementById(iframeParentContainerId);
     const iframe_container = document.getElementById(iframeContainerId);
-    const iframe = document.createElement('iframe');
 
-    iframe.src = iframeSrc;
-    iframe.width = iframe.height = '100%';
-    iframe.classList.add('jupyterlite_sphinx_raw_iframe');
-    examples_container.classList.add("hidden")
-    iframe_container.appendChild(iframe);
-    iframe_container.classList.remove("hidden")
+    let iframe = iframe_container.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
+
+    if (!iframe) {
+	iframe = document.createElement('iframe');
+	iframe.src = iframeSrc;
+	iframe.width = iframe.height = '100%';
+	iframe.classList.add('jupyterlite_sphinx_raw_iframe');
+	examples_container.classList.add("hidden")
+	iframe_container.appendChild(iframe);
+    }
+    else {
+	examples_container.classList.add("hidden");
+    }
+    iframe_parent_container.classList.remove("hidden");
+}
+
+
+window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) => {
+    const examples_container = document.getElementById(examplesContainerId);
+    const iframe_parent_container = document.getElementById(iframeParentContainerId);
+
+    iframe_parent_container.classList.add("hidden");
+    examples_container.classList.remove("hidden");
 }

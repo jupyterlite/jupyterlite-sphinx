@@ -69,6 +69,16 @@
 }
 
 
+.try_examples_outer_container {
+    position: relative;
+}
+
+
+.try_examples_button {
+    float: right;
+}
+
+
 .hidden {
     display: none;
 }
