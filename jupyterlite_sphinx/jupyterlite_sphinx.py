@@ -464,8 +464,16 @@ class TryExamplesDirective(SphinxDirective):
         # Add the button to the content_container_node
         content_container_node += try_it_button_node
 
-        # Return the outer container node
-        return [content_container_node, notebook_container]
+        # Allow css for button to be specified in conf.py
+        config = self.state.document.settings.env.config
+        try_examples_button_css = config.jupyterlite_try_examples_button_css
+
+        try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
+        style_tag = nodes.raw(
+            '', f'<style>{try_examples_button_css}</style>', format='html'
+        )
+
+        return [content_container_node, notebook_container, style_tag]
 
 
 def _process_docstring_examples(app, docname, source):
@@ -481,7 +489,7 @@ def _process_autodoc_docstrings(app, what, name, obj, options, lines):
 
 
 def conditional_process_examples(app, config):
-    if config.global_enable_try_examples:
+    if config.jupyterlite_global_enable_try_examples:
         app.connect("source-read", _process_docstring_examples)
         app.connect("autodoc-process-docstring", _process_autodoc_docstrings)
 
@@ -578,6 +586,13 @@ def setup(app):
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
+    app.add_config_value(
+        "jupyterlite_try_examples_button_css", default="float: right;", rebuild="html"
+    )
+    app.add_config_value(
+        "jupyterlite_global_enable_try_examples", default=False, rebuild=True
+    )
+
 
     # Initialize RetroLite and JupyterLite directives
     app.add_node(
@@ -623,7 +638,6 @@ def setup(app):
 
     # Initialize TryExamples directive
     app.add_directive("try_examples", TryExamplesDirective)
-    app.add_config_value('global_enable_try_examples', default=False, rebuild=True)
     app.connect('config-inited', conditional_process_examples)
 
     # CSS and JS assets
