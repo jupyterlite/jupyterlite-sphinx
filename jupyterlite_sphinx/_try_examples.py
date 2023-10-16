@@ -224,27 +224,21 @@ def insert_try_examples_directive(lines):
             break
     else:
         # No examples section found
-        return lines
-
+        return lines[:]
     # Increment to the line after "Examples"
     left_index += 1
-
     # Skip empty lines to get to the first content line after "Examples"
     while left_index < len(lines) and not lines[left_index].strip():
         left_index += 1
-
     # If reached the end of the docstring without finding non-empty line
     if left_index == len(lines):
-        return lines
-
+        return lines[:]
     # Check for the "..! disable_try_examples" directive
-    if lines[left_index].strip() == "..! disable_try_examples":
-        return lines
-
+    if lines[left_index].strip() == "..! disable_try_examples::":
+        return lines[:]
     # Check if the ".. try_examples::" directive already exists
-    if ".. try_examples::" in lines[left_index]:
-        return lines
-
+    if ".. try_examples::" == lines[left_index].strip():
+        return lines[:]
     # Find the end of the Examples section
     right_index = left_index
     while right_index < len(lines) and not _next_section_pattern.search(
