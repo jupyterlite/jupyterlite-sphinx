@@ -68,6 +68,11 @@
     }
 }
 
+.try_examples_iframe_container {
+    position: relative;
+    cursor: pointer;
+}
+
 
 .try_examples_outer_container {
     position: relative;

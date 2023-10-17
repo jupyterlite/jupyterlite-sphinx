@@ -194,7 +194,7 @@ _next_section_pattern = re.compile(
 )
 
 
-def insert_try_examples_directive(lines):
+def insert_try_examples_directive(lines, **options):
     """Adds try_examples directive to Examples section of a docstring.
 
     Hack to allow for a config option to enable try_examples functionality
@@ -249,7 +249,9 @@ def insert_try_examples_directive(lines):
     # Add the ".. try_examples::" directive and indent the content of the Examples section
     new_lines = (
         lines[:left_index]
-        + [".. try_examples::", ""]
+        + [".. try_examples::"]
+        + [f"    :{key}: {value}" for key, value in options.items()]
+        + [""]
         + ["    " + line for line in lines[left_index:right_index]]
         + [""]
         + lines[right_index:]

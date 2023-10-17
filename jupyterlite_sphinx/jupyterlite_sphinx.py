@@ -366,13 +366,8 @@ class TryExamplesDirective(SphinxDirective):
     has_content = True
     required_arguments = 0
     option_spec = {
-        "width": directives.unchanged,
-        "height": directives.unchanged,
-        "kernel": directives.unchanged,
         "toolbar": directives.unchanged,
         "theme": directives.unchanged,
-        "prompt": directives.unchanged,
-        "prompt_color": directives.unchanged,
     }
 
     def run(self):
@@ -384,8 +379,6 @@ class TryExamplesDirective(SphinxDirective):
             directive_key
         )
 
-        width = self.options.pop("width", "100%")
-        height = self.options.pop("height", "1000px")
         prefix = os.path.join("..", JUPYTERLITE_DIR)
         lite_app = "retro/"
         notebooks_path = "notebooks/"
@@ -395,6 +388,7 @@ class TryExamplesDirective(SphinxDirective):
         content_container_node['ids'].append(examples_div_id)
         # Parse the original content to create nodes
         content_node = nodes.container()
+        content_node['classes'].append("try_examples_content")
         self.state.nested_parse(self.content, self.content_offset, content_node)
         content_container_node += content_node
 
@@ -419,7 +413,6 @@ class TryExamplesDirective(SphinxDirective):
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
         iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
-        container_style = f'width: {width}; height: {height};'
 
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
@@ -428,11 +421,9 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         iframe_parent_container_div_end = "</div>"
-
         iframe_container_div = (
             f"<div id=\"{iframe_div_id}\" "
-            f"class=\"jupyterlite_sphinx_iframe_container\" "
-            f"style=\"{container_style}\">"
+            f"class=\"try_examples_iframe_container\">"
             f"</div>"
         )
 
@@ -466,7 +457,7 @@ class TryExamplesDirective(SphinxDirective):
 
         # Allow css for button to be specified in conf.py
         config = self.state.document.settings.env.config
-        try_examples_button_css = config.jupyterlite_try_examples_button_css
+        try_examples_button_css = config.try_examples_button_css
 
         try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
         style_tag = nodes.raw(
@@ -483,13 +474,20 @@ def _process_docstring_examples(app, docname, source):
 
 
 def _process_autodoc_docstrings(app, what, name, obj, options, lines):
-    modified_lines = insert_try_examples_directive(lines)
+    try_examples_options = {
+        "toolbar": app.config.try_examples_toolbar,
+        "theme": app.config.try_examples_theme,
+    }
+    try_examples_options = {
+        key: value for key, value in try_examples_options.items() if value is not None
+    }
+    modified_lines = insert_try_examples_directive(lines, **try_examples_options)
     lines.clear()
     lines.extend(modified_lines)
 
 
 def conditional_process_examples(app, config):
-    if config.jupyterlite_global_enable_try_examples:
+    if config.global_enable_try_examples:
         app.connect("source-read", _process_docstring_examples)
         app.connect("autodoc-process-docstring", _process_autodoc_docstrings)
 
@@ -587,10 +585,16 @@ def setup(app):
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value(
-        "jupyterlite_try_examples_button_css", default="float: right;", rebuild="html"
+        "try_examples_button_css", default="float: right;", rebuild="html"
     )
     app.add_config_value(
-        "jupyterlite_global_enable_try_examples", default=False, rebuild=True
+        "global_enable_try_examples", default=False, rebuild=True
+    )
+    app.add_config_value(
+        "try_examples_toolbar", default=None, rebuild=True
+    )
+    app.add_config_value(
+        "try_examples_theme", default=None, rebuild=True
     )
 
 

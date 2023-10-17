@@ -44,31 +44,33 @@ window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
 window.tryExamplesShowIframe = (
     examplesContainerId, iframeContainerId, iframeParentContainerId, iframeSrc
 ) => {
-    const examples_container = document.getElementById(examplesContainerId);
-    const iframe_parent_container = document.getElementById(iframeParentContainerId);
-    const iframe_container = document.getElementById(iframeContainerId);
+    const examplesContainer = document.getElementById(examplesContainerId);
+    const iframeParentContainer = document.getElementById(iframeParentContainerId);
+    const iframeContainer = document.getElementById(iframeContainerId);
 
-    let iframe = iframe_container.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
+    let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
 
     if (!iframe) {
+	const examples = examplesContainer.querySelector('.try_examples_content');
 	iframe = document.createElement('iframe');
 	iframe.src = iframeSrc;
-	iframe.width = iframe.height = '100%';
+	iframe.style.width = '100%';
+	iframe.style.height = `${examples.offsetHeight}px`;
 	iframe.classList.add('jupyterlite_sphinx_raw_iframe');
-	examples_container.classList.add("hidden")
-	iframe_container.appendChild(iframe);
+	examplesContainer.classList.add("hidden");
+	iframeContainer.appendChild(iframe);
     }
     else {
-	examples_container.classList.add("hidden");
+	examplesContainer.classList.add("hidden");
     }
-    iframe_parent_container.classList.remove("hidden");
+    iframeParentContainer.classList.remove("hidden");
 }
 
 
 window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) => {
-    const examples_container = document.getElementById(examplesContainerId);
-    const iframe_parent_container = document.getElementById(iframeParentContainerId);
+    const examplesContainer = document.getElementById(examplesContainerId);
+    const iframeParentContainer = document.getElementById(iframeParentContainerId);
 
-    iframe_parent_container.classList.add("hidden");
-    examples_container.classList.remove("hidden");
+    iframeParentContainer.classList.add("hidden");
+    examplesContainer.classList.remove("hidden");
 }
