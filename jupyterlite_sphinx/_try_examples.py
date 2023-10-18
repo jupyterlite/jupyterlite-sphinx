@@ -116,7 +116,7 @@ def examples_to_notebook(input_lines):
 
 def _process_latex(md_text):
     # Map rst latex directive to $ so latex renders in notebook.
-    md_text = re.sub(r":math:`(?P<latex>.*?)`", r"$\g<latex>$", md_text)
+    md_text = re.sub(r":math:\s*`(?P<latex>.*?)`", r"$\g<latex>$", md_text)
 
     lines = md_text.split("\n")
     in_math_block = False
