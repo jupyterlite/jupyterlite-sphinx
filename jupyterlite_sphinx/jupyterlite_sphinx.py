@@ -379,7 +379,13 @@ class TryExamplesDirective(SphinxDirective):
             directive_key
         )
 
-        prefix = os.path.join("..", JUPYTERLITE_DIR)
+        # We need to get the relative path back to the documentation root from
+        # whichever file the docstring content is in.
+        docname = self.env.docname
+        depth = len(docname.split("/")) - 1
+        relative_path_to_root = '/'.join(['..'] * depth)
+        prefix = os.path.join(relative_path_to_root, JUPYTERLITE_DIR)
+
         lite_app = "retro/"
         notebooks_path = "notebooks/"
 
