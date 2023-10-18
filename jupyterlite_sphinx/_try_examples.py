@@ -49,9 +49,22 @@ def examples_to_notebook(input_lines):
     output_line = None
     inside_multiline_code_block = False
 
+    ignore_directives = [".. plot::", ".. only::"]
+    inside_ignore_directive = False
 
     for line in input_lines:
         line = line.rstrip("\n")
+
+        # Content underneath some directives should be ignored when generating notebook.
+        if any(line.startswith(directive) for directive in ignore_directives):
+            inside_ignore_directive = True
+            continue
+        if inside_ignore_directive:
+            if line == "" or line[0].isspace():
+                continue
+            else:
+                inside_ignore_directive = False
+
         if line.startswith(">>>"):
             if inside_multiline_code_block:
                 # End of a multiline code block.
