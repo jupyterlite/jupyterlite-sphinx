@@ -207,6 +207,8 @@ _next_section_pattern = re.compile(
         ]
         # If examples section is last, processed by numpydoc may appear at end.
         + [r"^\.\. \!\! processed by numpydoc \!\!"]
+        # Attributes section sometimes has no directive.
+        + [r":Attributes:"]
     )
 )
 
