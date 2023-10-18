@@ -188,8 +188,12 @@ _non_example_docstring_section_headers = (
 _examples_start_pattern = re.compile(r".. (rubric|admonition):: Examples")
 _next_section_pattern = re.compile(
     "|".join(
-        rf".. (rubric|admonition)::\s*{header}"
-        for header in _non_example_docstring_section_headers
+        [
+            rf".. (rubric|admonition)::\s*{header}"
+            for header in _non_example_docstring_section_headers
+        ]
+        # If examples section is last, processed by numpydoc may appear at end.
+        + [r"^\.\. \!\! processed by numpydoc \!\!"]
     )
 )
 
