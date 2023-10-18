@@ -206,7 +206,7 @@ _next_section_pattern = re.compile(
             for header in _non_example_docstring_section_headers
         ]
         # If examples section is last, processed by numpydoc may appear at end.
-        + [r"^\.\. \!\! processed by numpydoc \!\!"]
+        + [r"^\.\.\s+\!\! processed by numpydoc \!\!"]
         # Attributes section sometimes has no directive.
         + [r":Attributes:"]
     )
