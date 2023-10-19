@@ -1,4 +1,5 @@
 import os
+import json
 from uuid import uuid4
 import shutil
 import tempfile
@@ -408,7 +409,8 @@ class TryExamplesDirective(SphinxDirective):
             # Copy the Notebook for RetroLite to find
             os.makedirs(notebooks_dir, exist_ok=True)
             with open(notebooks_dir / Path(notebook_unique_name), "w") as f:
-                nbf.write(nb, f)
+                # nbf.write incorrectly formats multiline arrays in output.
+                json.dump(nb, f, indent=4, ensure_ascii=False)
 
         self.options["path"] = notebook_unique_name
         app_path = f"{lite_app}{notebooks_path}"
