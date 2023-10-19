@@ -206,7 +206,7 @@ _next_section_pattern = re.compile(
             for header in _non_example_docstring_section_headers
         ]
         # If examples section is last, processed by numpydoc may appear at end.
-        + [r"^\.\.\s+\!\! processed by numpydoc \!\!"]
+        + [r"\!\! processed by numpydoc \!\!"]
         # Attributes section sometimes has no directive.
         + [r":Attributes:"]
     )
@@ -264,6 +264,13 @@ def insert_try_examples_directive(lines, **options):
         lines[right_index]
     ):
         right_index += 1
+    if "!! processed by numpydoc !!" in lines[right_index]:
+        # Sometimes the .. appears on an earlier line than !! processed by numpydoc !!
+        if not re.search(
+                r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index]
+        ):
+            while lines[right_index].strip() != "..":
+                right_index -= 1
 
     # Add the ".. try_examples::" directive and indent the content of the Examples section
     new_lines = (
