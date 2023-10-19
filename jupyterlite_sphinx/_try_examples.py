@@ -46,7 +46,7 @@ def examples_to_notebook(input_lines):
 
     code_lines = []
     md_lines = []
-    output_line = None
+    output_lines = []
     inside_multiline_code_block = False
 
     ignore_directives = [".. plot::", ".. only::"]
@@ -65,66 +65,68 @@ def examples_to_notebook(input_lines):
             else:
                 inside_ignore_directive = False
 
-        if line.startswith(">>>"):
+        if line.startswith(">>>"):  # This is a code line.
+            if output_lines:
+                # If there are pending output lines, we must be starting a new
+                # code block.
+                _append_code_cell_and_clear_lines(code_lines, output_lines, nb)
             if inside_multiline_code_block:
-                # End of a multiline code block.
+                # A multiline codeblock is ending.
                 inside_multiline_code_block = False
-
-            # This line is code
             # If there is any pending markdown text, add it to the notebook
             if md_lines:
-                md_text = "\n".join(md_lines)
-                md_text = _process_latex(md_text)
+                _append_markdown_cell_and_clear_lines(md_lines, nb)
 
-                nb.cells.append(new_markdown_cell(md_text))
-                md_lines = []  # Reset markdown lines
-            # Add this line to the code
-            code_lines.append(line[4:])  # Remove '>>> ' prefix
+            # Add line of code, removing '>>> ' prefix
+            code_lines.append(line[4:])
         elif line.startswith("...") and code_lines:
-            # This is a continuation of a multiline code block.
+            # This is a line of code in a multiline code block.
             inside_multiline_code_block = True
             code_lines.append(line[4:])
         elif line.rstrip("\n") == "" and code_lines:
-            # This line is blank, so it is the end of a code cell
-            # If there is any pending code, add it to the notebook
-            code_text = "\n".join(code_lines)
-            cell = new_code_cell(code_text)
-            if output_line is not None:
-                cell.outputs.append(
-                    nbf.v4.new_output(
-                        output_type="execute_result", data={"text/plain": output_line}
-                    ),
-                )
-                output_line = None
-            nb.cells.append(cell)
-            code_lines = []  # Reset code lines
+            # A blank line means a code block has ended.
+            _append_code_cell_and_clear_lines(code_lines, output_lines, nb)
         elif code_lines:
-            # This line is the output of the previous code cell
-            output_line = line
+            # Non-blank non ">>>" prefixed line must be output of previous code block.
+            output_lines.append(line)
         else:
-            # This line is markdown
+            # Anything else should be treated as markdown.
             md_lines.append(line)
 
-    # If there is any pending markdown or code, add it to the notebook
+    # After processing all lines, add pending markdown or code to the notebook if
+    # any exists.
     if md_lines:
-        md_text = "\n".join(md_lines)
-        md_text = _process_latex(md_text)
-
-        # Convert blocks of LaTeX equations
-        md_text = _process_latex(md_text)
-
-        nb.cells.append(new_markdown_cell(md_text))
+        _append_markdown_cell_and_clear_lines(md_lines, nb)
     if code_lines:
-        code_text = "\n".join(code_lines)
-        cell = new_code_cell(code_text)
-        if output_line is not None:
-            cell.outputs.append(
-                nbf.v4.new_output(
-                    output_type="execute_result", data={"text/plain": output_line}
-                ),
-            )
-        nb.cells.append(cell)
+        _append_code_cell_and_clear_lines(code_lines, output_lines, nb)
     return nb
+
+
+def _append_code_cell_and_clear_lines(code_lines, output_lines, notebook):
+    """Append new code cell to notebook, clearing lines."""
+    code_text = "\n".join(code_lines)
+    cell = new_code_cell(code_text)
+    if output_lines:
+        combined_output = "\n".join(output_lines)
+        cell.outputs.append(
+            nbf.v4.new_output(
+                output_type="execute_result",
+                data={"text/plain": combined_output},
+            ),
+        )
+    notebook.cells.append(cell)
+    output_lines.clear()
+    code_lines.clear()
+
+
+def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
+    """Append new markdown cell to notebook, clearing lines."""
+    markdown_text = "\n".join(markdown_lines)
+    markdown_text = _process_latex(markdown_text)
+    # Convert blocks of LaTeX equations
+    markdownd_text = _process_latex(markdown_text)
+    notebook.cells.append(new_markdown_cell(markdown_text))
+    markdown_lines.clear()
 
 
 def _process_latex(md_text):
