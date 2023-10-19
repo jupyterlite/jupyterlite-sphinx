@@ -253,27 +253,33 @@ def insert_try_examples_directive(lines, **options):
         is included at the top of the Examples section. Also a no-op if the
         try_examples directive is already included.
     """
-    # Search for the "Examples" section start
+    # Search for start of an Examples section
     for left_index, line in enumerate(lines):
         if _examples_start_pattern.search(line):
             break
     else:
-        # No examples section found
+        # No Examples section found
         return lines[:]
-    # Increment to the line after "Examples"
+
+    # Jump to next line
     left_index += 1
-    # Skip empty lines to get to the first content line after "Examples"
+    # Skip empty lines to get to the first content line
     while left_index < len(lines) and not lines[left_index].strip():
         left_index += 1
-    # If reached the end of the docstring without finding non-empty line
     if left_index == len(lines):
+        # Examples section had no content, no need to insert directive.
         return lines[:]
-    # Check for the "..! disable_try_examples" directive
+
+    # Check for the "..! disable_try_examples" comment.
     if lines[left_index].strip() == "..! disable_try_examples::":
+        # If so, do not insert directive.
         return lines[:]
+
     # Check if the ".. try_examples::" directive already exists
     if ".. try_examples::" == lines[left_index].strip():
+        # If so, don't need to insert again.
         return lines[:]
+
     # Find the end of the Examples section
     right_index = left_index
     while right_index < len(lines) and not _next_section_pattern.search(
