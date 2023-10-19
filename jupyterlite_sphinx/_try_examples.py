@@ -122,11 +122,25 @@ def _append_code_cell_and_clear_lines(code_lines, output_lines, notebook):
 def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
     """Append new markdown cell to notebook, clearing lines."""
     markdown_text = "\n".join(markdown_lines)
-    markdown_text = _process_latex(markdown_text)
     # Convert blocks of LaTeX equations
-    markdownd_text = _process_latex(markdown_text)
+    markdown_text = _process_latex(markdown_text)
+    markdown_text = _strip_ref_identifiers(markdown_text)
     notebook.cells.append(new_markdown_cell(markdown_text))
     markdown_lines.clear()
+
+
+_ref_identifier_pattern = re.compile(r"\[R[a-f0-9]+-(?P<ref_num>\d+)\]_")
+
+def _strip_ref_identifiers(md_text):
+    """Remove identifiers from references in notebook.
+
+    Each docstring gets a unique identifier in order to have unique internal
+    links for each docstring on a page.
+
+    They look like [R4c2dbc17006a-1]_. We strip these out so they don't appear
+    in the notebooks. The above would be replaced with [1]_.
+    """
+    return _ref_identifier_pattern.sub(r"[\g<ref_num>]", md_text)
 
 
 def _process_latex(md_text):
