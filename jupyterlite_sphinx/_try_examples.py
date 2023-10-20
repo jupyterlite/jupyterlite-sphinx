@@ -145,7 +145,9 @@ def _strip_ref_identifiers(md_text):
 
 def _process_latex(md_text):
     # Map rst latex directive to $ so latex renders in notebook.
-    md_text = re.sub(r":math:\s*`(?P<latex>.*?)`", r"$\g<latex>$", md_text)
+    md_text = re.sub(
+        r":math:\s*`(?P<latex>.*?)`", r"$\g<latex>$", md_text, flags=re.DOTALL
+    )
 
     lines = md_text.split("\n")
     in_math_block = False
@@ -176,6 +178,7 @@ def _process_latex(md_text):
             if equation_lines:
                 wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
             equation_lines = []
+            wrapped_lines.append(line)
 
     return "\n".join(wrapped_lines)
 
