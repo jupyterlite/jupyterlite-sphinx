@@ -465,7 +465,7 @@ class TryExamplesDirective(SphinxDirective):
 
         # Allow css for button to be specified in conf.py
         config = self.state.document.settings.env.config
-        try_examples_button_css = config.try_examples_button_css
+        try_examples_button_css = config.try_examples_global_button_css
 
         try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
         style_tag = nodes.raw(
@@ -483,8 +483,8 @@ def _process_docstring_examples(app, docname, source):
 
 def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
-        "toolbar": app.config.try_examples_toolbar,
-        "theme": app.config.try_examples_theme,
+        "toolbar": app.config.try_examples_global_toolbar,
+        "theme": app.config.try_examples_global_theme,
     }
     try_examples_options = {
         key: value for key, value in try_examples_options.items() if value is not None
@@ -593,16 +593,16 @@ def setup(app):
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value(
-        "try_examples_button_css", default="float: right;", rebuild="html"
-    )
-    app.add_config_value(
         "global_enable_try_examples", default=False, rebuild=True
     )
     app.add_config_value(
-        "try_examples_toolbar", default=None, rebuild=True
+        "try_examples_global_button_css", default="float: right;", rebuild="html"
     )
     app.add_config_value(
-        "try_examples_theme", default=None, rebuild=True
+        "try_examples_global_toolbar", default=None, rebuild=True
+    )
+    app.add_config_value(
+        "try_examples_global_theme", default=None, rebuild=True
     )
 
 
