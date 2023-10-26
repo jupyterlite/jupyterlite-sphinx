@@ -99,6 +99,17 @@ def examples_to_notebook(input_lines):
         _append_markdown_cell_and_clear_lines(md_lines, nb)
     if code_lines:
         _append_code_cell_and_clear_lines(code_lines, output_lines, nb)
+
+    nb["metadata"] =  {
+        "kernelspec": {
+            "display_name": "Python",
+            "language": "python",
+            "name": "python"
+        },
+        "language_info": {
+            "name": "python",
+        }
+    }
     return nb
 
 
