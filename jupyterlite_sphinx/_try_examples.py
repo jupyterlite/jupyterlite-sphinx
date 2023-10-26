@@ -100,15 +100,15 @@ def examples_to_notebook(input_lines):
     if code_lines:
         _append_code_cell_and_clear_lines(code_lines, output_lines, nb)
 
-    nb["metadata"] =  {
+    nb["metadata"] = {
         "kernelspec": {
             "display_name": "Python",
             "language": "python",
-            "name": "python"
+            "name": "python",
         },
         "language_info": {
             "name": "python",
-        }
+        },
     }
     return nb
 
@@ -141,6 +141,7 @@ def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
 
 
 _ref_identifier_pattern = re.compile(r"\[R[a-f0-9]+-(?P<ref_num>\d+)\]_")
+
 
 def _strip_ref_identifiers(md_text):
     """Remove identifiers from references in notebook.
@@ -303,7 +304,7 @@ def insert_try_examples_directive(lines, **options):
     if "!! processed by numpydoc !!" in lines[right_index]:
         # Sometimes the .. appears on an earlier line than !! processed by numpydoc !!
         if not re.search(
-                r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index]
+            r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index]
         ):
             while lines[right_index].strip() != "..":
                 right_index -= 1
