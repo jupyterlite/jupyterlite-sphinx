@@ -17,6 +17,7 @@ dependencies = [
     "jupyter_server",
     "jupyterlab_server",
     "jupyterlite-core >=0.1.0",
+    "nbformat",
     "sphinx>=4",
 ]
 

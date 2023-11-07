@@ -1,10 +1,12 @@
 import os
+import json
 from uuid import uuid4
 import shutil
 import tempfile
 from warnings import warn
 import glob
 import re
+import nbformat as nbf
 
 from pathlib import Path
 
@@ -14,11 +16,15 @@ import subprocess
 
 from docutils.parsers.rst import directives
 from docutils.nodes import SkipNode, Element
+from docutils import nodes
 
 from sphinx.application import Sphinx
+from sphinx.ext.doctest import DoctestDirective
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
+
+from ._try_examples import examples_to_notebook, insert_try_examples_directive
 
 try:
     import voici
@@ -356,6 +362,148 @@ class RetroLiteParser(RSTParser):
         )
 
 
+class TryExamplesDirective(SphinxDirective):
+    """Add button to try doctest examples in Jupyterlite notebook."""
+
+    has_content = True
+    required_arguments = 0
+    option_spec = {
+        "toolbar": directives.unchanged,
+        "theme": directives.unchanged,
+    }
+
+    def run(self):
+        if "generated_notebooks" not in self.env.temp_data:
+            self.env.temp_data["generated_notebooks"] = {}
+
+        directive_key = f"{self.env.docname}-{self.lineno}"
+        notebook_unique_name = self.env.temp_data["generated_notebooks"].get(
+            directive_key
+        )
+
+        # We need to get the relative path back to the documentation root from
+        # whichever file the docstring content is in.
+        docname = self.env.docname
+        depth = len(docname.split("/")) - 1
+        relative_path_to_root = "/".join([".."] * depth)
+        prefix = os.path.join(relative_path_to_root, JUPYTERLITE_DIR)
+
+        lite_app = "retro/"
+        notebooks_path = "notebooks/"
+
+        content_container_node = nodes.container(
+            classes=["try_examples_outer_container"]
+        )
+        examples_div_id = uuid4()
+        content_container_node["ids"].append(examples_div_id)
+        # Parse the original content to create nodes
+        content_node = nodes.container()
+        content_node["classes"].append("try_examples_content")
+        self.state.nested_parse(self.content, self.content_offset, content_node)
+        content_container_node += content_node
+
+        if notebook_unique_name is None:
+            nb = examples_to_notebook(self.content)
+            self.content = None
+            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
+            self.env.temp_data["generated_notebooks"][
+                directive_key
+            ] = notebook_unique_name
+            # Copy the Notebook for RetroLite to find
+            os.makedirs(notebooks_dir, exist_ok=True)
+            with open(notebooks_dir / Path(notebook_unique_name), "w") as f:
+                # nbf.write incorrectly formats multiline arrays in output.
+                json.dump(nb, f, indent=4, ensure_ascii=False)
+
+        self.options["path"] = notebook_unique_name
+        app_path = f"{lite_app}{notebooks_path}"
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in self.options.items()]
+        )
+
+        iframe_parent_div_id = uuid4()
+        iframe_div_id = uuid4()
+        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        # Parent container (initially hidden)
+        iframe_parent_container_div_start = (
+            f'<div id="{iframe_parent_div_id}" '
+            f'class="try_examples_outer_container hidden">'
+        )
+
+        iframe_parent_container_div_end = "</div>"
+        iframe_container_div = (
+            f'<div id="{iframe_div_id}" '
+            f'class="try_examples_iframe_container">'
+            f"</div>"
+        )
+
+        # Button with the onclick event to swap embedded notebook back to examples.
+        go_back_button_html = (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
+            f"'{iframe_parent_div_id}')\">"
+            "Go Back</button>"
+        )
+
+        # Combine everything
+        notebook_container_html = (
+            iframe_parent_container_div_start
+            + iframe_container_div
+            + go_back_button_html
+            + iframe_parent_container_div_end
+        )
+        notebook_container = nodes.raw("", notebook_container_html, format="html")
+
+        # Button with the onclick event to swap examples with embedded notebook.
+        try_it_button_html = (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
+            f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}')\">"
+            "Try it with JupyterLite!</button>"
+        )
+        try_it_button_node = nodes.raw("", try_it_button_html, format="html")
+        # Add the button to the content_container_node
+        content_container_node += try_it_button_node
+
+        # Allow css for button to be specified in conf.py
+        config = self.state.document.settings.env.config
+        try_examples_button_css = config.try_examples_global_button_css
+
+        try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
+        style_tag = nodes.raw(
+            "", f"<style>{try_examples_button_css}</style>", format="html"
+        )
+
+        return [content_container_node, notebook_container, style_tag]
+
+
+def _process_docstring_examples(app, docname, source):
+    source_path = app.env.doc2path(docname)
+    if source_path.endswith(".py"):
+        source[0] = insert_try_examples_directive(source[0])
+
+
+def _process_autodoc_docstrings(app, what, name, obj, options, lines):
+    try_examples_options = {
+        "toolbar": app.config.try_examples_global_toolbar,
+        "theme": app.config.try_examples_global_theme,
+    }
+    try_examples_options = {
+        key: value for key, value in try_examples_options.items() if value is not None
+    }
+    modified_lines = insert_try_examples_directive(lines, **try_examples_options)
+    lines.clear()
+    lines.extend(modified_lines)
+
+
+def conditional_process_examples(app, config):
+    if config.global_enable_try_examples:
+        app.connect("source-read", _process_docstring_examples)
+        app.connect("autodoc-process-docstring", _process_autodoc_docstrings)
+
+
 def inited(app: Sphinx, config):
     # Create the content dir
     os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
@@ -448,6 +596,12 @@ def setup(app):
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
+    app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
+    app.add_config_value(
+        "try_examples_global_button_css", default="float: right;", rebuild="html"
+    )
+    app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
+    app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
 
     # Initialize RetroLite and JupyterLite directives
     app.add_node(
@@ -490,6 +644,10 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("voici", VoiciDirective)
+
+    # Initialize TryExamples directive
+    app.add_directive("try_examples", TryExamplesDirective)
+    app.connect("config-inited", conditional_process_examples)
 
     # CSS and JS assets
     copy_asset(str(HERE / "jupyterlite_sphinx.css"), str(Path(app.outdir) / "_static"))
