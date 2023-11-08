@@ -551,7 +551,7 @@ def jupyterlite_build(app: Sphinx, error):
         for app in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
             apps_option.extend(["--apps", app])
         if voici is not None:
-            apps..extend(["--apps", "voici"])
+            apps_option.extend(["--apps", "voici"])
 
         command = [
             "jupyter",
