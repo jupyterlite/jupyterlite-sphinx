@@ -162,13 +162,13 @@ class JupyterLiteIframe(_LiteIframe):
     notebooks_path = ""
 
 
-class RetroLiteIframe(_LiteIframe):
-    """Appended to the doctree by the RetroliteDirective directive
+class NotebookLiteIframe(_LiteIframe):
+    """Appended to the doctree by the NotebookliteDirective directive
 
-    Renders an iframe that shows a Notebook with RetroLite.
+    Renders an iframe that shows a Notebook with NotebookLite.
     """
 
-    lite_app = "retro/"
+    lite_app = "tree/"
     notebooks_path = "notebooks/"
 
 
@@ -287,7 +287,7 @@ class _LiteDirective(SphinxDirective):
 
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
 
-            # Copy the Notebook for RetroLite to find
+            # Copy the Notebook for NotebookLite to find
             os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
             try:
                 shutil.copyfile(notebook, str(notebooks_dir))
@@ -319,13 +319,13 @@ class JupyterLiteDirective(_LiteDirective):
     iframe_cls = JupyterLiteIframe
 
 
-class RetroLiteDirective(_LiteDirective):
-    """The ``.. retrolite::`` directive.
+class NotebookLiteDirective(_LiteDirective):
+    """The ``.. notebooklite::`` directive.
 
-    Renders a Notebook with RetroLite in the docs.
+    Renders a Notebook with NotebookLite in the docs.
     """
 
-    iframe_cls = RetroLiteIframe
+    iframe_cls = NotebookLiteIframe
 
 
 class VoiciDirective(_LiteDirective):
@@ -345,10 +345,10 @@ class VoiciDirective(_LiteDirective):
         return super().run()
 
 
-class RetroLiteParser(RSTParser):
+class NotebookLiteParser(RSTParser):
     """Sphinx source parser for Jupyter notebooks.
 
-    Shows the Notebook using retrolite."""
+    Shows the Notebook using notebooklite."""
 
     supported = ("jupyterlite_notebook",)
 
@@ -357,7 +357,7 @@ class RetroLiteParser(RSTParser):
         # Make the "absolute" filename relative to the source root
         filename = "/" + os.path.relpath(document.current_source, self.env.app.srcdir)
         super().parse(
-            f"{title}\n{'=' * len(title)}\n.. retrolite:: {filename}",
+            f"{title}\n{'=' * len(title)}\n.. notebooklite:: {filename}",
             document,
         )
 
@@ -388,7 +388,7 @@ class TryExamplesDirective(SphinxDirective):
         relative_path_to_root = "/".join([".."] * depth)
         prefix = os.path.join(relative_path_to_root, JUPYTERLITE_DIR)
 
-        lite_app = "retro/"
+        lite_app = "tree/"
         notebooks_path = "notebooks/"
 
         content_container_node = nodes.container(
@@ -410,7 +410,7 @@ class TryExamplesDirective(SphinxDirective):
             self.env.temp_data["generated_notebooks"][
                 directive_key
             ] = notebook_unique_name
-            # Copy the Notebook for RetroLite to find
+            # Copy the Notebook for NotebookLite to find
             os.makedirs(notebooks_dir, exist_ok=True)
             with open(notebooks_dir / Path(notebook_unique_name), "w") as f:
                 # nbf.write incorrectly formats multiline arrays in output.
@@ -547,7 +547,11 @@ def jupyterlite_build(app: Sphinx, error):
         for content in jupyterlite_contents:
             contents.extend(["--contents", content])
 
-        voici_option = [] if voici is None else ["--apps", "voici"]
+        apps_option = []
+        for app in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
+            apps_option.extend(["--apps", app])
+        if voici is not None:
+            apps..extend(["--apps", "voici"])
 
         command = [
             "jupyter",
@@ -560,13 +564,7 @@ def jupyterlite_build(app: Sphinx, error):
             os.path.join(app.srcdir, CONTENT_DIR),
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
-            "--apps",
-            "lab",
-            "--apps",
-            "retro",
-            "--apps",
-            "repl",
-            *voici_option,
+            *apps_option,
             "--lite-dir",
             jupyterlite_dir,
         ]
@@ -584,8 +582,8 @@ def jupyterlite_build(app: Sphinx, error):
 
 
 def setup(app):
-    # Initialize RetroLite parser
-    app.add_source_parser(RetroLiteParser)
+    # Initialize NotebookLite parser
+    app.add_source_parser(NotebookLiteParser)
 
     app.connect("config-inited", inited)
     # We need to build JupyterLite at the end, when all the content was created
@@ -603,16 +601,18 @@ def setup(app):
     app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
 
-    # Initialize RetroLite and JupyterLite directives
+    # Initialize NotebookLite and JupyterLite directives
     app.add_node(
-        RetroLiteIframe,
+        NotebookLiteIframe,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),
         text=(skip, None),
         man=(skip, None),
     )
-    app.add_directive("retrolite", RetroLiteDirective)
+    app.add_directive("notebooklite", NotebookLiteDirective)
+    # For backward compatibility
+    app.add_directive("retrolite", NotebookLiteDirective)
     app.add_node(
         JupyterLiteIframe,
         html=(visit_element_html, None),
