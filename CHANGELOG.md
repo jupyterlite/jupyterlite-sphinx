@@ -2,6 +2,23 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.10.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.9.3...72393f736e38f36ff6f91a3ae878ba3f54646cad))
+
+### Enhancements made
+
+- Update to jupyterlite v0.2 [#113](https://github.com/jupyterlite/jupyterlite-sphinx/pull/113) ([@martinRenou](https://github.com/martinRenou))
+- Add try_examples directive for adding interactivity to sphinx Examples sections [#111](https://github.com/jupyterlite/jupyterlite-sphinx/pull/111) ([@steppi](https://github.com/steppi))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-09-13&to=2023-11-09&type=c))
+
+[@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2023-09-13..2023-11-09&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2023-09-13..2023-11-09&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.9.3
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.9.2...551a58744536dca3d51e657b1d7ddcb5da102510))
@@ -15,8 +32,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-09-11&to=2023-09-13&type=c))
 
 [@brichet](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Abrichet+updated%3A2023-09-11..2023-09-13&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.9.2
 
