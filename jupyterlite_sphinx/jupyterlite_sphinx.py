@@ -548,8 +548,8 @@ def jupyterlite_build(app: Sphinx, error):
             contents.extend(["--contents", content])
 
         apps_option = []
-        for app in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
-            apps_option.extend(["--apps", app])
+        for liteapp in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
+            apps_option.extend(["--apps", liteapp])
         if voici is not None:
             apps_option.extend(["--apps", "voici"])
 
