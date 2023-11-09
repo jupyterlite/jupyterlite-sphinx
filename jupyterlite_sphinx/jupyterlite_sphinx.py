@@ -169,7 +169,7 @@ class NotebookLiteIframe(_LiteIframe):
     """
 
     lite_app = "tree/"
-    notebooks_path = "notebooks/"
+    notebooks_path = "../notebooks/"
 
 
 class VoiciIframe(_PromptedIframe):
