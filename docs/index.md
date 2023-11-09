@@ -37,7 +37,7 @@ Each of those directives can be configured with the following options:
 :maxdepth: 2
 
 directives/jupyterlite
-directives/retrolite
+directives/notebooklite
 directives/replite
 directives/voici
 full
