@@ -456,24 +456,42 @@ class TryExamplesDirective(SphinxDirective):
         )
         notebook_container = nodes.raw("", notebook_container_html, format="html")
 
+
+        config = self.state.document.settings.env.config
+        # Minimum height for a notebook iframe container.
+        min_height = config.try_examples_global_min_height
+
         # Button with the onclick event to swap examples with embedded notebook.
+        button_text = config.try_examples_global_button_text
         try_it_button_html = (
             '<button class="try_examples_button" '
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
-            f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}')\">"
-            "Try it with JupyterLite!</button>"
+            f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
+            f"'{min_height}')\">"
+            f"{button_text}</button>"
         )
         try_it_button_node = nodes.raw("", try_it_button_html, format="html")
         # Add the button to the content_container_node
         content_container_node += try_it_button_node
 
         # Allow css for button to be specified in conf.py
-        config = self.state.document.settings.env.config
         try_examples_button_css = config.try_examples_global_button_css
-
         try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
+
+        try_examples_button_hover_css = config.try_examples_global_button_hover_css
+        if try_examples_button_hover_css is not None:
+            try_examples_button_hover_css = (
+                f".try_examples_button:hover {{{try_examples_button_hover_css}}}"
+            )
+        else:
+            try_examples_button_hover_css = ""
+
+        complete_button_css = try_examples_button_css + try_examples_button_hover_css
+
         style_tag = nodes.raw(
-            "", f"<style>{try_examples_button_css}</style>", format="html"
+            "",
+            f"<style>{complete_button_css}</style>",
+            format="html"
         )
 
         return [content_container_node, notebook_container, style_tag]
@@ -594,10 +612,21 @@ def setup(app):
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
-    app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value(
         "try_examples_global_button_css", default="float: right;", rebuild="html"
     )
+    app.add_config_value(
+        "try_examples_global_button_hover_css", default=None, rebuild="html"
+    )
+    app.add_config_value(
+        "try_examples_global_min_height", default="200px", rebuild="html"
+    )
+    app.add_config_value(
+        "try_examples_global_button_text",
+        default="Try it with Jupyterlite!",
+        rebuild="html",
+    )
+    app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
 
