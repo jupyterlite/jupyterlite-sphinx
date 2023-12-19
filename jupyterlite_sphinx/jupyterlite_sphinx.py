@@ -389,7 +389,7 @@ class TryExamplesDirective(SphinxDirective):
         prefix = os.path.join(relative_path_to_root, JUPYTERLITE_DIR)
 
         lite_app = "tree/"
-        notebooks_path = "notebooks/"
+        notebooks_path = "../notebooks/"
 
         content_container_node = nodes.container(
             classes=["try_examples_outer_container"]
