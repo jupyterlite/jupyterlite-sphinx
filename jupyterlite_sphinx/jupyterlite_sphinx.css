@@ -82,3 +82,9 @@
 .hidden {
     display: none;
 }
+
+.try_examples_button_container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    /* Add any other styling for the container */
+}

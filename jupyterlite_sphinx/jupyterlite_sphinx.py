@@ -400,7 +400,7 @@ class TryExamplesDirective(SphinxDirective):
         content_node = nodes.container()
         content_node["classes"].append("try_examples_content")
         self.state.nested_parse(self.content, self.content_offset, content_node)
-        content_container_node += content_node
+
 
         if notebook_unique_name is None:
             nb = examples_to_notebook(self.content)
@@ -441,17 +441,19 @@ class TryExamplesDirective(SphinxDirective):
 
         # Button with the onclick event to swap embedded notebook back to examples.
         go_back_button_html = (
+            '<div class="try_examples_button_container">'
             '<button class="try_examples_button" '
             f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
             f"'{iframe_parent_div_id}')\">"
             "Go Back</button>"
+            "</div>"
         )
 
         # Combine everything
         notebook_container_html = (
             iframe_parent_container_div_start
-            + iframe_container_div
             + go_back_button_html
+            + iframe_container_div
             + iframe_parent_container_div_end
         )
         notebook_container = nodes.raw("", notebook_container_html, format="html")
@@ -464,15 +466,20 @@ class TryExamplesDirective(SphinxDirective):
         # Button with the onclick event to swap examples with embedded notebook.
         button_text = config.try_examples_global_button_text
         try_it_button_html = (
+            '<div class="try_examples_button_container">'
             '<button class="try_examples_button" '
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
             f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
             f"'{min_height}')\">"
             f"{button_text}</button>"
+            "</div>"
         )
         try_it_button_node = nodes.raw("", try_it_button_html, format="html")
+
         # Add the button to the content_container_node
         content_container_node += try_it_button_node
+        # Add the content to the content_container_node
+        content_container_node += content_node
 
         # Allow css for button to be specified in conf.py
         try_examples_button_css = config.try_examples_global_button_css
