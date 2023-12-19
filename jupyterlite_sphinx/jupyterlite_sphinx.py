@@ -370,6 +370,10 @@ class TryExamplesDirective(SphinxDirective):
     option_spec = {
         "toolbar": directives.unchanged,
         "theme": directives.unchanged,
+        "button_text": directives.unchanged,
+        "button_css": directives.unchanged,
+        "button_hover_css": directives.unchanged,
+        "min_height": directives.unchanged,
     }
 
     def run(self):
@@ -380,6 +384,11 @@ class TryExamplesDirective(SphinxDirective):
         notebook_unique_name = self.env.temp_data["generated_notebooks"].get(
             directive_key
         )
+
+        button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
+        button_css = self.options.pop("button_css", "")
+        button_hover_css = self.options.pop("button_hover_css", "")
+        min_height = self.options.pop("min_height", "200px")
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
@@ -459,12 +468,7 @@ class TryExamplesDirective(SphinxDirective):
         notebook_container = nodes.raw("", notebook_container_html, format="html")
 
 
-        config = self.state.document.settings.env.config
-        # Minimum height for a notebook iframe container.
-        min_height = config.try_examples_global_min_height
-
         # Button with the onclick event to swap examples with embedded notebook.
-        button_text = config.try_examples_global_button_text
         try_it_button_html = (
             '<div class="try_examples_button_container">'
             '<button class="try_examples_button" '
@@ -481,19 +485,14 @@ class TryExamplesDirective(SphinxDirective):
         # Add the content to the content_container_node
         content_container_node += content_node
 
-        # Allow css for button to be specified in conf.py
-        try_examples_button_css = config.try_examples_global_button_css
-        try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
-
-        try_examples_button_hover_css = config.try_examples_global_button_hover_css
-        if try_examples_button_hover_css is not None:
-            try_examples_button_hover_css = (
-                f".try_examples_button:hover {{{try_examples_button_hover_css}}}"
+        if button_css:
+            button_css = f".try_examples_button {{{button_css}}}"
+        if button_hover_css:
+            button_hover_css = (
+                f".try_examples_button:hover {{{button_hover_css}}}"
             )
-        else:
-            try_examples_button_hover_css = ""
 
-        complete_button_css = try_examples_button_css + try_examples_button_hover_css
+        complete_button_css = button_css + button_hover_css
 
         style_tag = nodes.raw(
             "",
@@ -514,6 +513,10 @@ def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
         "toolbar": app.config.try_examples_global_toolbar,
         "theme": app.config.try_examples_global_theme,
+        "button_text": app.config.try_examples_global_button_text,
+        "button_css": app.config.try_examples_global_button_css,
+        "button_hover_css": app.config.try_examples_global_button_hover_css,
+        "min_height": app.config.try_examples_global_min_height,
     }
     try_examples_options = {
         key: value for key, value in try_examples_options.items() if value is not None
@@ -619,23 +622,22 @@ def setup(app):
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
+
+    app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
+    app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
+    app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
     app.add_config_value(
-        "try_examples_global_button_css", default="float: right;", rebuild="html"
+        "try_examples_global_button_css", default=None, rebuild="html"
     )
     app.add_config_value(
         "try_examples_global_button_hover_css", default=None, rebuild="html"
     )
     app.add_config_value(
-        "try_examples_global_min_height", default="200px", rebuild="html"
+        "try_examples_global_min_height", default=None, rebuild="html"
     )
     app.add_config_value(
-        "try_examples_global_button_text",
-        default="Try it with Jupyterlite!",
-        rebuild="html",
+        "try_examples_global_button_text", default=None, rebuild="html",
     )
-    app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
-    app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
-    app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
 
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
