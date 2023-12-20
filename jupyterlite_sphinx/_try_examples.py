@@ -144,10 +144,12 @@ def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
 _ref_identifier_pattern = re.compile(r"\[R[a-f0-9]+-(?P<ref_num>\d+)\]_")
 _link_pattern = re.compile(r"`(?P<link_text>[^`<]+)<(?P<url>[^`>]+)>`_")
 
+
 def _convert_sphinx_link(match):
-    link_text = match.group('link_text').rstrip()
-    url = match.group('url')
-    return f'[{link_text}]({url})'
+    link_text = match.group("link_text").rstrip()
+    url = match.group("url")
+    return f"[{link_text}]({url})"
+
 
 def _convert_links(md_text):
     """Convert sphinx style links to markdown style links
