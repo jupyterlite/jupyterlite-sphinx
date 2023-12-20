@@ -50,7 +50,8 @@ Examples
         \int_{x=-\infty}^{\infty}e^{-x^2}\mathrm{d}x = \sqrt{\pi}
 
     If you are displaying `math output <https://www.sphinx-doc.org/en/master/usage/extensions/math.html>`_
-    with sphinx.
+    with sphinx. Sphinx links such as the one in the previous sentence are also converted to
+    markdown format.
 ```
 
 
@@ -99,7 +100,8 @@ Examples
         \int_{-\infty}^{\infty}e^{-x^2}\mathrm{d}x = \sqrt{\pi}
 
     If you are displaying `math output <https://www.sphinx-doc.org/en/master/usage/extensions/math.html>`_
-    with sphinx.
+    with sphinx. Sphinx links such as the one in the previous sentence are also converted to
+    markdown format.
 ```
 
 ## Configuration
