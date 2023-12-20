@@ -192,6 +192,10 @@ def _process_latex(md_text):
             equation_lines = []
             wrapped_lines.append(line)
 
+    # Handle the case where the text ends with a math block
+    if in_math_block and equation_lines:
+        wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
+
     return "\n".join(wrapped_lines)
 
 
