@@ -18,7 +18,7 @@ def examples_to_notebook(input_lines):
 
     Examples
     --------
-    >>> from jupyterlite_sphinx.generate_notebook import examples_to_notebook
+    >>> from jupyterlite_sphinx._try_examples import examples_to_notebook
 
     >>> input_lines = [
     >>>            "Add two numbers. This block of text will appear as a\n",
