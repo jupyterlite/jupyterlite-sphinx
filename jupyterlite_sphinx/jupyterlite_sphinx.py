@@ -368,7 +368,6 @@ class TryExamplesDirective(SphinxDirective):
     has_content = True
     required_arguments = 0
     option_spec = {
-        "toolbar": directives.unchanged,
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
         "button_css": directives.unchanged,
@@ -511,7 +510,6 @@ def _process_docstring_examples(app, docname, source):
 
 def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
-        "toolbar": app.config.try_examples_global_toolbar,
         "theme": app.config.try_examples_global_theme,
         "button_text": app.config.try_examples_global_button_text,
         "button_css": app.config.try_examples_global_button_css,
@@ -624,7 +622,6 @@ def setup(app):
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
-    app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
     app.add_config_value(
         "try_examples_global_button_css", default=None, rebuild="html"
