@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 extensions = [
+    'sphinx.ext.mathjax',
     'jupyterlite_sphinx',
     'myst_parser',
 ]
