@@ -40,6 +40,7 @@ directives/jupyterlite
 directives/notebooklite
 directives/replite
 directives/voici
+directives/try_examples
 full
 changelog
 ```

@@ -18,7 +18,7 @@ def examples_to_notebook(input_lines):
 
     Examples
     --------
-    >>> from jupyterlite_sphinx.generate_notebook import examples_to_notebook
+    >>> from jupyterlite_sphinx._try_examples import examples_to_notebook
 
     >>> input_lines = [
     >>>            "Add two numbers. This block of text will appear as a\n",
@@ -136,11 +136,28 @@ def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
     # Convert blocks of LaTeX equations
     markdown_text = _process_latex(markdown_text)
     markdown_text = _strip_ref_identifiers(markdown_text)
+    markdown_text = _convert_links(markdown_text)
     notebook.cells.append(new_markdown_cell(markdown_text))
     markdown_lines.clear()
 
 
 _ref_identifier_pattern = re.compile(r"\[R[a-f0-9]+-(?P<ref_num>\d+)\]_")
+_link_pattern = re.compile(r"`(?P<link_text>[^`<]+)<(?P<url>[^`>]+)>`_")
+
+
+def _convert_sphinx_link(match):
+    link_text = match.group("link_text").rstrip()
+    url = match.group("url")
+    return f"[{link_text}]({url})"
+
+
+def _convert_links(md_text):
+    """Convert sphinx style links to markdown style links
+
+    Sphinx style links have the form `link text <url>`_. Converts to
+    markdown format [link text](url).
+    """
+    return _link_pattern.sub(_convert_sphinx_link, md_text)
 
 
 def _strip_ref_identifiers(md_text):
@@ -191,6 +208,10 @@ def _process_latex(md_text):
                 wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
             equation_lines = []
             wrapped_lines.append(line)
+
+    # Handle the case where the text ends with a math block
+    if in_math_block and equation_lines:
+        wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
 
     return "\n".join(wrapped_lines)
 

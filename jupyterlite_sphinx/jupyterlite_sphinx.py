@@ -368,8 +368,13 @@ class TryExamplesDirective(SphinxDirective):
     has_content = True
     required_arguments = 0
     option_spec = {
-        "toolbar": directives.unchanged,
         "theme": directives.unchanged,
+        "button_text": directives.unchanged,
+        "button_css": directives.unchanged,
+        "button_hover_css": directives.unchanged,
+        "button_horizontal_position": directives.unchanged,
+        "button_vertical_position": directives.unchanged,
+        "min_height": directives.unchanged,
     }
 
     def run(self):
@@ -381,6 +386,27 @@ class TryExamplesDirective(SphinxDirective):
             directive_key
         )
 
+        button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
+        button_css = self.options.pop("button_css", "")
+        button_hover_css = self.options.pop("button_hover_css", "")
+        button_horizontal_position = self.options.pop(
+            "button_horizontal_position", "right"
+        )
+        button_vertical_position = self.options.pop("button_vertical_position", "top")
+        min_height = self.options.pop("min_height", "200px")
+
+        if button_horizontal_position not in ["left", "center", "right"]:
+            raise RuntimeError(
+                "try_examples directive expects button_horizontal_position to be one of"
+                f" 'left', 'center', or 'right', received {button_horizontal_position}."
+            )
+
+        if button_vertical_position not in ["bottom", "top"]:
+            raise RuntimeError(
+                "try_examples directive expects button_vertical_position to be one of"
+                f" 'top' or 'bottom', received {button_vertical_position}."
+            )
+
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
         docname = self.env.docname
@@ -389,7 +415,7 @@ class TryExamplesDirective(SphinxDirective):
         prefix = os.path.join(relative_path_to_root, JUPYTERLITE_DIR)
 
         lite_app = "tree/"
-        notebooks_path = "notebooks/"
+        notebooks_path = "../notebooks/"
 
         content_container_node = nodes.container(
             classes=["try_examples_outer_container"]
@@ -400,7 +426,6 @@ class TryExamplesDirective(SphinxDirective):
         content_node = nodes.container()
         content_node["classes"].append("try_examples_content")
         self.state.nested_parse(self.content, self.content_offset, content_node)
-        content_container_node += content_node
 
         if notebook_unique_name is None:
             nb = examples_to_notebook(self.content)
@@ -441,39 +466,68 @@ class TryExamplesDirective(SphinxDirective):
 
         # Button with the onclick event to swap embedded notebook back to examples.
         go_back_button_html = (
+            '<div class="try_examples_button_container">'
             '<button class="try_examples_button" '
             f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
             f"'{iframe_parent_div_id}')\">"
             "Go Back</button>"
+            "</div>"
         )
-
-        # Combine everything
-        notebook_container_html = (
-            iframe_parent_container_div_start
-            + iframe_container_div
-            + go_back_button_html
-            + iframe_parent_container_div_end
-        )
-        notebook_container = nodes.raw("", notebook_container_html, format="html")
 
         # Button with the onclick event to swap examples with embedded notebook.
         try_it_button_html = (
+            '<div class="try_examples_button_container">'
             '<button class="try_examples_button" '
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
-            f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}')\">"
-            "Try it with JupyterLite!</button>"
+            f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
+            f"'{min_height}')\">"
+            f"{button_text}</button>"
+            "</div>"
         )
         try_it_button_node = nodes.raw("", try_it_button_html, format="html")
-        # Add the button to the content_container_node
-        content_container_node += try_it_button_node
 
-        # Allow css for button to be specified in conf.py
-        config = self.state.document.settings.env.config
-        try_examples_button_css = config.try_examples_global_button_css
+        # Combine everything
+        if button_vertical_position == "top":
+            notebook_container_html = (
+                iframe_parent_container_div_start
+                + go_back_button_html
+                + iframe_container_div
+                + iframe_parent_container_div_end
+            )
+            content_container_node += try_it_button_node
+            content_container_node += content_node
+        else:
+            notebook_container_html = (
+                iframe_parent_container_div_start
+                + iframe_container_div
+                + go_back_button_html
+                + iframe_parent_container_div_end
+            )
+            content_container_node += content_node
+            content_container_node += try_it_button_node
 
-        try_examples_button_css = f".try_examples_button {{{try_examples_button_css}}}"
+        notebook_container = nodes.raw("", notebook_container_html, format="html")
+
+        # Generate css for button based on options.
+        if button_css:
+            button_css = f".try_examples_button {{{button_css}}}"
+        if button_hover_css:
+            button_hover_css = f".try_examples_button:hover {{{button_hover_css}}}"
+
+        justify = {"left": "flex-start", "center": "center", "right": "flex-end"}[
+            button_horizontal_position
+        ]
+
+        button_container_css = (
+            ".try_examples_button_container {"
+            f"display: flex; justify-content: {justify}"
+            "}"
+        )
+
+        complete_button_css = button_css + button_hover_css + button_container_css
+
         style_tag = nodes.raw(
-            "", f"<style>{try_examples_button_css}</style>", format="html"
+            "", f"<style>{complete_button_css}</style>", format="html"
         )
 
         return [content_container_node, notebook_container, style_tag]
@@ -487,8 +541,13 @@ def _process_docstring_examples(app, docname, source):
 
 def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
-        "toolbar": app.config.try_examples_global_toolbar,
         "theme": app.config.try_examples_global_theme,
+        "button_text": app.config.try_examples_global_button_text,
+        "button_css": app.config.try_examples_global_button_css,
+        "button_hover_css": app.config.try_examples_global_button_hover_css,
+        "button_horizontal_position": app.config.try_examples_global_button_horizontal_position,
+        "button_vertical_position": app.config.try_examples_global_button_vertical_position,
+        "min_height": app.config.try_examples_global_min_height,
     }
     try_examples_options = {
         key: value for key, value in try_examples_options.items() if value is not None
@@ -594,12 +653,25 @@ def setup(app):
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
+
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
-    app.add_config_value(
-        "try_examples_global_button_css", default="float: right;", rebuild="html"
-    )
-    app.add_config_value("try_examples_global_toolbar", default=None, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
+    app.add_config_value("try_examples_global_button_css", default=None, rebuild="html")
+    app.add_config_value(
+        "try_examples_global_button_hover_css", default=None, rebuild="html"
+    )
+    app.add_config_value(
+        "try_examples_global_button_horizontal_position", default=None, rebuild="html"
+    )
+    app.add_config_value(
+        "try_examples_global_button_vertical_position", default=None, rebuild="html"
+    )
+    app.add_config_value("try_examples_global_min_height", default=None, rebuild="html")
+    app.add_config_value(
+        "try_examples_global_button_text",
+        default=None,
+        rebuild="html",
+    )
 
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
