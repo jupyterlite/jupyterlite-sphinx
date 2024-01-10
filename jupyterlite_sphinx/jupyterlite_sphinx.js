@@ -52,18 +52,18 @@ window.tryExamplesShowIframe = (
     let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
 
     if (!iframe) {
-	      const examples = examplesContainer.querySelector('.try_examples_content');
-	      iframe = document.createElement('iframe');
-	      iframe.src = iframeSrc;
-	      iframe.style.width = '100%';
+              const examples = examplesContainer.querySelector('.try_examples_content');
+              iframe = document.createElement('iframe');
+              iframe.src = iframeSrc;
+              iframe.style.width = '100%';
               minHeight = parseInt(iframeMinHeight);
-	      height = Math.max(minHeight, examples.offsetHeight);
-	      iframe.style.height = `${height}px`;
-	      iframe.classList.add('jupyterlite_sphinx_raw_iframe');
-	      examplesContainer.classList.add("hidden");
-	      iframeContainer.appendChild(iframe);
+              height = Math.max(minHeight, examples.offsetHeight);
+              iframe.style.height = `${height}px`;
+              iframe.classList.add('jupyterlite_sphinx_raw_iframe');
+              examplesContainer.classList.add("hidden");
+              iframeContainer.appendChild(iframe);
     } else {
-	      examplesContainer.classList.add("hidden");
+              examplesContainer.classList.add("hidden");
     }
     iframeParentContainer.classList.remove("hidden");
 }
@@ -83,11 +83,11 @@ window.checkDisableTryExamples = (relativePathToRoot) => {
     // Add a dummy query string to avoid problems due to file being cached.
     const disableFileUrl = `${relativePathToRoot}/.disable_try_examples?cb=${timestamp}`
     fetch(disableFileUrl).then(response => {
-	if (response.ok) {
+        if (response.ok) {
             var buttons = document.getElementsByClassName('try_examples_button');
             for (var i = 0; i < buttons.length; i++) {
-		buttons[i].classList.add('hidden');
+                buttons[i].classList.add('hidden');
             }
-	}
+        }
     });
 }
