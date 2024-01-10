@@ -532,7 +532,7 @@ class TryExamplesDirective(SphinxDirective):
 
         # For disabling interactive examples without rebuilding. Check for
         # .try_examples_ignore file and hide button if it is present.
-        ignore_path = os.path.join(relative_path_to_root, '.try_examples_ignore.json')
+        ignore_path = os.path.join(relative_path_to_root, ".try_examples_ignore.json")
         script_html = (
             "<script>"
             'document.addEventListener("DOMContentLoaded", function() {'
