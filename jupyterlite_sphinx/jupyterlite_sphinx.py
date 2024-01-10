@@ -530,7 +530,18 @@ class TryExamplesDirective(SphinxDirective):
             "", f"<style>{complete_button_css}</style>", format="html"
         )
 
-        return [content_container_node, notebook_container, style_tag]
+        # For disabling interactive examples without rebuilding. Check for
+        # .disable_try_examples file and hide button if it is present.
+        script_html = (
+            "<script>"
+            'document.addEventListener("DOMContentLoaded", function() {'
+            f'    window.checkDisableTryExamples("{relative_path_to_root}");'
+            "});"
+            "</script>"
+        )
+        script_node = nodes.raw("", script_html, format="html")
+
+        return [content_container_node, notebook_container, style_tag, script_node]
 
 
 def _process_docstring_examples(app, docname, source):

@@ -76,3 +76,18 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
     iframeParentContainer.classList.add("hidden");
     examplesContainer.classList.remove("hidden");
 }
+
+
+window.checkDisableTryExamples = (relativePathToRoot) => {
+    const timestamp = new Date().getTime();
+    // Add a dummy query string to avoid problems due to file being cached.
+    const disableFileUrl = `${relativePathToRoot}/.disable_try_examples?cb=${timestamp}`
+    fetch(disableFileUrl).then(response => {
+	if (response.ok) {
+            var buttons = document.getElementsByClassName('try_examples_button');
+            for (var i = 0; i < buttons.length; i++) {
+		buttons[i].classList.add('hidden');
+            }
+	}
+    });
+}
