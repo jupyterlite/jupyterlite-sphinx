@@ -166,3 +166,9 @@ allowing for specification of examples sections which should not be made interac
 If you are using the `TryExamples` directive in your documentation, you'll need to ensure
 that the version of the package installed in the Jupyterlite kernel you are using
 matches that of the version you are documenting.
+
+## Disable without rebuilding
+Adding a file entitled `.disable_try_examples` to the root of your documentation's build
+directory will cause try examples buttons to be hidden at page load time, effectively
+disabling interactive examples without requiring a documentation rebuild. This can be
+helpful for projects requiring substantial documentation build time.
