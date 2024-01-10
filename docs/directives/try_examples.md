@@ -168,7 +168,30 @@ that the version of the package installed in the Jupyterlite kernel you are usin
 matches that of the version you are documenting.
 
 ## Disable without rebuilding
-Adding a file entitled `.disable_try_examples` to the root of your documentation's build
-directory will cause try examples buttons to be hidden at page load time, effectively
-disabling interactive examples without requiring a documentation rebuild. This can be
-helpful for projects requiring substantial documentation build time.
+The `TryExamples` directive supports disabling interactive examples without rebuilding
+the documentation. This can be helpful for projects requiring substantial documentation
+build time. Users may add a json file entitled `.try_examples_ignore.json` to the root
+directory of the build directory for the deployed documentation. The format is a list of
+[JavaScript Regex patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions) attached to the key `"patterns"` like below.
+
+```json
+{
+    "patterns": ["^latest/.*", "^stable/reference/generated/example"]
+}
+```
+
+`TryExamples` buttons will be hidden in files matching at least one of these patterns,
+effectively disabling the interactive documentation. In the provided example:
+
+* The pattern `"^latest/.*" disables interactive examples for all files within the
+  latest directory, which may be useful if this directory contains documentation
+  for a development version for which corresponding package build is not available
+  in a Jupyterlite kernel.
+
+* The pattern `"^stable/reference/generated/example"` targets a particular file
+  in the documentation for the latest stable release. 
+
+Note that these patterns should match the Sphinx docnames of the documentation files.
+A docname is the relative path from the documentation root to the file of interest,
+but without the file extension. For instance, the docname corresponding to `index.rst` at
+the root of the Sphinx source directory would be `index`.
