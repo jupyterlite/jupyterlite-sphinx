@@ -78,16 +78,35 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 }
 
 
-window.checkDisableTryExamples = (relativePathToRoot) => {
-    const timestamp = new Date().getTime();
-    // Add a dummy query string to avoid problems due to file being cached.
-    const disableFileUrl = `${relativePathToRoot}/.disable_try_examples?cb=${timestamp}`
-    fetch(disableFileUrl).then(response => {
-        if (response.ok) {
-            var buttons = document.getElementsByClassName('try_examples_button');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].classList.add('hidden');
+window.checkTryExamplesIgnore = (ignoreFilePath, currentPagePath) => {
+    fetch(ignoreFilePath)
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // try examples ignore file is not present.
+                    return null;
+                }
+                throw new Error(`Error fetching ${ignoreFilePath}`);
             }
-        }
-    });
-}
+            return response.json();
+        })
+        .then(data => {
+            if (!data) {
+                return;
+            }
+            const regexPatterns = data.patterns;
+            for (let pattern of regexPatterns) {
+                let regex = new RegExp(pattern);
+                if (regex.test(currentPagePath)) {
+                    var buttons = document.getElementsByClassName('try_examples_button');
+                    for (var i = 0; i < buttons.length; i++) {
+                        buttons[i].classList.add('hidden');
+                    }
+                    break;
+                }
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+};

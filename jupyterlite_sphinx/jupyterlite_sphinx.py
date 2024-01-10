@@ -531,11 +531,12 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         # For disabling interactive examples without rebuilding. Check for
-        # .disable_try_examples file and hide button if it is present.
+        # .try_examples_ignore file and hide button if it is present.
+        ignore_path = os.path.join(relative_path_to_root, '.try_examples_ignore.json')
         script_html = (
             "<script>"
             'document.addEventListener("DOMContentLoaded", function() {'
-            f'    window.checkDisableTryExamples("{relative_path_to_root}");'
+            f'window.checkTryExamplesIgnore("{ignore_path}","{docname}");'
             "});"
             "</script>"
         )
