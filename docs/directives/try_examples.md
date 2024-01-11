@@ -167,16 +167,16 @@ If you are using the `TryExamples` directive in your documentation, you'll need 
 that the version of the package installed in the Jupyterlite kernel you are using
 matches that of the version you are documenting.
 
-## Disable without rebuilding
+## Configuration without rebuilding
 The `TryExamples` directive supports disabling interactive examples without rebuilding
 the documentation. This can be helpful for projects requiring substantial documentation
-build time. Users may add a json file entitled `.try_examples_ignore.json` to the root
+build time. Users may add a json config file entitled `.try_examples.json` to the root
 directory of the build directory for the deployed documentation. The format is a list of
-[JavaScript Regex patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions) attached to the key `"patterns"` like below.
+[JavaScript Regex patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions) attached to the key `"ignore_patterns"` like below.
 
 ```json
 {
-    "patterns": ["^latest/.*", "^stable/reference/generated/example"]
+    "ignore_patterns": ["^latest/.*", "^stable/reference/generated/example"]
 }
 ```
 

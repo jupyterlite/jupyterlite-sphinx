@@ -530,13 +530,12 @@ class TryExamplesDirective(SphinxDirective):
             "", f"<style>{complete_button_css}</style>", format="html"
         )
 
-        # For disabling interactive examples without rebuilding. Check for
-        # .try_examples_ignore file and hide button if it is present.
-        ignore_path = os.path.join(relative_path_to_root, ".try_examples_ignore.json")
+        # Search cnofig file allowing for config changes without rebuilding docs.
+        config_path = os.path.join(relative_path_to_root, ".try_examples.json")
         script_html = (
             "<script>"
             'document.addEventListener("DOMContentLoaded", function() {'
-            f'window.checkTryExamplesIgnore("{ignore_path}","{docname}");'
+            f'window.loadTryExamplesConfig("{config_path}","{docname}");'
             "});"
             "</script>"
         )

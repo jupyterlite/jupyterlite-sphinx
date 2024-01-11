@@ -78,7 +78,7 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 }
 
 
-window.checkTryExamplesIgnore = (ignoreFilePath, currentPagePath) => {
+window.loadTryExamplesConfig = (ignoreFilePath, currentPagePath) => {
     // Add a timestamp as query parameter to ensure a cached version of the
     // file is not used.
     const timestamp = new Date().getTime();
@@ -98,7 +98,9 @@ window.checkTryExamplesIgnore = (ignoreFilePath, currentPagePath) => {
             if (!data) {
                 return;
             }
-            const regexPatterns = data.patterns;
+	    // Disable interactive examples if file matches one of the ignore patterns
+	    // by hiding try_examples_buttons.
+            const regexPatterns = data.ignore_patterns;
             for (let pattern of regexPatterns) {
                 let regex = new RegExp(pattern);
                 if (regex.test(currentPagePath)) {
