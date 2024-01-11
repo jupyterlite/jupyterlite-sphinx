@@ -98,8 +98,8 @@ window.loadTryExamplesConfig = (ignoreFilePath, currentPagePath) => {
             if (!data) {
                 return;
             }
-	    // Disable interactive examples if file matches one of the ignore patterns
-	    // by hiding try_examples_buttons.
+            // Disable interactive examples if file matches one of the ignore patterns
+            // by hiding try_examples_buttons.
             const regexPatterns = data.ignore_patterns;
             for (let pattern of regexPatterns) {
                 let regex = new RegExp(pattern);
