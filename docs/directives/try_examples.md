@@ -195,3 +195,12 @@ Note that these patterns should match the Sphinx docnames of the documentation f
 A docname is the relative path from the documentation root to the file of interest,
 but without the file extension. For instance, the docname corresponding to `index.rst` at
 the root of the Sphinx source directory would be `index`.
+
+A default configuration file can be specified in `conf.py` with the option
+`try_examples_default_runtime_config`.
+
+```python
+try_examples_default_runtime_config = {
+    "ignore_patterns": ["^latest/.*", "^stable/reference/generated/example"]
+}
+```
