@@ -79,7 +79,11 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 
 
 window.checkTryExamplesIgnore = (ignoreFilePath, currentPagePath) => {
-    fetch(ignoreFilePath)
+    // Add a timestamp as query parameter to ensure a cached version of the
+    // file is not used.
+    const timestamp = new Date().getTime();
+    const ignoreFileUrl = `${ignoreFilePath}?cb=${timestamp}`;
+    fetch(ignoreFileUrl)
         .then(response => {
             if (!response.ok) {
                 if (response.status === 404) {
