@@ -574,6 +574,25 @@ def conditional_process_examples(app, config):
         app.connect("autodoc-process-docstring", _process_autodoc_docstrings)
 
 
+def write_try_examples_runtime_config(app, exception):
+    """Add default runtime configuration file .try_examples.json.
+
+    These configuration options can be changed in the deployed docs without
+    rebuilding by replacing this file.
+    """
+    if exception is not None:
+        return
+
+    config = app.config.try_examples_default_runtime_config
+    if config is None:
+        return
+
+    output_dir = app.outdir
+    config_path = os.path.join(output_dir, ".try_examples.json")
+    with open(config_path, "w") as f:
+        json.dump(config, f, indent=4)
+
+
 def inited(app: Sphinx, config):
     # Create the content dir
     os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
@@ -659,6 +678,9 @@ def setup(app):
     # We need to build JupyterLite at the end, when all the content was created
     app.connect("build-finished", jupyterlite_build)
 
+    # Write default .try_examples.json after build finishes.
+    app.connect("build-finished", write_try_examples_runtime_config)
+
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
@@ -682,6 +704,11 @@ def setup(app):
         "try_examples_global_button_text",
         default=None,
         rebuild="html",
+    )
+    app.add_config_value(
+        "try_examples_default_runtime_config",
+        default=None,
+        rebuild=None,
     )
 
     # Initialize NotebookLite and JupyterLite directives
