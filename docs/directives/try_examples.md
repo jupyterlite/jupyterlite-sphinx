@@ -168,6 +168,7 @@ that the version of the package installed in the Jupyterlite kernel you are usin
 matches that of the version you are documenting.
 
 ## Configuration without rebuilding
+
 The `TryExamples` directive supports disabling interactive examples without rebuilding
 the documentation. This can be helpful for projects requiring substantial documentation
 build time. Users may add a json config file entitled `.try_examples.json` to the root
