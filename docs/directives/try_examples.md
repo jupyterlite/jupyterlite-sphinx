@@ -177,31 +177,30 @@ directory of the build directory for the deployed documentation. The format is a
 
 ```json
 {
-    "ignore_patterns": ["^latest/.*", "^stable/reference/generated/example"]
+    "ignore_patterns": ["^/latest/.*", "^/stable/reference/generated/example.html"]
 }
 ```
 
-`TryExamples` buttons will be hidden in files matching at least one of these patterns,
-effectively disabling the interactive documentation. In the provided example:
+`TryExamples` buttons will be hidden in url pathnames matching at least one of these
+patterns, effectively disabling the interactive documentation. In the provided example:
 
-* The pattern `"^latest/.*" disables interactive examples for all files within the
-  latest directory, which may be useful if this directory contains documentation
-  for a development version for which corresponding package build is not available
+* The pattern `".*latest/.*" disables interactive examples for urls for the documentation
+  for the latest version of the package, which may be useful if this documentation is
+  for a development version for which a corresponding package build is not available
   in a Jupyterlite kernel.
 
-* The pattern `"^stable/reference/generated/example"` targets a particular file
+* The pattern `".*stable/reference/generated/example.html"` targets a particular url
   in the documentation for the latest stable release. 
 
-Note that these patterns should match the Sphinx docnames of the documentation files.
-A docname is the relative path from the documentation root to the file of interest,
-but without the file extension. For instance, the docname corresponding to `index.rst` at
-the root of the Sphinx source directory would be `index`.
+Note that these patterns should match the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname) of the url, not the full url. This is the path portion of
+the url. For instance, the pathname of https://jupyterlite-sphinx.readthedocs.io/en/latest/directives/try_examples.html is `/en/latest/directives/try_examples.html`.
+
 
 A default configuration file can be specified in `conf.py` with the option
 `try_examples_default_runtime_config`.
 
 ```python
 try_examples_default_runtime_config = {
-    "ignore_patterns": ["^latest/.*", "^stable/reference/generated/example"]
+    "ignore_patterns": ["^/latest/.*", "^/stable/reference/generated/example.html"]
 }
 ```
