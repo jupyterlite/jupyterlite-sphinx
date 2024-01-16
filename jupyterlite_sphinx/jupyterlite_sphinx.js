@@ -78,42 +78,43 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 }
 
 
-window.loadTryExamplesConfig = (ignoreFilePath) => {
-    // Add a timestamp as query parameter to ensure a cached version of the
-    // file is not used.
-    const timestamp = new Date().getTime();
-    const ignoreFileUrl = `${ignoreFilePath}?cb=${timestamp}`;
-    const currentPageUrl = window.location.pathname;
-    fetch(ignoreFileUrl)
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) {
-                    // try examples ignore file is not present.
-                    return null;
-                }
-                throw new Error(`Error fetching ${ignoreFilePath}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (!data) {
+window.loadTryExamplesConfig = async (ignoreFilePath) => {
+    try {
+        // Add a timestamp as query parameter to ensure a cached version of the
+        // file is not used.
+        const timestamp = new Date().getTime();
+        const ignoreFileUrl = `${ignoreFilePath}?cb=${timestamp}`;
+        const currentPageUrl = window.location.pathname;
+
+        const response = await fetch(ignoreFileUrl);
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Try examples ignore file is not present.
+                console.log('Ignore file not found.');
                 return;
             }
-            // Disable interactive examples if file matches one of the ignore patterns
-            // by hiding try_examples_buttons.
-            const regexPatterns = data.ignore_patterns;
-            for (let pattern of regexPatterns) {
-                let regex = new RegExp(pattern);
-                if (regex.test(currentPageUrl)) {
-                    var buttons = document.getElementsByClassName('try_examples_button');
-                    for (var i = 0; i < buttons.length; i++) {
-                        buttons[i].classList.add('hidden');
-                    }
-                    break;
+            throw new Error(`Error fetching ${ignoreFilePath}`);
+        }
+
+        const data = await response.json();
+        if (!data) {
+            return;
+        }
+
+        // Disable interactive examples if file matches one of the ignore patterns
+        // by hiding try_examples_buttons.
+        Patterns = data.ignore_patterns;
+        for (let pattern of Patterns) {
+            let regex = new RegExp(pattern);
+            if (regex.test(currentPageUrl)) {
+                var buttons = document.getElementsByClassName('try_examples_button');
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].classList.add('hidden');
                 }
+                break;
             }
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        }
+    } catch (error) {
+        console.error(error);
+    }
 };
