@@ -78,11 +78,12 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 }
 
 
-window.loadTryExamplesConfig = (ignoreFilePath, currentPagePath) => {
+window.loadTryExamplesConfig = (ignoreFilePath) => {
     // Add a timestamp as query parameter to ensure a cached version of the
     // file is not used.
     const timestamp = new Date().getTime();
     const ignoreFileUrl = `${ignoreFilePath}?cb=${timestamp}`;
+    const currentPageUrl = window.location.pathname;
     fetch(ignoreFileUrl)
         .then(response => {
             if (!response.ok) {
@@ -103,7 +104,7 @@ window.loadTryExamplesConfig = (ignoreFilePath, currentPagePath) => {
             const regexPatterns = data.ignore_patterns;
             for (let pattern of regexPatterns) {
                 let regex = new RegExp(pattern);
-                if (regex.test(currentPagePath)) {
+                if (regex.test(currentPageUrl)) {
                     var buttons = document.getElementsByClassName('try_examples_button');
                     for (var i = 0; i < buttons.length; i++) {
                         buttons[i].classList.add('hidden');

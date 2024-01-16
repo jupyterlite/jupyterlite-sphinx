@@ -535,7 +535,7 @@ class TryExamplesDirective(SphinxDirective):
         script_html = (
             "<script>"
             'document.addEventListener("DOMContentLoaded", function() {'
-            f'window.loadTryExamplesConfig("{config_path}","{docname}");'
+            f'window.loadTryExamplesConfig("{config_path}");'
             "});"
             "</script>"
         )
