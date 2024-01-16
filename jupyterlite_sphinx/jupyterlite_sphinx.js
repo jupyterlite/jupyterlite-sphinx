@@ -118,3 +118,15 @@ window.loadTryExamplesConfig = async (ignoreFilePath) => {
         console.error(error);
     }
 };
+
+
+window.toggleTryExamplesButtons = () => {
+    /* Toggle visibility of TryExamples buttons. For use in console for debug
+     * purposes. */
+    var buttons = document.getElementsByClassName('try_examples_button');
+
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.toggle('hidden');
+    }
+
+};
