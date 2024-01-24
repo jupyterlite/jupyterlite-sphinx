@@ -166,3 +166,41 @@ allowing for specification of examples sections which should not be made interac
 If you are using the `TryExamples` directive in your documentation, you'll need to ensure
 that the version of the package installed in the Jupyterlite kernel you are using
 matches that of the version you are documenting.
+
+## Configuration without rebuilding
+
+The `TryExamples` directive supports disabling interactive examples without rebuilding
+the documentation. This can be helpful for projects requiring substantial documentation
+build time. Users may add a json config file entitled `.try_examples.json` to the root
+directory of the build directory for the deployed documentation. The format is a list of
+[JavaScript Regex patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions) attached to the key `"ignore_patterns"` like below.
+
+```json
+{
+    "ignore_patterns": ["^/latest/.*", "^/stable/reference/generated/example.html"]
+}
+```
+
+`TryExamples` buttons will be hidden in url pathnames matching at least one of these
+patterns, effectively disabling the interactive documentation. In the provided example:
+
+* The pattern `".*latest/.*" disables interactive examples for urls for the documentation
+  for the latest version of the package, which may be useful if this documentation is
+  for a development version for which a corresponding package build is not available
+  in a Jupyterlite kernel.
+
+* The pattern `".*stable/reference/generated/example.html"` targets a particular url
+  in the documentation for the latest stable release. 
+
+Note that these patterns should match the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname) of the url, not the full url. This is the path portion of
+the url. For instance, the pathname of https://jupyterlite-sphinx.readthedocs.io/en/latest/directives/try_examples.html is `/en/latest/directives/try_examples.html`.
+
+
+A default configuration file can be specified in `conf.py` with the option
+`try_examples_default_runtime_config`.
+
+```python
+try_examples_default_runtime_config = {
+    "ignore_patterns": ["^/latest/.*", "^/stable/reference/generated/example.html"]
+}
+```

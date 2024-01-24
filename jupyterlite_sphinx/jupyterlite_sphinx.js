@@ -52,18 +52,18 @@ window.tryExamplesShowIframe = (
     let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
 
     if (!iframe) {
-	      const examples = examplesContainer.querySelector('.try_examples_content');
-	      iframe = document.createElement('iframe');
-	      iframe.src = iframeSrc;
-	      iframe.style.width = '100%';
+              const examples = examplesContainer.querySelector('.try_examples_content');
+              iframe = document.createElement('iframe');
+              iframe.src = iframeSrc;
+              iframe.style.width = '100%';
               minHeight = parseInt(iframeMinHeight);
-	      height = Math.max(minHeight, examples.offsetHeight);
-	      iframe.style.height = `${height}px`;
-	      iframe.classList.add('jupyterlite_sphinx_raw_iframe');
-	      examplesContainer.classList.add("hidden");
-	      iframeContainer.appendChild(iframe);
+              height = Math.max(minHeight, examples.offsetHeight);
+              iframe.style.height = `${height}px`;
+              iframe.classList.add('jupyterlite_sphinx_raw_iframe');
+              examplesContainer.classList.add("hidden");
+              iframeContainer.appendChild(iframe);
     } else {
-	      examplesContainer.classList.add("hidden");
+              examplesContainer.classList.add("hidden");
     }
     iframeParentContainer.classList.remove("hidden");
 }
@@ -76,3 +76,57 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
     iframeParentContainer.classList.add("hidden");
     examplesContainer.classList.remove("hidden");
 }
+
+
+window.loadTryExamplesConfig = async (ignoreFilePath) => {
+    try {
+        // Add a timestamp as query parameter to ensure a cached version of the
+        // file is not used.
+        const timestamp = new Date().getTime();
+        const ignoreFileUrl = `${ignoreFilePath}?cb=${timestamp}`;
+        const currentPageUrl = window.location.pathname;
+
+        const response = await fetch(ignoreFileUrl);
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Try examples ignore file is not present.
+                console.log('Ignore file not found.');
+                return;
+            }
+            throw new Error(`Error fetching ${ignoreFilePath}`);
+        }
+
+        const data = await response.json();
+        if (!data) {
+            return;
+        }
+
+        // Disable interactive examples if file matches one of the ignore patterns
+        // by hiding try_examples_buttons.
+        Patterns = data.ignore_patterns;
+        for (let pattern of Patterns) {
+            let regex = new RegExp(pattern);
+            if (regex.test(currentPageUrl)) {
+                var buttons = document.getElementsByClassName('try_examples_button');
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].classList.add('hidden');
+                }
+                break;
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+window.toggleTryExamplesButtons = () => {
+    /* Toggle visibility of TryExamples buttons. For use in console for debug
+     * purposes. */
+    var buttons = document.getElementsByClassName('try_examples_button');
+
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.toggle('hidden');
+    }
+
+};
