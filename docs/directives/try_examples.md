@@ -4,31 +4,20 @@
 docstring examples sections written in [doctestformat](https://docs.python.org/3/library/doctest.html) to be swapped with an embedded classic Notebook at the push of a button.
 
 
+## Quick Start
+
+You can write RST interleaved with Codeblocks in the ``.. try_exaples::``
+directive::
+
+
+
 ```rst
 Examples
 --------
 .. try_examples::
-    :button_css:
-        background-color: #f7dc1e;
-	border: none;
-    	padding: 5px 10px;
-   	border-radius: 15px;
-	font-family: vibur;
-	font-size: x-large;
-	box-shadow: 0 2px 5px rgba(108,108,108,0.2);
-    :button_hover_css:
-        background-color: #fff221;
- 	transform: scale(1.02);
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	cursor: pointer;
-    :button_horizontal_position: right
-    :button_vertical_position: top
-    :button_text: Try it in a classic notebook!
-    :min_height: 200px
-
 
     Doctest examples sections are parsed and converted to notebooks. Blocks of text
-    like this become markdown cells. Codeblocks begin with `>>>`. Contiguous blocks
+    like this become markdown cells. Codeblocks begin with ``>>>``. Contiguous blocks
     of code are combined into a single code cell.
 
     >>> x = 2
@@ -36,7 +25,7 @@ Examples
     >>> x + y
     4
 
-    `...` is used to continue multiline statements.
+    ``...`` is used to continue multiline statements.
 
     >>> def f(x, y):
     ...     return x + y
@@ -59,26 +48,9 @@ Examples
 Examples
 --------
 .. try_examples::
-    :button_css:
-        background-color: #f7dc1e;
-	border: none;
-    	padding: 5px 10px;
-   	border-radius: 15px;
-	font-family: vibur;
-	font-size: x-large;
-	box-shadow: 0 2px 5px rgba(108,108,108,0.2);
-    :button_hover_css:
-        background-color: #fff221;
- 	transform: scale(1.02);
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	cursor: pointer;
-    :button_horizontal_position: right
-    :button_vertical_position: top
-    :button_text: Try it in a classic notebook!
-    :min_height: 200px
-
+    
     Doctest examples sections are parsed and converted to notebooks. Blocks of text
-    like this become markdown cells. Codeblocks begin with `>>>`. Contiguous blocks
+    like this become markdown cells. Codeblocks begin with ``>>>``. Contiguous blocks
     of code are combined into a single code cell.
 
     >>> x = 2
@@ -86,7 +58,7 @@ Examples
     >>> x + y
     4
 
-    `...` is used to continue multiline statements.
+    ``...`` is used to continue multiline statements.
 
     >>> def f(x, y):
     ...     return x + y
@@ -106,35 +78,15 @@ Examples
 
 ## Configuration
 
-The button's text, position, and style can be configured to match your page design. The
-text can be configured with the option `:button_text:`. The options `:button_css:` and
-`:button_hover_css:` take lists of css properties as in the example above, and
-apply them to the button. `:button_horizontal_position:` can be one of `left`, `right`, or
-`center` and `:button_vertical_position:` can be one of `top` or `bottom`. The position
-is with respect to the rendered examples block / embedded notebook
-(depending on which is active).
+### Global Styling
 
-The height of the embedded notebook's iframe container is calculated to match the height
-of the rendered doctest examples so that it takes up the same amount of space on the
-page. The `:min_height:` option can be used to ensure that the embedded notebook will not
-be unuseably small for very short examples blocks, though its use can cause the contents
-of the page to shift when the button is pressed.
+To customize the style of the buttons, we recommend for you to use see `How to
+add custom css or js to sphinx documentation <https://docs.readthedocs.io/en/stable/guides/adding-custom-css.html#how-to-add-custom-css-or-javascript-to-sphinx-documentation>`__
 
-the `:theme:` option available for other `jupyterlite-sphinx` directives is also
-available.
-
-If you are using [sphinx.ext.autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) with [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) or [sphinx.ext.napoleon](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html), you
-can set the option
-
-```python
-global_enable_try_examples = True
-```
-
-in your sphinx `conf.py` in order to automatically insert the `try_examples` directive
-in examples sections during the `"autodoc-process-docstring"` event. Configuration values
-can be set globally for the inserted `try_examples` directives by setting the config values
-`try_examples_global_button_css`, etc. as below. All valid config values are supported
-by prepending `try_examples_global_`.
+Configuration values can be set globally for the inserted `try_examples`
+directives by setting the config values `try_examples_global_button_css`, etc.
+as below. All valid config values are supported by prepending
+`try_examples_global_`.
 
 ```python
 global_enable_try_examples = True
@@ -155,6 +107,104 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 try_examples_global_button_text = "Try it in your browser!"
 try_examples_global_min_height = "200px"
 ```
+
+### Per button styling
+
+
+The button's text, position, and style can be configured to match your page design. The
+text can be configured with the option `:button_text:`. The options `:button_css:` and
+`:button_hover_css:` take lists of css properties as in the example above, and
+apply them to the button. `:button_horizontal_position:` can be one of `left`, `right`, or
+`center` and `:button_vertical_position:` can be one of `top` or `bottom`. The position
+is with respect to the rendered examples block / embedded notebook
+(depending on which is active).
+
+The height of the embedded notebook's iframe container is calculated to match the height
+of the rendered doctest examples so that it takes up the same amount of space on the
+page. The `:min_height:` option can be used to ensure that the embedded notebook will not
+be unuseably small for very short examples blocks, though its use can cause the contents
+of the page to shift when the button is pressed.
+
+the `:theme:` option available for other `jupyterlite-sphinx` directives is also
+available.
+
+
+```rst
+Per Button Style
+----------------
+.. try_examples::
+    :button_css:
+        background-color: #1ecef7;
+    border: none;
+        padding: 5px 10px;
+    border-radius: 15px;
+    font-family: vibur;
+    font-size: x-large;
+    box-shadow: 0 2px 5px rgba(108,108,108,0.2);
+    :button_hover_css:
+        background-color: #fff221;
+    transform: scale(1.02);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    :button_horizontal_position: right
+    :button_vertical_position: top
+    :button_text: Try it in a classic notebook!
+    :min_height: 200px
+
+
+    The try-example button attached to this section will have custom css
+
+    >>> x = 2
+    >>> y = 2
+    >>> x + y
+    4
+
+```
+
+
+```{eval-rst}
+Per Button Style
+----------------
+.. try_examples::
+    :button_css:
+        background-color: red;
+    border: none;
+        padding: 5px 10px;
+    border-radius: 15px;
+    font-family: vibur;
+    font-size: x-large;
+    box-shadow: 0 2px 5px rgba(108,108,108,0.2);
+    :button_hover_css:
+        background-color: #fff221;
+    transform: scale(1.02);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    :button_horizontal_position: right
+    :button_vertical_position: top
+    :button_text: Try it in a classic notebook!
+    :min_height: 200px
+
+    The try-example button attached to this section will have custom css
+
+    >>> x = 2
+    >>> y = 2
+    >>> x + y
+    4
+
+```
+
+
+
+
+If you are using [sphinx.ext.autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) with [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) or [sphinx.ext.napoleon](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html), you
+can set the option
+
+```python
+global_enable_try_examples = True
+```
+
+in your sphinx `conf.py` in order to automatically insert the `try_examples` directive
+in examples sections during the `"autodoc-process-docstring"` event.
 
 If an examples section already contains a `try_examples` directive, no additional
 directives will be inserted, allowing for specific cases to be separately configured
