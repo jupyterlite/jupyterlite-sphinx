@@ -2,11 +2,8 @@ import os
 import json
 from uuid import uuid4
 import shutil
-import tempfile
-from warnings import warn
 import glob
 import re
-import nbformat as nbf
 
 from pathlib import Path
 
@@ -19,7 +16,6 @@ from docutils.nodes import SkipNode, Element
 from docutils import nodes
 
 from sphinx.application import Sphinx
-from sphinx.ext.doctest import DoctestDirective
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
@@ -370,10 +366,7 @@ class TryExamplesDirective(SphinxDirective):
     option_spec = {
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
-        "button_css": directives.unchanged,
-        "button_hover_css": directives.unchanged,
-        "button_horizontal_position": directives.unchanged,
-        "button_vertical_position": directives.unchanged,
+        "example_class": directives.unchanged,
         "min_height": directives.unchanged,
     }
 
@@ -387,25 +380,8 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
-        button_css = self.options.pop("button_css", "")
-        button_hover_css = self.options.pop("button_hover_css", "")
-        button_horizontal_position = self.options.pop(
-            "button_horizontal_position", "right"
-        )
-        button_vertical_position = self.options.pop("button_vertical_position", "top")
+        example_class = self.options.pop("example_class", "")
         min_height = self.options.pop("min_height", "200px")
-
-        if button_horizontal_position not in ["left", "center", "right"]:
-            raise RuntimeError(
-                "try_examples directive expects button_horizontal_position to be one of"
-                f" 'left', 'center', or 'right', received {button_horizontal_position}."
-            )
-
-        if button_vertical_position not in ["bottom", "top"]:
-            raise RuntimeError(
-                "try_examples directive expects button_vertical_position to be one of"
-                f" 'top' or 'bottom', received {button_vertical_position}."
-            )
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
@@ -454,7 +430,7 @@ class TryExamplesDirective(SphinxDirective):
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
             f'<div id="{iframe_parent_div_id}" '
-            f'class="try_examples_outer_container hidden">'
+            f'class="try_examples_outer_container {example_class} hidden">'
         )
 
         iframe_parent_container_div_end = "</div>"
@@ -487,51 +463,19 @@ class TryExamplesDirective(SphinxDirective):
         try_it_button_node = nodes.raw("", try_it_button_html, format="html")
 
         # Combine everything
-        if button_vertical_position == "top":
-            notebook_container_html = (
-                iframe_parent_container_div_start
-                + go_back_button_html
-                + iframe_container_div
-                + iframe_parent_container_div_end
-            )
-            content_container_node += try_it_button_node
-            content_container_node += content_node
-        else:
-            notebook_container_html = (
-                iframe_parent_container_div_start
-                + iframe_container_div
-                + go_back_button_html
-                + iframe_parent_container_div_end
-            )
-            content_container_node += content_node
-            content_container_node += try_it_button_node
+        notebook_container_html = (
+            iframe_parent_container_div_start
+            + go_back_button_html
+            + iframe_container_div
+            + iframe_parent_container_div_end
+        )
+        content_container_node += try_it_button_node
+        content_container_node += content_node
 
         notebook_container = nodes.raw("", notebook_container_html, format="html")
 
-        # Generate css for button based on options.
-        if button_css:
-            button_css = f".try_examples_button {{{button_css}}}"
-        if button_hover_css:
-            button_hover_css = f".try_examples_button:hover {{{button_hover_css}}}"
-
-        justify = {"left": "flex-start", "center": "center", "right": "flex-end"}[
-            button_horizontal_position
-        ]
-
-        button_container_css = (
-            ".try_examples_button_container {"
-            f"display: flex; justify-content: {justify}"
-            "}"
-        )
-
-        complete_button_css = button_css + button_hover_css + button_container_css
-
-        style_tag = nodes.raw(
-            "", f"<style>{complete_button_css}</style>", format="html"
-        )
-
-        # Search cnofig file allowing for config changes without rebuilding docs.
-        config_path = os.path.join(relative_path_to_root, ".try_examples.json")
+        # Search config file allowing for config changes without rebuilding docs.
+        config_path = os.path.join(relative_path_to_root, "try_examples.json")
         script_html = (
             "<script>"
             'document.addEventListener("DOMContentLoaded", function() {'
@@ -541,7 +485,7 @@ class TryExamplesDirective(SphinxDirective):
         )
         script_node = nodes.raw("", script_html, format="html")
 
-        return [content_container_node, notebook_container, style_tag, script_node]
+        return [content_container_node, notebook_container, script_node]
 
 
 def _process_docstring_examples(app, docname, source):
@@ -554,10 +498,7 @@ def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
         "theme": app.config.try_examples_global_theme,
         "button_text": app.config.try_examples_global_button_text,
-        "button_css": app.config.try_examples_global_button_css,
-        "button_hover_css": app.config.try_examples_global_button_hover_css,
-        "button_horizontal_position": app.config.try_examples_global_button_horizontal_position,
-        "button_vertical_position": app.config.try_examples_global_button_vertical_position,
+        "example_class": app.config.try_examples_global_example_class,
         "min_height": app.config.try_examples_global_min_height,
     }
     try_examples_options = {
@@ -572,25 +513,6 @@ def conditional_process_examples(app, config):
     if config.global_enable_try_examples:
         app.connect("source-read", _process_docstring_examples)
         app.connect("autodoc-process-docstring", _process_autodoc_docstrings)
-
-
-def write_try_examples_runtime_config(app, exception):
-    """Add default runtime configuration file .try_examples.json.
-
-    These configuration options can be changed in the deployed docs without
-    rebuilding by replacing this file.
-    """
-    if exception is not None:
-        return
-
-    config = app.config.try_examples_default_runtime_config
-    if config is None:
-        return
-
-    output_dir = app.outdir
-    config_path = os.path.join(output_dir, ".try_examples.json")
-    with open(config_path, "w") as f:
-        json.dump(config, f, indent=4)
 
 
 def inited(app: Sphinx, config):
@@ -678,9 +600,6 @@ def setup(app):
     # We need to build JupyterLite at the end, when all the content was created
     app.connect("build-finished", jupyterlite_build)
 
-    # Write default .try_examples.json after build finishes.
-    app.connect("build-finished", write_try_examples_runtime_config)
-
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
@@ -689,26 +608,14 @@ def setup(app):
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
-    app.add_config_value("try_examples_global_button_css", default=None, rebuild="html")
     app.add_config_value(
-        "try_examples_global_button_hover_css", default=None, rebuild="html"
-    )
-    app.add_config_value(
-        "try_examples_global_button_horizontal_position", default=None, rebuild="html"
-    )
-    app.add_config_value(
-        "try_examples_global_button_vertical_position", default=None, rebuild="html"
+        "try_examples_global_example_class", default=None, rebuild="html"
     )
     app.add_config_value("try_examples_global_min_height", default=None, rebuild="html")
     app.add_config_value(
         "try_examples_global_button_text",
         default=None,
         rebuild="html",
-    )
-    app.add_config_value(
-        "try_examples_default_runtime_config",
-        default=None,
-        rebuild=None,
     )
 
     # Initialize NotebookLite and JupyterLite directives
@@ -767,6 +674,11 @@ def setup(app):
     app.add_css_file("jupyterlite_sphinx.css")
 
     app.add_js_file("jupyterlite_sphinx.js")
+
+    # Copy optional try examples runtime config if it exists.
+    try_examples_config_path = Path(app.srcdir) / "try_examples.json"
+    if try_examples_config_path.exists():
+        copy_asset(str(try_examples_config_path), app.outdir)
 
 
 def search_params_parser(search_params: str) -> str:

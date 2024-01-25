@@ -78,22 +78,22 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 }
 
 
-window.loadTryExamplesConfig = async (ignoreFilePath) => {
+window.loadTryExamplesConfig = async (configFilePath) => {
     try {
         // Add a timestamp as query parameter to ensure a cached version of the
         // file is not used.
         const timestamp = new Date().getTime();
-        const ignoreFileUrl = `${ignoreFilePath}?cb=${timestamp}`;
+        const configFileUrl = `${configFilePath}?cb=${timestamp}`;
         const currentPageUrl = window.location.pathname;
 
-        const response = await fetch(ignoreFileUrl);
+        const response = await fetch(configFileUrl);
         if (!response.ok) {
             if (response.status === 404) {
                 // Try examples ignore file is not present.
-                console.log('Ignore file not found.');
+                console.log('try_examples config file not found.');
                 return;
             }
-            throw new Error(`Error fetching ${ignoreFilePath}`);
+            throw new Error(`Error fetching ${configFilePath}`);
         }
 
         const data = await response.json();
