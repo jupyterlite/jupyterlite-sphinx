@@ -85,8 +85,15 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
 /* Global variable for try_examples iframe minHeight. Defaults to 0 but can be
  * modified based on configuration in try_examples.json */
 var tryExamplesGlobalMinHeight = 0;
+/* Global variable to check if config has been loaded. This keeps it from getting
+ * loaded multiple times if there are multiple try_examples directives on one page
+ */
+var tryExamplesConfigLoaded = false;
 
 window.loadTryExamplesConfig = async (configFilePath) => {
+    if (tryExamplesConfigLoaded) {
+        return;
+    }
     try {
         // Add a timestamp as query parameter to ensure a cached version of the
         // file is not used.
@@ -130,6 +137,7 @@ window.loadTryExamplesConfig = async (configFilePath) => {
     } catch (error) {
         console.error(error);
     }
+    tryExamplesConfigLoaded = true;
 };
 
 
