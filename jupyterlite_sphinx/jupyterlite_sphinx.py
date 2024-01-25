@@ -364,10 +364,10 @@ class TryExamplesDirective(SphinxDirective):
     has_content = True
     required_arguments = 0
     option_spec = {
+        "height": directives.unchanged,
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
         "example_class": directives.unchanged,
-        "min_height": directives.unchanged,
     }
 
     def run(self):
@@ -380,8 +380,8 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
+        height = self.options.pop("height", None)
         example_class = self.options.pop("example_class", "")
-        min_height = self.options.pop("min_height", "200px")
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
@@ -456,7 +456,7 @@ class TryExamplesDirective(SphinxDirective):
             '<button class="try_examples_button" '
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
             f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
-            f"'{min_height}')\">"
+            f"'{height}')\">"
             f"{button_text}</button>"
             "</div>"
         )
@@ -499,7 +499,6 @@ def _process_autodoc_docstrings(app, what, name, obj, options, lines):
         "theme": app.config.try_examples_global_theme,
         "button_text": app.config.try_examples_global_button_text,
         "example_class": app.config.try_examples_global_example_class,
-        "min_height": app.config.try_examples_global_min_height,
     }
     try_examples_options = {
         key: value for key, value in try_examples_options.items() if value is not None
@@ -608,10 +607,6 @@ def setup(app):
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
-    app.add_config_value(
-        "try_examples_global_example_class", default=None, rebuild="html"
-    )
-    app.add_config_value("try_examples_global_min_height", default=None, rebuild="html")
     app.add_config_value(
         "try_examples_global_button_text",
         default=None,
