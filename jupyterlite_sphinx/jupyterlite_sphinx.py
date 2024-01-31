@@ -394,7 +394,7 @@ class TryExamplesDirective(SphinxDirective):
         notebooks_path = "../notebooks/"
 
         content_container_node = nodes.container(
-            classes=["try_examples_outer_container"]
+            classes=["try_examples_outer_container", example_class]
         )
         examples_div_id = uuid4()
         content_container_node["ids"].append(examples_div_id)
@@ -430,7 +430,7 @@ class TryExamplesDirective(SphinxDirective):
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
             f'<div id="{iframe_parent_div_id}" '
-            f'class="try_examples_outer_container {example_class} hidden">'
+            f'class="try_examples_outer_iframe {example_class} hidden">'
         )
 
         iframe_parent_container_div_end = "</div>"
