@@ -36,7 +36,7 @@ def examples_to_notebook(input_lines):
     >>>            "\n",
     >>>            ".. math::\n",
     >>>            "\n",
-    >>>            "    x = 2,\;y = 2
+    >>>            "    x = 2,\\;y = 2
     >>>            "\n",
     >>>            "    x + y = 4\n",
     >>>          ]

@@ -33,7 +33,7 @@ Furthermore, this automatically installs any labextension that it founds, for ex
 
 Say you want to install NumPy, Matplotlib and ipycanvas, it can be done by creating the environment.yml file with the following content:
 
-```yml
+```yaml
 name: xeus-python-kernel
 channels:
   - https://repo.mamba.pm/emscripten-forge

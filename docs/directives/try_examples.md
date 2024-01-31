@@ -125,6 +125,7 @@ Here's an example with some options set
 .. try_examples::
     :button_text: Try it in your browser!
     :height: 400px
+    :example_class: blue-bottom
 
     The button text has changed and the height now exceeds the size of the content.
 
@@ -133,6 +134,11 @@ Here's an example with some options set
     >>> x + y
     4
 
+    We've also added the ``blue-bottom`` class, the button should appear as blue,
+    below the examples, and on the left side of the screen.
+
+    See ``try_examples.css`` in the Repository to see how we achieved this via
+    custom css.
 ```
 
 and here is the result
@@ -141,6 +147,7 @@ and here is the result
 .. try_examples::
     :button_text: Try it in your browser!
     :height: 400px
+    :example_class: blue-bottom
 
     The button text has changed and the height now exceeds the size of the content.
 
@@ -149,6 +156,11 @@ and here is the result
     >>> x + y
     4
 
+    We've also added the ``blue-bottom`` class, the button should appear as blue,
+    below the examples, and on the left side of the screen.
+
+    See ``try_examples.css`` in the Repository to see how we achieved this via
+    custom css.
 ```
 
 
@@ -230,7 +242,7 @@ patterns, effectively disabling the interactive documentation. In the provided e
   in a Jupyterlite kernel.
 
 * The pattern `"^/stable/reference/generated/example.html"` targets a particular url
-  in the documentation for the latest stable release. 
+  in the documentation for the latest stable release.
 
 Note that these patterns should match the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname) of the url, not the full url. This is the path portion of
 the url. For instance, the pathname of https://jupyterlite-sphinx.readthedocs.io/en/latest/directives/try_examples.html is `/en/latest/directives/try_examples.html`.

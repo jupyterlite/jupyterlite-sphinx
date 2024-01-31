@@ -1,21 +1,64 @@
+:root {
+  --jupyter-light-primary: #f7dc1e;
+  --jupyter-light-primary-muted: #fff221;
+}
+
 .try_examples_button {
-    background-color: #f7dc1e;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-family: vibur;
-    font-size: larger;
-    box-shadow: 0 2px 5px rgba(108,108,108,0.2);
+  background-color: var(--jupyter-light-primary);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-family: vibur;
+  font-size: larger;
+  box-shadow: 0 2px 5px rgba(108, 108, 108, 0.2);
 }
 
 .try_examples_button:hover {
-    background-color: #fff221;
-    transform: scale(1.02);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
+  background-color: var(--jupyter-light-primary-muted);
+  transform: scale(1.02);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .try_examples_button_container {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.try_examples_outer_container,
+.try_examples_outer_iframe {
+  flex-direction: column-reverse;
+  display: flex;
+}
+
+/* override class + hidden, otherwise any attempt  of custom css to
+ * set the display mode would lead to the iframe/container always visible.
+ * */
+
+.try_examples_outer_container.hidden,
+.try_examples_outer_iframe.hidden {
+  display: none;
+}
+
+/* customisation when the buttons containers have the blue-bottom class */
+
+/* here we just show how to:
+ *   - change the color of the button
+ *   - change the color on hover.
+ *
+ *  As we _used to have_ option to show the button above/below, and left/right
+ *  we show how to achieve the same with flex-direction
+ */
+
+.blue-bottom .try_examples_button_container {
+  justify-content: flex-start;
+}
+
+.blue-bottom .try_examples_button {
+  background-color: #00bcd4;
+  color: white;
+}
+
+.blue-bottom button.try_examples_button:hover {
+  background-color: #2196f3;
 }
