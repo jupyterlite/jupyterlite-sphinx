@@ -28,4 +28,7 @@ html_theme_options = {
     ]
 }
 
+html_static_path = ["_static"]
+html_css_files = ["try_examples.css"]
+
 suppress_warnings = ["myst.xref_missing"]
