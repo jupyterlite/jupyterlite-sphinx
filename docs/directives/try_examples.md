@@ -137,8 +137,8 @@ Here's an example with some options set
     We've also added the ``blue-bottom`` class, the button should appear as blue,
     below the examples, and on the left side of the screen.
 
-    See ``try_examples.css`` in the Repository to see how we achieved this via
-    custom css.
+    See `try_examples.css <https://github.com/jupyterlite/jupyterlite-sphinx/blob/main/docs/_static/try_examples.css>`_
+    to see how we achieved this via custom css.
 ```
 
 and here is the result
@@ -159,8 +159,8 @@ and here is the result
     We've also added the ``blue-bottom`` class, the button should appear as blue,
     below the examples, and on the left side of the screen.
 
-    See ``try_examples.css`` in the Repository to see how we achieved this via
-    custom css.
+    See `try_examples.css <https://github.com/jupyterlite/jupyterlite-sphinx/blob/main/docs/_static/try_examples.css>`_
+    to see how we achieved this via custom css.
 ```
 
 
