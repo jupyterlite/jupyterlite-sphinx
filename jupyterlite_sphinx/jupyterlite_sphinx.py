@@ -498,7 +498,6 @@ def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
         "theme": app.config.try_examples_global_theme,
         "button_text": app.config.try_examples_global_button_text,
-        "example_class": app.config.try_examples_global_example_class,
     }
     try_examples_options = {
         key: value for key, value in try_examples_options.items() if value is not None
