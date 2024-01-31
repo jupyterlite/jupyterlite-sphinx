@@ -436,7 +436,7 @@ class TryExamplesDirective(SphinxDirective):
         iframe_parent_container_div_end = "</div>"
         iframe_container_div = (
             f'<div id="{iframe_div_id}" '
-            f'class="try_examples_iframe_container">'
+            f'class="jupyterlite_sphinx_iframe_container">'
             f"</div>"
         )
 

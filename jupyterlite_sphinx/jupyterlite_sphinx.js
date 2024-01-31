@@ -50,9 +50,14 @@ window.tryExamplesShowIframe = (
     const iframeContainer = document.getElementById(iframeContainerId);
     var height;
 
-    let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
+    let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_iframe');
 
     if (!iframe) {
+              // Add spinner
+              const spinner = document.createElement('div');
+              spinner.classList.add('try_examples_spinner');
+              iframeContainer.appendChild(spinner);
+
               const examples = examplesContainer.querySelector('.try_examples_content');
               iframe = document.createElement('iframe');
               iframe.src = iframeSrc;
@@ -63,8 +68,9 @@ window.tryExamplesShowIframe = (
                   height = Math.max(tryExamplesGlobalMinHeight, examples.offsetHeight);
               }
               iframe.style.height = `${height}px`;
-              iframe.classList.add('jupyterlite_sphinx_raw_iframe');
+              iframe.classList.add('jupyterlite_sphinx_iframe');
               examplesContainer.classList.add("hidden");
+
               iframeContainer.appendChild(iframe);
     } else {
               examplesContainer.classList.add("hidden");
