@@ -67,6 +67,12 @@ window.tryExamplesShowIframe = (
               } else {
                   height = Math.max(tryExamplesGlobalMinHeight, examples.offsetHeight);
               }
+
+              // Get spinner position
+              const iframeTop = iframe.getBoundingClientRect().top;
+              const spinnerTop = iframeTop + Math.min((height * 0.2), 200);
+              spinner.style.top = `${spinnerTop}px`;
+
               iframe.style.height = `${height}px`;
               iframe.classList.add('jupyterlite_sphinx_iframe');
               examplesContainer.classList.add("hidden");
