@@ -1,15 +1,27 @@
 window.jupyterliteShowIframe = (tryItButtonId, iframeSrc) => {
   const tryItButton = document.getElementById(tryItButtonId);
   const iframe = document.createElement('iframe');
+  const buttonRect = tryItButton.getBoundingClientRect();
+
+  const spinner = document.createElement('div');
+  // hardcoded spinner height and width needs to match what is in css.
+  const spinnerHeight = 50; // px
+  const spinnerWidth = 50; // px
+  spinner.classList.add('jupyterlite_sphinx_spinner');
+  spinner.style.display = 'none';
+  // Add negative margins to center the spinner
+  spinner.style.marginTop = `-${spinnerHeight/2}px`;
+  spinner.style.marginLeft = `-${spinnerWidth/2}px`;
 
   iframe.src = iframeSrc;
   iframe.width = iframe.height = '100%';
   iframe.classList.add('jupyterlite_sphinx_iframe');
 
+  tryItButton.style.display = 'none';
+  spinner.style.display = 'block';
+
+  tryItButton.parentNode.appendChild(spinner);
   tryItButton.parentNode.appendChild(iframe);
-  tryItButton.innerText = 'Loading ...';
-  tryItButton.classList.remove('jupyterlite_sphinx_try_it_button_unclicked');
-  tryItButton.classList.add('jupyterlite_sphinx_try_it_button_clicked');
 }
 
 window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
@@ -55,7 +67,10 @@ window.tryExamplesShowIframe = (
     if (!iframe) {
               // Add spinner
               const spinner = document.createElement('div');
-              spinner.classList.add('try_examples_spinner');
+              // hardcoded spinner width needs to match what is in css.
+              const spinnerHeight = 50; // px
+              const spinnerWidth = 50; // px
+              spinner.classList.add('jupyterlite_sphinx_spinner');
               iframeContainer.appendChild(spinner);
 
               const examples = examplesContainer.querySelector('.try_examples_content');
@@ -76,6 +91,9 @@ window.tryExamplesShowIframe = (
               const viewportBottom = window.innerHeight;
               const spinnerTop = 0.5 * Math.min((viewportBottom - examplesTop), height);
               spinner.style.top = `${spinnerTop}px`;
+              // Add negative margins to center the spinner
+              spinner.style.marginTop = `-${spinnerHeight/2}px`;
+              spinner.style.marginLeft = `-${spinnerWidth/2}px`;
 
               iframe.style.height = `${height}px`;
               iframe.classList.add('jupyterlite_sphinx_iframe');
