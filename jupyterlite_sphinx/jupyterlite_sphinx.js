@@ -68,9 +68,13 @@ window.tryExamplesShowIframe = (
                   height = Math.max(tryExamplesGlobalMinHeight, examples.offsetHeight);
               }
 
-              // Get spinner position
-              const iframeTop = iframe.getBoundingClientRect().top;
-              const spinnerTop = iframeTop + Math.min((height * 0.2), 200);
+              /* Get spinner position. It will be centered in the iframe, unless the
+               * iframe extends beyond the viewport, in which case it will be centered
+               * between the top of the iframe and the bottom of the viewport.
+               */
+              const examplesTop = examples.getBoundingClientRect().top;
+              const viewportBottom = window.innerHeight;
+              const spinnerTop = 0.5 * Math.min((viewportBottom - examplesTop), height);
               spinner.style.top = `${spinnerTop}px`;
 
               iframe.style.height = `${height}px`;
