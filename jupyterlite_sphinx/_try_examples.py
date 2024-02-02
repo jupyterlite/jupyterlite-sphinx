@@ -226,7 +226,7 @@ def _process_literal_blocks(md_text):
         indent_level = len(line) - len(line.lstrip())
 
         if in_literal_block and (indent_level > 0 or line.strip() == ""):
-                literal_block_accumulator.append(line.lstrip())
+            literal_block_accumulator.append(line.lstrip())
         elif in_literal_block:
             new_lines.extend(["```"] + literal_block_accumulator + ["```"])
             literal_block_accumulator = []
