@@ -1,15 +1,27 @@
 window.jupyterliteShowIframe = (tryItButtonId, iframeSrc) => {
   const tryItButton = document.getElementById(tryItButtonId);
   const iframe = document.createElement('iframe');
+  const buttonRect = tryItButton.getBoundingClientRect();
+
+  const spinner = document.createElement('div');
+  // hardcoded spinner height and width needs to match what is in css.
+  const spinnerHeight = 50; // px
+  const spinnerWidth = 50; // px
+  spinner.classList.add('jupyterlite_sphinx_spinner');
+  spinner.style.display = 'none';
+  // Add negative margins to center the spinner
+  spinner.style.marginTop = `-${spinnerHeight/2}px`;
+  spinner.style.marginLeft = `-${spinnerWidth/2}px`;
 
   iframe.src = iframeSrc;
   iframe.width = iframe.height = '100%';
   iframe.classList.add('jupyterlite_sphinx_iframe');
 
+  tryItButton.style.display = 'none';
+  spinner.style.display = 'block';
+
+  tryItButton.parentNode.appendChild(spinner);
   tryItButton.parentNode.appendChild(iframe);
-  tryItButton.innerText = 'Loading ...';
-  tryItButton.classList.remove('jupyterlite_sphinx_try_it_button_unclicked');
-  tryItButton.classList.add('jupyterlite_sphinx_try_it_button_clicked');
 }
 
 window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
@@ -50,9 +62,17 @@ window.tryExamplesShowIframe = (
     const iframeContainer = document.getElementById(iframeContainerId);
     var height;
 
-    let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_raw_iframe');
+    let iframe = iframeContainer.querySelector('iframe.jupyterlite_sphinx_iframe');
 
     if (!iframe) {
+              // Add spinner
+              const spinner = document.createElement('div');
+              // hardcoded spinner width needs to match what is in css.
+              const spinnerHeight = 50; // px
+              const spinnerWidth = 50; // px
+              spinner.classList.add('jupyterlite_sphinx_spinner');
+              iframeContainer.appendChild(spinner);
+
               const examples = examplesContainer.querySelector('.try_examples_content');
               iframe = document.createElement('iframe');
               iframe.src = iframeSrc;
@@ -62,9 +82,23 @@ window.tryExamplesShowIframe = (
               } else {
                   height = Math.max(tryExamplesGlobalMinHeight, examples.offsetHeight);
               }
+
+              /* Get spinner position. It will be centered in the iframe, unless the
+               * iframe extends beyond the viewport, in which case it will be centered
+               * between the top of the iframe and the bottom of the viewport.
+               */
+              const examplesTop = examples.getBoundingClientRect().top;
+              const viewportBottom = window.innerHeight;
+              const spinnerTop = 0.5 * Math.min((viewportBottom - examplesTop), height);
+              spinner.style.top = `${spinnerTop}px`;
+              // Add negative margins to center the spinner
+              spinner.style.marginTop = `-${spinnerHeight/2}px`;
+              spinner.style.marginLeft = `-${spinnerWidth/2}px`;
+
               iframe.style.height = `${height}px`;
-              iframe.classList.add('jupyterlite_sphinx_raw_iframe');
+              iframe.classList.add('jupyterlite_sphinx_iframe');
               examplesContainer.classList.add("hidden");
+
               iframeContainer.appendChild(iframe);
     } else {
               examplesContainer.classList.add("hidden");
