@@ -133,7 +133,7 @@ def _append_code_cell_and_clear_lines(code_lines, output_lines, notebook):
 def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
     """Append new markdown cell to notebook, clearing lines."""
     markdown_text = "\n".join(markdown_lines)
-    # Convert blocks of LaTeX equations
+    markdown_text = _process_literal_blocks(markdown_text)
     markdown_text = _process_latex(markdown_text)
     markdown_text = _strip_ref_identifiers(markdown_text)
     markdown_text = _convert_links(markdown_text)
@@ -214,6 +214,33 @@ def _process_latex(md_text):
         wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
 
     return "\n".join(wrapped_lines)
+
+
+def _process_literal_blocks(md_text):
+    md_lines = md_text.split("\n")
+    new_lines = []
+    in_literal_block = False
+    literal_block_accumulator = []
+
+    for line in md_lines:
+        indent_level = len(line) - len(line.lstrip())
+
+        if in_literal_block and (indent_level > 0 or line.strip() == ""):
+            literal_block_accumulator.append(line)
+        elif in_literal_block:
+            new_lines.extend(["```"] + literal_block_accumulator + ["```", line])
+            literal_block_accumulator = []
+            in_literal_block = False
+        elif line.endswith("::"):
+            in_literal_block = True
+            new_lines.append(line[:-2])
+        else:
+            new_lines.append(line)
+
+    if literal_block_accumulator:
+        new_lines.extend(["```"] + literal_block_accumulator + ["```"])
+
+    return "\n".join(new_lines)
 
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html#docstring-sections
