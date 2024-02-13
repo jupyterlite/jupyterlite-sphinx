@@ -115,6 +115,21 @@ window.tryExamplesHideIframe = (examplesContainerId, iframeParentContainerId) =>
     examplesContainer.classList.remove("hidden");
 }
 
+// this will be used by the "Open in tab" button that is present next
+// # to the "go back" button after an iframe is made visible.
+window.openInNewTab = (examplesContainerId, iframeParentContainerId) => {
+  const examplesContainer = document.getElementById(examplesContainerId);
+  const iframeParentContainer = document.getElementById(
+    iframeParentContainerId
+  );
+
+  window.open(
+    // we make some assumption that there is a single iframe and the the src is what we want to open.
+    // Maybe we should have tabs open JupyterLab by default.
+    iframeParentContainer.getElementsByTagName("iframe")[0].getAttribute("src")
+  );
+  tryExamplesHideIframe(examplesContainerId, iframeParentContainerId);
+};
 
 /* Global variable for try_examples iframe minHeight. Defaults to 0 but can be
  * modified based on configuration in try_examples.json */
