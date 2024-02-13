@@ -133,7 +133,7 @@ def _append_code_cell_and_clear_lines(code_lines, output_lines, notebook):
 def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
     """Append new markdown cell to notebook, clearing lines."""
     markdown_text = "\n".join(markdown_lines)
-    # Convert blocks of LaTeX equations
+    markdown_text = _process_literal_blocks(markdown_text)
     markdown_text = _process_latex(markdown_text)
     markdown_text = _strip_ref_identifiers(markdown_text)
     markdown_text = _convert_links(markdown_text)
@@ -214,6 +214,50 @@ def _process_latex(md_text):
         wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
 
     return "\n".join(wrapped_lines)
+
+
+def _process_literal_blocks(md_text):
+    md_lines = md_text.split("\n")
+    new_lines = []
+    in_literal_block = False
+    literal_block_accumulator = []
+
+    for line in md_lines:
+        indent_level = len(line) - len(line.lstrip())
+
+        if in_literal_block and (indent_level > 0 or line.strip() == ""):
+            literal_block_accumulator.append(line.lstrip())
+        elif in_literal_block:
+            new_lines.extend(["```"] + literal_block_accumulator + ["```"])
+            literal_block_accumulator = []
+            if line.endswith("::"):
+                # If the line endswith ::, a new literal block is starting.
+                line = line[:-2]  # Strip off the :: from the end
+                if not line:
+                    # If the line contains only ::, we ignore it.
+                    continue
+            else:
+                # Only set in_literal_block to False if not starting new
+                # literal block.
+                in_literal_block = False
+            # We've appended the entire literal block which just ended, but
+            # still need to append the current line.
+            new_lines.append(line)
+        else:
+            if line.endswith("::"):
+                # A literal block is starting.
+                in_literal_block = True
+                line = line[:-2]
+                if not line:
+                    # As above, if the line contains only ::, ignore it.
+                    continue
+            new_lines.append(line)
+
+    if literal_block_accumulator:
+        # Handle case where a literal block ends the markdown cell.
+        new_lines.extend(["```"] + literal_block_accumulator + ["```"])
+
+    return "\n".join(new_lines)
 
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html#docstring-sections
