@@ -30,13 +30,13 @@ JupyterLite should automatically show up in your built online documentation. To 
 
 ````{note}
 By default `jupyterlite-sphinx` does not install a Python kernel.
-If you would like have a Python kernel available in your docs you can install either `jupyterlite-pyodide-kernel` or `jupyterlite-xeus-python` with `pip`:
+If you would like have a Python kernel available in your docs you can install either `jupyterlite-pyodide-kernel` or `jupyterlite-xeus` with `pip`:
 
 ```shell
 # to install the Python kernel based on Pyodide
 pip install jupyterlite-pyodide-kernel
 
-# to install the Python kernel based on Xeus Python
-pip install jupyterlite-xeus-python
+# to load Xeus-based kernels
+pip install jupyterlite-xeus
 ```
 ````

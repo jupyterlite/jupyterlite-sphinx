@@ -29,7 +29,7 @@ dev = [
 docs = [
     "myst_parser",
     "pydata-sphinx-theme",
-    "jupyterlite-xeus-python>=0.9.0,<0.10.0",
+    "jupyterlite-xeus>=0.1.8,<0.2.0",
 ]
 
 [tool.hatch.version]
