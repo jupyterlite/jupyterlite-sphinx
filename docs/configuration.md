@@ -23,11 +23,11 @@ jupyterlite_dir = "/path/to/your/lite/dir"
 
 ## Pre-installed packages
 
-In order to have Python packages pre-installed in the kernel environment, you can use [jupyterlite-xeus-python](https://xeus-python-kernel.readthedocs.io).
+In order to have Python packages pre-installed in the kernel environment, you can use [jupyterlite-xeus](https://jupyterlite-xeus.readthedocs.io), with the `xeus-python` kernel.
 
-You would need `jupyterlite-xeus-python` installed in your docs build environment.
+You would need `jupyterlite-xeus` installed in your docs build environment.
 
-You can pre-install packages by adding an `environment.yml` file in the docs directory, this file will be found automatically by xeus-python which will pre-build the environment when running the jupyter lite build.
+You can pre-install packages by adding an `environment.yml` file in the docs directory, with `xeus-python` defined as one of the dependencies. It will pre-build the environment when running the `jupyter lite build`.
 
 Furthermore, this automatically installs any labextension that it founds, for example installing ipyleaflet will make ipyleaflet work without the need to manually install the jupyter-leaflet labextension.
 
