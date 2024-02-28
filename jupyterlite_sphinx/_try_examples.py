@@ -133,8 +133,8 @@ def _append_code_cell_and_clear_lines(code_lines, output_lines, notebook):
 def _append_markdown_cell_and_clear_lines(markdown_lines, notebook):
     """Append new markdown cell to notebook, clearing lines."""
     markdown_text = "\n".join(markdown_lines)
-    markdown_text = _process_literal_blocks(markdown_text)
     markdown_text = _process_latex(markdown_text)
+    markdown_text = _process_literal_blocks(markdown_text)
     markdown_text = _strip_ref_identifiers(markdown_text)
     markdown_text = _convert_links(markdown_text)
     notebook.cells.append(new_markdown_cell(markdown_text))
