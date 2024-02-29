@@ -368,6 +368,7 @@ class TryExamplesDirective(SphinxDirective):
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
         "example_class": directives.unchanged,
+        "warning_text": directives.unchanged,
     }
 
     def run(self):
@@ -382,6 +383,7 @@ class TryExamplesDirective(SphinxDirective):
         button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
         height = self.options.pop("height", None)
         example_class = self.options.pop("example_class", "")
+        warning_text = self.options.pop("warning_text", None)
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
@@ -404,7 +406,7 @@ class TryExamplesDirective(SphinxDirective):
         self.state.nested_parse(self.content, self.content_offset, content_node)
 
         if notebook_unique_name is None:
-            nb = examples_to_notebook(self.content)
+            nb = examples_to_notebook(self.content, warning_text=warning_text)
             self.content = None
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
@@ -506,6 +508,7 @@ def _process_autodoc_docstrings(app, what, name, obj, options, lines):
     try_examples_options = {
         "theme": app.config.try_examples_global_theme,
         "button_text": app.config.try_examples_global_button_text,
+        "warning_text": app.config.try_examples_global_warning_text,
     }
     try_examples_options = {
         key: value for key, value in try_examples_options.items() if value is not None
@@ -614,6 +617,7 @@ def setup(app):
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
+    app.add_config_value("try_examples_global_warning_text", default=None, rebuild=True)
     app.add_config_value(
         "try_examples_global_button_text",
         default=None,
