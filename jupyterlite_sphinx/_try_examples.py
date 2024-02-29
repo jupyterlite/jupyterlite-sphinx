@@ -48,13 +48,11 @@ def examples_to_notebook(input_lines, warning_text=None):
     """
     nb = nbf.v4.new_notebook()
 
-
     if warning_text is not None:
         # Two newlines \n\n signal that the inner content should be parsed as
         # markdown.
         warning = f"<div class='alert alert-warning'>\n\n{warning_text}\n\n</div>"
         nb.cells.append(new_markdown_cell(warning))
-
 
     code_lines = []
     md_lines = []
