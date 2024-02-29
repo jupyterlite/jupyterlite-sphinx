@@ -64,3 +64,14 @@
 @keyframes l13{
     100%{transform: rotate(1turn)}
 }
+
+
+
+/* we do not want the button to show on smaller screens (phones), as clicking
+ * can download a lot of data, 430px, is the width of iPhone 14 pro max */
+
+@media (max-width: 430px) {
+  div.try_examples_button_container {
+    display: none;
+  }
+}

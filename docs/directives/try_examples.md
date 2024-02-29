@@ -7,6 +7,11 @@ Below is an example of the directive in use. The button has been styled with cus
 css as explained in the configuration section below. Without custom css, the button will
 be plain and unadorned.
 
+Note that as starting JupyterLite can download a significant amount of data, and
+that the Jupyter interface is not optimized for mobile, the buttons will be
+hidden on mobile by default (screen width 430px or smaller). This can be
+changed by overwriting with custom CSS.
+
 
 ```rst
 Examples
