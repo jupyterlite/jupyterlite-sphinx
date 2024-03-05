@@ -52,6 +52,41 @@ window.jupyterliteConcatSearchParams = (iframeSrc, params) => {
   }
 };
 
+/*
+ * On slow or metered connection we might not want to download a few hundred of
+ * Mb without warnings, this will try to detect slow or metered connections and
+ * ask the user wheter they wish to continue.
+ *
+ * If we detect that the user is not on a metered connection or slow connection
+ * it will return true.
+ */
+const _askContinueToUserIfMobileOrSlow = () => {
+  // this is an experimental API
+  // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/connection
+  const networkinfo = navigator.connection || {};
+  const connectiontype = networkinfo.effectiveType || "";
+  if (
+    networkinfo.saveData == true ||
+    connectiontype.indexOf("2g") !== -1 ||
+    connectiontype.indexOf("3g") !== -1
+  ) {
+    console.log(
+      "We detected either a mettered or slow connection. Asking user if they are sure.",
+    );
+    const res = confirm(
+      "Opening JupyterLite may download several hundreds Mb of data. Do you wish to continue ?",
+    );
+    return res;
+  }
+  return true;
+};
+/*
+ * This is the callback that will be triggered when a user press the button
+ * to show this iframe. Browser don't like blocking onClick handler,
+ * and  this may take some time (ask user if they wish to continue, which is
+ * blocking), there is unfortunately no way to use native `confirm` in a
+ * non-blocking way without pulling full heavy dependencies.
+ */
 window.tryExamplesShowIframe = (
   examplesContainerId,
   iframeContainerId,
@@ -59,6 +94,9 @@ window.tryExamplesShowIframe = (
   iframeSrc,
   iframeHeight,
 ) => {
+  if (!_askContinueToUserIfMobileOrSlow()) {
+    return;
+  }
   const examplesContainer = document.getElementById(examplesContainerId);
   const iframeParentContainer = document.getElementById(
     iframeParentContainerId,
