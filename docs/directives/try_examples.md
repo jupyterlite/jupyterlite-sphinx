@@ -9,7 +9,7 @@ be plain and unadorned.
 
 Note that as starting JupyterLite can download a significant amount of data, and
 that the Jupyter interface is not optimized for mobile, the buttons will be
-hidden on mobile by default (screen width 430px or smaller). This can be
+hidden on mobile by default (screen width 480px or smaller). This can be
 changed by overwriting with custom CSS.
 
 
