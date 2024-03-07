@@ -3,13 +3,17 @@ from nbformat.v4 import new_code_cell, new_markdown_cell
 import re
 
 
-def examples_to_notebook(input_lines):
+def examples_to_notebook(input_lines, *, warning_text=None):
     """Parse examples section of a docstring and convert to Jupyter notebook.
 
     Parameters
     ----------
     input_lines : iterable of str.
-                  Lines within
+
+    warning_text : str[Optional]
+        If given, add a markdown cell at the top of the generated notebook
+        containing the given text. The cell will be styled to indicate that
+        this is a warning.
 
     Returns
     -------
@@ -43,6 +47,12 @@ def examples_to_notebook(input_lines):
     >>> notebook = examples_to_notebook(input_lines)
     """
     nb = nbf.v4.new_notebook()
+
+    if warning_text is not None:
+        # Two newlines \n\n signal that the inner content should be parsed as
+        # markdown.
+        warning = f"<div class='alert alert-warning'>\n\n{warning_text}\n\n</div>"
+        nb.cells.append(new_markdown_cell(warning))
 
     code_lines = []
     md_lines = []

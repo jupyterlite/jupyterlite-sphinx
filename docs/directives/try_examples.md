@@ -123,6 +123,7 @@ The `try_examples` directive has options
 * `:example_class:` An html class to attach to the outer container for the rendered
 examples content and embedded notebook. This can be used in a custom css file to allow
 for more precise customization, eg. different button styles across different examples.
+* `:warning_text:` Prepend a markdown cell to the notebook containing this text, styled to make it clear this is intended as a warning.
 
 Here's an example with some options set
 
@@ -131,6 +132,7 @@ Here's an example with some options set
     :button_text: Try it in your browser!
     :height: 400px
     :example_class: blue-bottom
+    :warning_text: Interactive examples are experimental and may not always work as expected.
 
     The button text has changed and the height now exceeds the size of the content.
 
@@ -153,6 +155,7 @@ and here is the result
     :button_text: Try it in your browser!
     :height: 400px
     :example_class: blue-bottom
+    :warning_text: Interactive examples are experimental and may not always work as expected.
 
     The button text has changed and the height now exceeds the size of the content.
 
@@ -200,13 +203,14 @@ the section header for an examples section will prevent a directive from being i
 allowing for specification of examples sections which should not be made interactive.
 
 
-The button text and theme can be set globally with the config variables
-`try_examples_global_button_text`, and `try_examples_global_theme`.
+The button text, theme, and warning text can be set globally with the config variables
+`try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text`.
 
 ```python
 global_enable_try_examples = True
 try_examples_global_button_text = "Try it in your browser!"
 try_examples_global_height = "200px"
+try_examples_global_warning_text = "Interactive examples are experimental and may not always work as expected."
 ```
 
 There is no option to set a global specific height because the proper height
