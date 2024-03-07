@@ -2,6 +2,44 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.12.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.11.0...0ef8be22f403e6ebaa46d1b6e1643ce7303a756c))
+
+### Enhancements made
+
+- Add option for initial warning cell in try examples directive [#143](https://github.com/jupyterlite/jupyterlite-sphinx/pull/143) ([@steppi](https://github.com/steppi))
+- Hide buttons on smaller screens (mobile). [#141](https://github.com/jupyterlite/jupyterlite-sphinx/pull/141) ([@Carreau](https://github.com/Carreau))
+- Suggestion: Add pre-commit to format js and css files. [#137](https://github.com/jupyterlite/jupyterlite-sphinx/pull/137) ([@Carreau](https://github.com/Carreau))
+- Add a full screen "Open in tab" button [#135](https://github.com/jupyterlite/jupyterlite-sphinx/pull/135) ([@Carreau](https://github.com/Carreau))
+- Add a loading spinner for TryExamples directive. [#133](https://github.com/jupyterlite/jupyterlite-sphinx/pull/133) ([@steppi](https://github.com/steppi))
+- Misc parsing warnings. [#131](https://github.com/jupyterlite/jupyterlite-sphinx/pull/131) ([@Carreau](https://github.com/Carreau))
+- Improve TryExamples customization [#129](https://github.com/jupyterlite/jupyterlite-sphinx/pull/129) ([@steppi](https://github.com/steppi))
+- Add option to disable TryExamples without rebuilding docs [#118](https://github.com/jupyterlite/jupyterlite-sphinx/pull/118) ([@steppi](https://github.com/steppi))
+
+### Bugs fixed
+
+- Add processing of literal blocks in try examples directive [#134](https://github.com/jupyterlite/jupyterlite-sphinx/pull/134) ([@steppi](https://github.com/steppi))
+
+### Maintenance and upkeep improvements
+
+- Run pre-commit on all files in this repository. [#145](https://github.com/jupyterlite/jupyterlite-sphinx/pull/145) ([@Carreau](https://github.com/Carreau))
+- Update publish workflow to use the PyPI trusted publisher [#123](https://github.com/jupyterlite/jupyterlite-sphinx/pull/123) ([@jtpio](https://github.com/jtpio))
+
+### Documentation improvements
+
+- Fix incorrect math processing [#139](https://github.com/jupyterlite/jupyterlite-sphinx/pull/139) ([@steppi](https://github.com/steppi))
+- Update to `jupyterlite-xeus` [#138](https://github.com/jupyterlite/jupyterlite-sphinx/pull/138) ([@jtpio](https://github.com/jtpio))
+- Improve TryExamples customization [#129](https://github.com/jupyterlite/jupyterlite-sphinx/pull/129) ([@steppi](https://github.com/steppi))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-12-22&to=2024-03-07&type=c))
+
+[@Carreau](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2023-12-22..2024-03-07&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2023-12-22..2024-03-07&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2023-12-22..2024-03-07&type=Issues) | [@mattip](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amattip+updated%3A2023-12-22..2024-03-07&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2023-12-22..2024-03-07&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.11.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.10.0...b1535878aef8233dfea9136fa8fa43c76a9b81e8))
@@ -15,8 +53,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-11-09&to=2023-12-22&type=c))
 
 [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2023-11-09..2023-12-22&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.10.0
 
