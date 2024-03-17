@@ -686,6 +686,8 @@ def setup(app):
     if try_examples_config_path.exists():
         copy_asset(str(try_examples_config_path), app.outdir)
 
+    return {"parallel_read_safe": True}
+
 
 def search_params_parser(search_params: str) -> str:
     pattern = re.compile(r"^\[(?:\s*[\"']{1}([^=\s\,&=\?\/]+)[\"']{1}\s*\,?)+\]$")
