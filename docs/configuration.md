@@ -76,11 +76,11 @@ following configuration options.
 
 It also has the following configuration options:
 
- - `jupyterlite_log_level`, a `str`, default to `"WARN"` or `None`
- - `jupyterlite_verbosity` a `str`, default to `"0"` or `None`
- - `jupyterlite_reporter` a `str`, default to `"zero"` or `None`
+ - `jupyterlite_log_level`, a `str` (defaults to `"WARN"`) or `None`
+ - `jupyterlite_verbosity`, a `str` (defaults to `"0"`) or `None`
+ - `jupyterlite_reporter`, a `str` (defaults to `"zero"`) or `None`
 
-Jupyterlite-sphinx decreases verbosity by deafult, these can be set to `None` to restore the jupyterlite default.
+Jupyterlite-sphinx uses low verbosity by default. Setting these parameters to `None` restores the `jupyterlite build` defaults.
 
-See `jupyterlite build` documentation for the command line arguments of the same
-name.
+See the `jupyterlite build` documentation for info on `log-level`. `verbosity` and `reporter` control the configuration
+of [doit](https://smarie.github.io/python-doit-api/api_reference/), which is used internally in `jupyterlite`.
