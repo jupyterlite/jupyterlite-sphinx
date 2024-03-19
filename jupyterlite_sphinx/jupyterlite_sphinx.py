@@ -545,7 +545,13 @@ def jupyterlite_build(app: Sphinx, error):
         print("[jupyterlite-sphinx] Running JupyterLite build")
         jupyterlite_config = app.env.config.jupyterlite_config
         jupyterlite_contents = app.env.config.jupyterlite_contents
-        jupyterlite_dir = app.env.config.jupyterlite_dir
+
+        jupyterlite_dir = str(app.env.config.jupyterlite_dir)
+
+        jupyterlite_debug = app.env.config.jupyterlite_debug
+        jupyterlite_log_level = app.env.config.jupyterlite_log_level
+        jupyterlite_verbosity = app.env.config.jupyterlite_verbosity
+        jupyterlite_reporter = app.env.config.jupyterlite_reporter
 
         config = []
         if jupyterlite_config:
@@ -574,20 +580,35 @@ def jupyterlite_build(app: Sphinx, error):
             apps_option.extend(["--apps", "voici"])
 
         command = [
-            "jupyter",
-            "lite",
-            "build",
-            "--debug",
-            *config,
-            *contents,
-            "--contents",
-            os.path.join(app.srcdir, CONTENT_DIR),
-            "--output-dir",
-            os.path.join(app.outdir, JUPYTERLITE_DIR),
-            *apps_option,
-            "--lite-dir",
-            jupyterlite_dir,
+            c
+            for c in (
+                "jupyter",
+                "lite",
+                "doit" "build",
+                "--debug" if jupyterlite_debug else None,
+                *config,
+                *contents,
+                "--contents",
+                os.path.join(app.srcdir, CONTENT_DIR),
+                "--output-dir",
+                os.path.join(app.outdir, JUPYTERLITE_DIR),
+                *apps_option,
+                "--lite-dir",
+                jupyterlite_dir,
+                "--log-level" if jupyterlite_log_level is not None else None,
+                jupyterlite_log_level,
+                "--",
+                "--verbosity" if jupyterlite_verbosity else None,
+                jupyterlite_verbosity,
+                "--reporter" if jupyterlite_reporter else None,
+                jupyterlite_reporter,
+            )
+            if c is not None
         ]
+
+        assert all(
+            [isinstance(s, str) for s in command]
+        ), f"Expected all commands arguments to be a str, got {command}"
 
         subprocess.run(command, cwd=app.srcdir, check=True)
 
@@ -611,9 +632,15 @@ def setup(app):
 
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
-    app.add_config_value("jupyterlite_dir", app.srcdir, rebuild="html")
+    app.add_config_value("jupyterlite_dir", str(app.srcdir), rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
+
+    # JLite debug configuration options
+    app.add_config_value("jupyterlite_debug", False, rebuild="html")
+    app.add_config_value("jupyterlite_log_level", "WARN", rebuild="html")
+    app.add_config_value("jupyterlite_verbosity", "0", rebuild="html")
+    app.add_config_value("jupyterlite_reporter", "zero", rebuild="html")
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)

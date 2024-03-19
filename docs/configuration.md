@@ -63,3 +63,24 @@ You can disable this behavior by setting the following config:
 ```python
 jupyterlite_bind_ipynb_suffix = False
 ```
+
+
+## Build logging levels
+
+Jupyterlite-sphinx exposes jupyterlite debug and logging flags thought the
+following configuration options.
+
+
+ - `jupyterlite_debug`, boolean (`False`|`True`), passes the `--debug` flag  to
+   `jupyterlite build`
+
+It also has the following configuration options:
+
+ - `jupyterlite_log_level`, a `str`, default to `"WARN"` or `None`
+ - `jupyterlite_verbosity` a `str`, default to `"0"` or `None`
+ - `jupyterlite_reporter` a `str`, default to `"zero"` or `None`
+
+Jupyterlite-sphinx decreases verbosity by deafult, these can be set to `None` to restore the jupyterlite default.
+
+See `jupyterlite build` documentation for the command line arguments of the same
+name.
