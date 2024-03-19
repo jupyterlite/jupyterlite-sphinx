@@ -1,0 +1,5 @@
+[flake8]
+# W503: line break before binary operator
+ignore = W503
+max-line-length = 160
+max-complexity = 15
