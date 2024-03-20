@@ -67,10 +67,11 @@ jupyterlite_bind_ipynb_suffix = False
 ### Suppressing jupyterlite logging
 
 `jupyterlite` can produce large amounts of output to the terminal when docs are building.
-To silence this output, you can set
+By default, this output is silenced, but will still be printed if the invocation of
+`jupyterlite build` fails. To unsilence this output, set
 
 ```python
-jupyterlite_silence = True
+jupyterlite_silence = False
 ```
 
-in your `conf.py`.
+in your Sphinx `conf.py`.
