@@ -641,7 +641,7 @@ def setup(app):
     app.add_config_value("jupyterlite_dir", str(app.srcdir), rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
-    app.add_config_value("jupyterlite_silence", False, rebuild=True)
+    app.add_config_value("jupyterlite_silence", True, rebuild=True)
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
