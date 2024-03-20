@@ -584,7 +584,8 @@ def jupyterlite_build(app: Sphinx, error):
             for c in (
                 "jupyter",
                 "lite",
-                "doit" "build",
+                "doit",
+                "build",
                 "--debug" if jupyterlite_debug else None,
                 *config,
                 *contents,
@@ -597,7 +598,6 @@ def jupyterlite_build(app: Sphinx, error):
                 jupyterlite_dir,
                 "--log-level" if jupyterlite_log_level is not None else None,
                 jupyterlite_log_level,
-                "--",
                 "--verbosity" if jupyterlite_verbosity else None,
                 jupyterlite_verbosity,
                 "--reporter" if jupyterlite_reporter else None,
