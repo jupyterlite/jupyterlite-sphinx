@@ -64,23 +64,13 @@ You can disable this behavior by setting the following config:
 jupyterlite_bind_ipynb_suffix = False
 ```
 
+### Suppressing jupyterlite logging
 
-## Build logging levels
+`jupyterlite` can produce large amounts of output to the terminal when docs are building.
+To silence this output, you can set
 
-Jupyterlite-sphinx exposes jupyterlite debug and logging flags thought the
-following configuration options.
+```python
+jupyterlite_silence = True
+```
 
-
- - `jupyterlite_debug`, boolean (`False`|`True`), passes the `--debug` flag  to
-   `jupyterlite build`
-
-It also has the following configuration options:
-
- - `jupyterlite_log_level`, a `str` (defaults to `"WARN"`) or `None`
- - `jupyterlite_verbosity`, a `str` (defaults to `"0"`) or `None`
- - `jupyterlite_reporter`, a `str` (defaults to `"zero"`) or `None`
-
-Jupyterlite-sphinx uses low verbosity by default. Setting these parameters to `None` restores the `jupyterlite build` defaults.
-
-See the `jupyterlite build` documentation for info on `log-level`. `verbosity` and `reporter` control the configuration
-of [doit](https://smarie.github.io/python-doit-api/api_reference/), which is used internally in `jupyterlite`.
+in your `conf.py`.
