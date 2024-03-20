@@ -594,11 +594,29 @@ def jupyterlite_build(app: Sphinx, error):
             [isinstance(s, str) for s in command]
         ), f"Expected all commands arguments to be a str, got {command}"
 
-        kwargs = {"cwd": app.srcdir, "check": True}
+        kwargs = {"cwd": app.srcdir, "check": False}
         if app.env.config.jupyterlite_silence:
-            kwargs["stdout"] = subprocess.DEVNULL
-            kwargs["stderr"] = subprocess.DEVNULL
-        subprocess.run(command, **kwargs)
+            kwargs["stdout"] = subprocess.PIPE
+            kwargs["stderr"] = subprocess.PIPE
+
+        completed_process = subprocess.run(command, **kwargs)
+
+        if completed_process.returncode != 0:
+            if app.env.config.jupyterlite_silence:
+                print(
+                    "`jupyterlite build` failed but it's output has been silenced."
+                    " stdout and stderr are reproduced below.\n"
+                )
+                print("stdout:", completed_process.stdout.decode())
+                print("stderr:", completed_process.stderr.decode())
+
+            # Raise the original exception that would have occurred with check=True
+            raise subprocess.CalledProcessError(
+                returncode=completed_process.returncode,
+                cmd=command,
+                output=completed_process.stdout,
+                stderr=completed_process.stderr,
+            )
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
