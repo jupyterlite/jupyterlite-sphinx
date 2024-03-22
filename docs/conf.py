@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 extensions = [
-    'sphinx.ext.mathjax',
-    'jupyterlite_sphinx',
-    'myst_parser',
+    "sphinx.ext.mathjax",
+    "jupyterlite_sphinx",
+    "myst_parser",
 ]
 
 html_theme = "pydata_sphinx_theme"
@@ -12,10 +12,10 @@ html_logo = "_static/icon.svg"
 jupyterlite_contents = "./custom_contents"
 jupyterlite_bind_ipynb_suffix = False
 
-master_doc = 'index'
+master_doc = "index"
 
 # General information about the project.
-project = 'JupyterLite Sphinx extension'
+project = "JupyterLite Sphinx extension"
 
 # theme configuration
 html_theme_options = {
