@@ -45,3 +45,9 @@ features = ["docs"]
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -W -b html docs docs/build/html"
 serve = "python -m http.server --directory docs/build/html"
+
+[[tool.mypy.overrides]]
+module = [
+    "voici",
+]
+ignore_missing_imports = true
