@@ -2,6 +2,26 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.13.1
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.13.0...1e80dd142b70c883f7fcc5de4823fe7ca81bfb32))
+
+### Enhancements made
+
+- Give a pragmatic solution to suppressing noisy output [#153](https://github.com/jupyterlite/jupyterlite-sphinx/pull/153) ([@steppi](https://github.com/steppi))
+
+### Bugs fixed
+
+- Give a pragmatic solution to suppressing noisy output [#153](https://github.com/jupyterlite/jupyterlite-sphinx/pull/153) ([@steppi](https://github.com/steppi))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-03-19&to=2024-03-22&type=c))
+
+[@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-03-19..2024-03-22&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.13.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.12.0...4dd4b3074d1a8e573c76b331a7ed20ff886bde2e))
@@ -18,8 +38,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-03-07&to=2024-03-19&type=c))
 
 [@Carreau](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2024-03-07..2024-03-19&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-03-07..2024-03-19&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-03-07..2024-03-19&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.12.0
 
