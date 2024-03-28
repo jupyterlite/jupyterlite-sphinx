@@ -380,7 +380,13 @@ class TryExamplesDirective(SphinxDirective):
             directive_key
         )
 
-        button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
+        # Use button_text from try_examples_global_button_text if not provided
+        if self.env.config.try_examples_global_button_text is not None:
+            button_text = self.options.pop(
+                "button_text", self.env.config.try_examples_global_button_text
+            )
+        else:
+            button_text = self.options.pop("button_text", "Try it with JupyterLite!")
         height = self.options.pop("height", None)
         example_class = self.options.pop("example_class", "")
         warning_text = self.options.pop("warning_text", None)
@@ -604,7 +610,7 @@ def jupyterlite_build(app: Sphinx, error):
         if completed_process.returncode != 0:
             if app.env.config.jupyterlite_silence:
                 print(
-                    "`jupyterlite build` failed but it's output has been silenced."
+                    "`jupyterlite build` failed but its output has been silenced."
                     " stdout and stderr are reproduced below.\n"
                 )
                 print("stdout:", completed_process.stdout.decode())
