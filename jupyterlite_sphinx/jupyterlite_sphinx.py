@@ -382,14 +382,31 @@ class TryExamplesDirective(SphinxDirective):
 
         # Use button_text from try_examples_global_button_text if not provided
         if self.env.config.try_examples_global_button_text is not None:
-            button_text = self.options.pop(
+            button_text = self.options.get(
                 "button_text", self.env.config.try_examples_global_button_text
             )
         else:
             button_text = self.options.pop("button_text", "Try it with JupyterLite!")
+
+        # Use warning_text from try_examples_global_warning_text if not provided
+        if self.env.config.try_examples_global_warning_text is not None:
+            warning_text = self.options.get(
+                "warning_text", self.env.config.try_examples_global_warning_text
+            )
+        else:
+            warning_text = self.options.pop("warning_text", None)
+
+        # Keep height as is because it is specific to the example being embedded
+        # into the notebook
         height = self.options.pop("height", None)
-        example_class = self.options.pop("example_class", "")
-        warning_text = self.options.pop("warning_text", None)
+
+        # Use example_class from try_examples_global_theme if not provided
+        if self.env.config.try_examples_global_theme is not None:
+            example_class = self.options.get(
+                "example_class", self.env.config.try_examples_global_theme
+            )
+        else:
+            example_class = self.options.pop("example_class", "")
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
