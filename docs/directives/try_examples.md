@@ -19,7 +19,7 @@ Examples
 .. try_examples::
 
     Doctest examples sections are parsed and converted to notebooks. Blocks of text
-    like this become markdown cells. Codeblocks begin with ``>>>``. Contiguous blocks
+    like this become Markdown cells. Code blocks begin with ``>>>``. Contiguous blocks
     of code are combined into a single code cell.
 
     >>> x = 2
@@ -116,9 +116,10 @@ positioning of the button. The css for the example above is
 ```
 
 
-The `try_examples` directive has options
+The `try_examples` directive has these options:
+
 * `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embeddednotebook.
-* `:button_text` To customize the text of the button that replaces the rendered examples with an embedded notebook.
+* `:button_text` To customize the text of the button that replaces the rendered examples with an embedded notebook. The default value is `"Try it with JupyterLite!"`, or the value of the global configuration variable `try_examples_global_button_text` if it is set in `conf.py`.
 * `:theme:` This works the same as for the other JupyterLite-Sphinx directives.
 * `:example_class:` An html class to attach to the outer container for the rendered
 examples content and embedded notebook. This can be used in a custom css file to allow
