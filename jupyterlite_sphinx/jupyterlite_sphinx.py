@@ -135,6 +135,13 @@ class _LiteIframe(_PromptedIframe):
 
         iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
 
+        if "iframe_src" in attributes:
+            if attributes["iframe_src"] != iframe_src:
+                raise ValueError(
+                    f'Two different values of iframe_src {attributes["iframe_src"]=},{iframe_src=}, try upgrading sphinx to v 7.2.0 or more recent'
+                )
+            del attributes["iframe_src"]
+
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
 
