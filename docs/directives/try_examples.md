@@ -117,7 +117,7 @@ positioning of the button. The css for the example above is
 
 
 The `try_examples` directive has options
-* `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embeddednotebook.
+* `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embedded notebook.
 * `:button_text` To customize the text of the button that replaces the rendered examples with an embedded notebook.
 * `:theme:` This works the same as for the other JupyterLite-Sphinx directives.
 * `:example_class:` An html class to attach to the outer container for the rendered
