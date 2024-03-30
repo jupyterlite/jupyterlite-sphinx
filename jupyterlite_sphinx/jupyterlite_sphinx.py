@@ -387,10 +387,25 @@ class TryExamplesDirective(SphinxDirective):
             directive_key
         )
 
-        button_text = self.options.pop("button_text", "Try it with Jupyterlite!")
+        # Use global configuration values from conf.py in manually inserted directives
+        # if they are provided and the user has not specified a config value in the
+        # directive itself.
+
+        default_button_text = self.env.config.try_examples_global_button_text
+        if default_button_text is None:
+            default_button_text = "Try it with JupyterLite!"
+        button_text = self.options.pop("button_text", default_button_text)
+
+        default_warning_text = self.env.config.try_examples_global_warning_text
+        warning_text = self.options.pop("warning_text", default_warning_text)
+
+        default_example_class = self.env.config.try_examples_global_theme
+        if default_example_class is None:
+            default_example_class = ""
+        example_class = self.options.pop("example_class", default_example_class)
+
+        # A global height cannot be set in conf.py
         height = self.options.pop("height", None)
-        example_class = self.options.pop("example_class", "")
-        warning_text = self.options.pop("warning_text", None)
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
@@ -611,7 +626,7 @@ def jupyterlite_build(app: Sphinx, error):
         if completed_process.returncode != 0:
             if app.env.config.jupyterlite_silence:
                 print(
-                    "`jupyterlite build` failed but it's output has been silenced."
+                    "`jupyterlite build` failed but its output has been silenced."
                     " stdout and stderr are reproduced below.\n"
                 )
                 print("stdout:", completed_process.stdout.decode())

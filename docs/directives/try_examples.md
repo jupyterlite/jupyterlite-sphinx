@@ -117,7 +117,7 @@ positioning of the button. The css for the example above is
 
 
 The `try_examples` directive has options
-* `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embeddednotebook.
+* `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embedded notebook.
 * `:button_text` To customize the text of the button that replaces the rendered examples with an embedded notebook.
 * `:theme:` This works the same as for the other JupyterLite-Sphinx directives.
 * `:example_class:` An html class to attach to the outer container for the rendered
@@ -204,7 +204,9 @@ allowing for specification of examples sections which should not be made interac
 
 
 The button text, theme, and warning text can be set globally with the config variables
-`try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text`.
+`try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text` in `conf.py`;
+these apply both to automatically and manually inserted directives. Options set explicitly in a directive will
+override the global configuration.
 
 ```python
 global_enable_try_examples = True
