@@ -216,7 +216,7 @@ try_examples_global_height = "200px"
 try_examples_global_warning_text = "Interactive examples are experimental and may not always work as expected."
 ```
 
-However, there is no option to set a global specific height because the proper height
+There is no option to set a global specific height because the proper height
 should depend on the size of the examples content. Again, the default height of
 the embedded notebook's iframe container matches the height of the associated
 rendered doctest example so that it takes up the same amount of space on the
