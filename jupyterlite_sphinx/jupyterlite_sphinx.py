@@ -388,32 +388,26 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         # Use button_text from try_examples_global_button_text if not provided
-        if self.env.config.try_examples_global_button_text is not None:
-            button_text = self.options.get(
-                "button_text", self.env.config.try_examples_global_button_text
-            )
-        else:
-            button_text = self.options.pop("button_text", "Try it with JupyterLite!")
+        default_button_text = self.env.config.try_examples_global_button_text
+        if default_button_text is None:
+            default_button_text = "Try it with JupyterLite!"
+        button_text = self.options.pop("button_text", default_button_text)
 
         # Use warning_text from try_examples_global_warning_text if not provided
-        if self.env.config.try_examples_global_warning_text is not None:
-            warning_text = self.options.get(
-                "warning_text", self.env.config.try_examples_global_warning_text
-            )
-        else:
-            warning_text = self.options.pop("warning_text", None)
+        default_warning_text = self.env.config.try_examples_global_warning_text
+        if default_warning_text is None:
+            default_warning_text = "Interactive examples are experimental and may not always work as expected."
+        warning_text = self.options.pop("warning_text", default_warning_text)
 
         # Keep height as is because it is specific to the example being embedded
         # into the notebook
         height = self.options.pop("height", None)
 
         # Use example_class from try_examples_global_theme if not provided
-        if self.env.config.try_examples_global_theme is not None:
-            example_class = self.options.get(
-                "example_class", self.env.config.try_examples_global_theme
-            )
-        else:
-            example_class = self.options.pop("example_class", "")
+        default_example_class = self.env.config.try_examples_global_theme
+        if default_example_class is None:
+            default_example_class = ""
+        example_class = self.options.pop("example_class", default_example_class)
 
         # We need to get the relative path back to the documentation root from
         # whichever file the docstring content is in.
