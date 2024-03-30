@@ -404,8 +404,7 @@ class TryExamplesDirective(SphinxDirective):
             default_example_class = ""
         example_class = self.options.pop("example_class", default_example_class)
 
-        # No global option for height is available, so we use the one provided
-        # manually in the directive.
+        # A global height cannot be set in conf.py
         height = self.options.pop("height", None)
 
         # We need to get the relative path back to the documentation root from
