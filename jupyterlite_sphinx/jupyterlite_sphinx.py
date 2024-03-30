@@ -393,10 +393,9 @@ class TryExamplesDirective(SphinxDirective):
             default_button_text = "Try it with JupyterLite!"
         button_text = self.options.pop("button_text", default_button_text)
 
-        # Use warning_text from try_examples_global_warning_text if not provided
+        # Use warning_text from try_examples_global_warning_text by default. If
+        # it is not provided, don't show any warning text
         default_warning_text = self.env.config.try_examples_global_warning_text
-        if default_warning_text is None:
-            default_warning_text = "Interactive examples are experimental and may not always work as expected."
         warning_text = self.options.pop("warning_text", default_warning_text)
 
         # Keep height as is because it is specific to the example being embedded
