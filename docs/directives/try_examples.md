@@ -205,9 +205,8 @@ allowing for specification of examples sections which should not be made interac
 
 The button text, theme, and warning text can be set globally with the config variables
 `try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text` in `conf.py`;
-and these apply both to automatically inserted directives and to manually inserted ones. The
-priority of these global settings is lower than that of the specific options set for a manually
-inserted directive, which will override the global settings on a per-directive basis.
+these apply both to automatically and manually inserted directives. Options set explicitly in a directive will
+override the global configuration.
 
 ```python
 global_enable_try_examples = True
