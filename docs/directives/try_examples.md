@@ -19,7 +19,7 @@ Examples
 .. try_examples::
 
     Doctest examples sections are parsed and converted to notebooks. Blocks of text
-    like this become Markdown cells. Code blocks begin with ``>>>``. Contiguous blocks
+    like this become markdown cells. Codeblocks begin with ``>>>``. Contiguous blocks
     of code are combined into a single code cell.
 
     >>> x = 2
@@ -116,16 +116,14 @@ positioning of the button. The css for the example above is
 ```
 
 
-The `try_examples` directive has these options:
-
-* `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embedded notebook.
-* `:button_text` To customize the text of the button that replaces the rendered examples with an embedded notebook. The default value is `"Try it with JupyterLite!"`, or the value of the global configuration variable `try_examples_global_button_text` if it is set in `conf.py`.
+The `try_examples` directive has options
+* `:height:` To set a specific value for the height of the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) containing the embeddednotebook.
+* `:button_text` To customize the text of the button that replaces the rendered examples with an embedded notebook.
 * `:theme:` This works the same as for the other JupyterLite-Sphinx directives.
 * `:example_class:` An html class to attach to the outer container for the rendered
 examples content and embedded notebook. This can be used in a custom css file to allow
 for more precise customization, eg. different button styles across different examples.
-The default value is the value of the global configuration variable `try_examples_global_theme`, if it is set in `conf.py`.
-* `:warning_text:` Prepend a markdown cell to the notebook containing this text, styled to make it clear this is intended as a warning. The default value is the value of the global configuration variable `try_examples_global_warning_text` if it is set in `conf.py`, otherwise no warning text is added.
+* `:warning_text:` Prepend a markdown cell to the notebook containing this text, styled to make it clear this is intended as a warning.
 
 Here's an example with some options set
 
@@ -206,7 +204,10 @@ allowing for specification of examples sections which should not be made interac
 
 
 The button text, theme, and warning text can be set globally with the config variables
-`try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text`.
+`try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text` in `conf.py`;
+and these apply both to automatically inserted directives and to manually inserted ones. The
+priority of these global settings is lower than that of the specific options set for a manually
+inserted directive, which will override the global settings on a per-directive basis.
 
 ```python
 global_enable_try_examples = True
@@ -215,7 +216,7 @@ try_examples_global_height = "200px"
 try_examples_global_warning_text = "Interactive examples are experimental and may not always work as expected."
 ```
 
-There is no option to set a global specific height because the proper height
+However, there is no option to set a global specific height because the proper height
 should depend on the size of the examples content. Again, the default height of
 the embedded notebook's iframe container matches the height of the associated
 rendered doctest example so that it takes up the same amount of space on the
