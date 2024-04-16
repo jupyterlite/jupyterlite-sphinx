@@ -106,6 +106,7 @@ class _PromptedIframe(Element):
             f'width="{self["width"]}" height="{self["height"]}" class="jupyterlite_sphinx_raw_iframe"></iframe>'
         )
 
+
 class _InTab(Element):
     def __init__(
         self,
@@ -124,9 +125,7 @@ class _InTab(Element):
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
-        self.lab_src = (
-            f'{prefix}/{app_path}{f"?{options}" if options else ""}'
-        )
+        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
 
         super().__init__(
             "",
@@ -198,6 +197,7 @@ class JupyterLiteIframe(_LiteIframe):
     lite_app = "lab/"
     notebooks_path = ""
 
+
 class JupyterLiteTab(_InTab):
     """Appended to the doctree by the JupyterliteDirective directive
 
@@ -206,6 +206,7 @@ class JupyterLiteTab(_InTab):
 
     lite_app = "lab/"
     notebooks_path = ""
+
 
 class NotebookLiteIframe(_LiteIframe):
     """Appended to the doctree by the NotebookliteDirective directive
