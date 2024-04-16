@@ -106,6 +106,40 @@ class _PromptedIframe(Element):
             f'width="{self["width"]}" height="{self["height"]}" class="jupyterlite_sphinx_raw_iframe"></iframe>'
         )
 
+class _InTab(Element):
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+        app_path = self.lite_app
+        if notebook is not None:
+            lite_options["path"] = notebook
+            app_path = f"{self.lite_app}{self.notebooks_path}"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+        self.lab_src = (
+            f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        )
+
+        super().__init__(
+            "",
+            **attributes,
+        )
+
+    def html(self):
+        return (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.open('{self.lab_src}')\">"
+            "Open as a notebook</button>"
+        )
+
 
 class _LiteIframe(_PromptedIframe):
     def __init__(
@@ -164,6 +198,14 @@ class JupyterLiteIframe(_LiteIframe):
     lite_app = "lab/"
     notebooks_path = ""
 
+class JupyterLiteTab(_InTab):
+    """Appended to the doctree by the JupyterliteDirective directive
+
+    Renders a button that opens a Notebook with JupyterLite in a new tab.
+    """
+
+    lite_app = "lab/"
+    notebooks_path = ""
 
 class NotebookLiteIframe(_LiteIframe):
     """Appended to the doctree by the NotebookliteDirective directive
@@ -262,6 +304,7 @@ class _LiteDirective(SphinxDirective):
         "prompt": directives.unchanged,
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
+        "new_tab": directives.unchanged,
     }
 
     def run(self):
@@ -272,6 +315,8 @@ class _LiteDirective(SphinxDirective):
         prompt_color = self.options.pop("prompt_color", None)
 
         search_params = search_params_parser(self.options.pop("search_params", False))
+
+        new_tab = self.options.pop("new_tab", False)
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
@@ -299,6 +344,20 @@ class _LiteDirective(SphinxDirective):
         else:
             notebook_name = None
 
+        if new_tab:
+            return [
+                self.newtab_cls(
+                    prefix=prefix,
+                    notebook=notebook_name,
+                    width=width,
+                    height=height,
+                    prompt=prompt,
+                    prompt_color=prompt_color,
+                    search_params=search_params,
+                    lite_options=self.options,
+                )
+            ]
+
         return [
             self.iframe_cls(
                 prefix=prefix,
@@ -320,6 +379,7 @@ class JupyterLiteDirective(_LiteDirective):
     """
 
     iframe_cls = JupyterLiteIframe
+    newtab_cls = JupyterLiteTab
 
 
 class NotebookLiteDirective(_LiteDirective):
@@ -688,6 +748,14 @@ def setup(app):
     app.add_directive("retrolite", NotebookLiteDirective)
     app.add_node(
         JupyterLiteIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_node(
+        JupyterLiteTab,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),

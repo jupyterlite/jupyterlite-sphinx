@@ -36,6 +36,18 @@ You can also pass a Notebook file to open automatically:
    :prompt_color: #00aa42
 ```
 
+If you use the `:new_tab:` option in the directive, the Notebook will be opened in a new browser tab.
+
+```rst
+.. jupyterlite:: my_notebook.ipynb
+   :new_tab: True
+```
+
+```{eval-rst}
+.. jupyterlite:: my_notebook.ipynb
+   :new_tab: True
+```
+
 The directive `search_params` allows to transfer some search parameters from the documentation URL to the Jupyterlite URL.\
 Jupyterlite will then be able to fetch these parameters from its own URL.\
 For example `:search_params: ["param1", "param2"]` will transfer the parameters *param1* and *param2*.
