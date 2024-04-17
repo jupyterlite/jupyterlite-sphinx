@@ -128,7 +128,7 @@ class _InTab(Element):
         self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
 
         super().__init__(
-            "",
+            rawsource,
             **attributes,
         )
 
