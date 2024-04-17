@@ -4,12 +4,14 @@ from uuid import uuid4
 import shutil
 import glob
 import re
+from typing import Dict, Any
 
 from pathlib import Path
 
 from urllib.parse import quote
 
 import subprocess
+from subprocess import CompletedProcess
 
 from docutils.parsers.rst import directives
 from docutils.nodes import SkipNode, Element
@@ -616,12 +618,14 @@ def jupyterlite_build(app: Sphinx, error):
             [isinstance(s, str) for s in command]
         ), f"Expected all commands arguments to be a str, got {command}"
 
-        kwargs = {"cwd": app.srcdir, "check": False}
+        kwargs: Dict[str, Any] = {}
         if app.env.config.jupyterlite_silence:
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
 
-        completed_process = subprocess.run(command, **kwargs)
+        completed_process: CompletedProcess[bytes] = subprocess.run(
+            command, cwd=app.srcdir, check=True, **kwargs
+        )
 
         if completed_process.returncode != 0:
             if app.env.config.jupyterlite_silence:
