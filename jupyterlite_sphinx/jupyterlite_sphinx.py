@@ -572,6 +572,10 @@ def jupyterlite_build(app: Sphinx, error):
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
 
+        jupyterlite_build_command_options: Dict[str, Any] = (
+            app.env.config.jupyterlite_build_command_options
+        )
+
         config = []
         if jupyterlite_config:
             config = ["--config", jupyterlite_config]
@@ -613,6 +617,22 @@ def jupyterlite_build(app: Sphinx, error):
             "--lite-dir",
             jupyterlite_dir,
         ]
+
+        if jupyterlite_build_command_options is not None:
+            for key, value in jupyterlite_build_command_options.items():
+                # Check for conflicting options from the default command we use
+                # while building. We don't want to allow these to be overridden
+                # unless they are explicitly set through Sphinx config.
+                if key in ["contents", "output_dir", "lite_dir"]:
+                    jupyterlite_command_error_message = """
+                Cannot use [contents, output_dir, lite_dir] in jupyterlite_build_command_options.
+                Please use the corresponding option directly in conf.py.
+                For a list of available options, run the 'jupyter lite build --help-all'
+                command and refer to the documentation for jupyterlite-sphinx:
+                https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
+                """
+                    raise ValueError(jupyterlite_command_error_message.format(key=key))
+                command.extend([f"--{key.replace('_', '-')}", value])
 
         assert all(
             [isinstance(s, str) for s in command]
@@ -668,6 +688,9 @@ def setup(app):
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value("jupyterlite_silence", True, rebuild=True)
+
+    # Pass a dictionary of additional options to the JupyterLite build command
+    app.add_config_value("jupyterlite_build_command_options", None, rebuild="html")
 
     app.add_config_value("global_enable_try_examples", default=False, rebuild=True)
     app.add_config_value("try_examples_global_theme", default=None, rebuild=True)
