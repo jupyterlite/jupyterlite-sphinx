@@ -97,3 +97,5 @@ The options `--contents`, `--output-dir`, and `--lite-dir` cannot be passed to `
 These can instead be set with
 the [`jupyterlite_contents`](#jupyterlite-content) and the[`jupyterlite_dir`](#jupyterlite-dir) configuration
 options described above.
+
+This is an advanced feature and users are responsible for providing sensible command line options.
