@@ -29,9 +29,9 @@ You would need `jupyterlite-xeus` installed in your docs build environment.
 
 You can pre-install packages by adding an `environment.yml` file in the docs directory, with `xeus-python` defined as one of the dependencies. It will pre-build the environment when running the `jupyter lite build`.
 
-Furthermore, this automatically installs any labextension that it finds, for example, installing `ipyleaflet` will make `ipyleaflet` work without the need to manually install the `jupyter-leaflet` labextension.
+Furthermore, this automatically installs any labextension that it founds, for example installing ipyleaflet will make ipyleaflet work without the need to manually install the jupyter-leaflet labextension.
 
-Say you want to install NumPy, Matplotlib and ipycanvas, it can be done by creating the `environment.yml` file with the following content:
+Say you want to install NumPy, Matplotlib and ipycanvas, it can be done by creating the environment.yml file with the following content:
 
 ```yaml
 name: xeus-python-kernel
@@ -56,7 +56,7 @@ jupyterlite_config = "jupyterlite_config.json"
 ## Disable the `.ipynb` docs source binding
 
 By default, jupyterlite-sphinx binds the `.ipynb` source suffix so that it renders Notebooks included in the doctree with JupyterLite.
-This is known to bring warnings with plugins like `sphinx-gallery`, or to conflict with `nbsphinx`.
+This is known to bring warnings with plugins like sphinx-gallery, or to conflict with nbsphinx.
 
 You can disable this behavior by setting the following config:
 
@@ -64,11 +64,11 @@ You can disable this behavior by setting the following config:
 jupyterlite_bind_ipynb_suffix = False
 ```
 
-### Suppressing JupyterLite logging
+### Suppressing jupyterlite logging
 
 `jupyterlite` can produce large amounts of output to the terminal when docs are building.
 By default, this output is silenced, but will still be printed if the invocation of
-`jupyter lite build` fails. To unsilence this output, set
+`jupyterlite build` fails. To unsilence this output, set
 
 ```python
 jupyterlite_silence = False
