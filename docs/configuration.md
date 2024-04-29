@@ -90,13 +90,9 @@ jupyterlite_build_command_options = {
 This will launch the JupyterLite site, configuring the `jupyterlite-xeus` kernel with a custom
 `jupyterlite_environment.yml` file.
 
-:::{attention}
 The `--contents`, `--output-dir`, and `--lite-dir` options are not supported in this scenario, as they are set by
 the [`jupyterlite_contents`](#jupyterlite-content) and the[`jupyterlite_dir`](#jupyterlite-dir) configuration
 options, respectively, as described above.
-:::
 
-:::{seealso}
 The full list of available options can be found by running the `jupyter lite build --help-all` command. For more
 information, please visit the [JupyterLite documentation](https://jupyterlite.readthedocs.io/en/stable/reference/cli.html#usage).
-:::
