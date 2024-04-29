@@ -632,7 +632,7 @@ def jupyterlite_build(app: Sphinx, error):
                 https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
                 """
                     raise ValueError(jupyterlite_command_error_message)
-                command.extend([f"--{key}", value])
+                command.extend([f"--{key}", str(value)])
 
         assert all(
             [isinstance(s, str) for s in command]
