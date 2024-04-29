@@ -11,7 +11,6 @@ html_logo = "_static/icon.svg"
 
 jupyterlite_contents = "./custom_contents"
 jupyterlite_bind_ipynb_suffix = False
-jupyterlite_silence = False
 
 master_doc = "index"
 
