@@ -6,6 +6,10 @@ extensions = [
     "myst_parser",
 ]
 
+myst_enable_extensions = [
+    "colon_fence"
+]
+
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/icon.svg"
 
