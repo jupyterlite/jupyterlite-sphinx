@@ -631,8 +631,8 @@ def jupyterlite_build(app: Sphinx, error):
                 command and refer to the documentation for jupyterlite-sphinx:
                 https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
                 """
-                    raise ValueError(jupyterlite_command_error_message.format(key=key))
-                command.extend([f"--{key.replace('_', '-')}", value])
+                    raise ValueError(jupyterlite_command_error_message)
+                command.extend([f"--{key}", value])
 
         assert all(
             [isinstance(s, str) for s in command]
