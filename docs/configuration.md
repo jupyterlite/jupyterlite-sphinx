@@ -82,14 +82,13 @@ You can pass additional arguments to the `jupyter lite build` command by passing
 
 ```python
 jupyterlite_build_command_options = {
-    "port": 8888,
     "XeusAddon.environment_file": "jupyterlite_environment.yml",
-    "source-date-epoch": "315532800",
+    ...
     }
 ```
 
-This will launch the JupyterLite site on port 8888, configure the `jupyterlite-xeus` kernel with a custom
-`jupyterlite_environment.yml` file, and configure the source date epoch to ensure reproducible builds.
+This will launch the JupyterLite site, configuring the `jupyterlite-xeus` kernel with a custom
+`jupyterlite_environment.yml` file.
 
 :::{attention}
 The `--contents`, `--output-dir`, and `--lite-dir` options are not supported in this scenario, as they are set by
