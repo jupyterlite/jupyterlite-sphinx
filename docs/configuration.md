@@ -75,3 +75,29 @@ jupyterlite_silence = False
 ```
 
 in your Sphinx `conf.py`.
+
+## Additional CLI arguments for `jupyter lite build`
+
+You can pass additional arguments to the `jupyter lite build` command by passing a dictionary of arguments to the `jupyterlite_build_command_args` configuration option, without the hyphens prepended to the keys. Here's an example:
+
+```python
+jupyterlite_build_command_options = {
+    "port": 8888,
+    "XeusAddon.environment_file": "jupyterlite_environment.yml",
+    "source-date-epoch": "315532800",
+    }
+```
+
+This will launch the JupyterLite site on port 8888, configure the `jupyterlite-xeus` kernel with a custom
+`jupyterlite_environment.yml` file, and configure the source date epoch to ensure reproducible builds.
+
+:::{attention}
+The `--contents`, `--output-dir`, and `--lite-dir` options are not supported in this scenario, as they are set by
+the [`jupyterlite_contents`](#jupyterlite-content) and the[`jupyterlite_dir`](#jupyterlite-dir) configuration
+options, respectively, as described above.
+:::
+
+:::{seealso}
+The full list of available options can be found by running the `jupyter lite build --help-all` command. For more
+information, please visit the [JupyterLite documentation](https://jupyterlite.readthedocs.io/en/stable/reference/cli.html#usage).
+:::
