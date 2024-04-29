@@ -78,7 +78,7 @@ in your Sphinx `conf.py`.
 
 ## Additional CLI arguments for `jupyter lite build`
 
-You can pass additional arguments to the `jupyter lite build` command by passing a dictionary of arguments to the `jupyterlite_build_command_args` configuration option, without the hyphens prepended to the keys. Here's an example:
+You can pass additional arguments to the `jupyter lite build` command by passing a dictionary of arguments to the `jupyterlite_build_command_options` configuration option, without the hyphens prepended to the keys. Here's an example:
 
 ```python
 jupyterlite_build_command_options = {
