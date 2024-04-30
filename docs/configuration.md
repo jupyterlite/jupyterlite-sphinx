@@ -98,4 +98,6 @@ These can instead be set with
 the [`jupyterlite_contents`](#jupyterlite-content) and the[`jupyterlite_dir`](#jupyterlite-dir) configuration
 options described above.
 
+These options take precedence over the options provided by the user such as via environment variables
+or through JSON-based configuration files.
 This is an advanced feature and users are responsible for providing sensible command line options.
