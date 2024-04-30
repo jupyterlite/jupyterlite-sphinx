@@ -75,3 +75,30 @@ jupyterlite_silence = False
 ```
 
 in your Sphinx `conf.py`.
+
+## Additional CLI arguments for `jupyter lite build`
+
+Additional arguments can be passed to the `jupyter lite build` command using the configuration
+option `jupyterlite_build_command_options` in `conf.py`. The following example shows how to
+specify an alternative location for the `xeus` kernel's `environment.yml` file as discussed
+[here](https://github.com/jupyterlite/xeus#usage).
+
+```python
+jupyterlite_build_command_options = {
+    "XeusAddon.environment_file": "jupyterlite_environment.yml",
+    }
+```
+
+This causes the additional option `--XeusAddon.environment_file=jupyterlite_environment.yml`
+to be passed to `jupyter lite build` internally within `jupyterlite-sphinx`. Note that one
+does not include the leading dashes, `--`, in the keys.
+
+The options `--contents`, `--output-dir`, and `--lite-dir` cannot be passed to `jupyter lite build` in this way.
+These can instead be set with
+the [`jupyterlite_contents`](#jupyterlite-content) and the[`jupyterlite_dir`](#jupyterlite-dir) configuration
+options described above.
+
+This is an advanced feature and users are responsible for providing sensible command line options.
+The standard precedence between `jupyter lite build` CLI options and other means of configuration apply.
+See the [jupyter lite CLI](https://jupyterlite.readthedocs.io/en/latest/reference/cli.html) documentation
+for more info.
