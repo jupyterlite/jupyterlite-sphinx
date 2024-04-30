@@ -623,11 +623,11 @@ def jupyterlite_build(app: Sphinx, error):
                 # Check for conflicting options from the default command we use
                 # while building. We don't want to allow these to be overridden
                 # unless they are explicitly set through Sphinx config.
-                if key in ["contents", "output_dir", "lite_dir"]:
+                if key in ["contents", "output-dir", "lite-dir"]:
                     jupyterlite_command_error_message = f"""
                     Additional option, {key}, passed to `jupyter lite build` through
                     `jupyterlite_build_command_options` in conf.py is already an existing
-                    option.  "contents", "output_dir", and "lite_dir" can be configured in
+                    option. "contents", "output_dir", and "lite_dir" can be configured in
                     conf.py as described in the jupyterlite-sphinx documentation:
                     https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
                     """
