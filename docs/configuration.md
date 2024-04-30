@@ -99,6 +99,6 @@ the [`jupyterlite_contents`](#jupyterlite-content) and the[`jupyterlite_dir`](#j
 options described above.
 
 This is an advanced feature and users are responsible for providing sensible command line options.
-The standard precedence between `jupyter lite build` CLI options and other means of configuration applies.
+The standard precedence rules between `jupyter lite build` CLI options and other means of configuration apply.
 See the [jupyter lite CLI](https://jupyterlite.readthedocs.io/en/latest/reference/cli.html) documentation
 for more info.
