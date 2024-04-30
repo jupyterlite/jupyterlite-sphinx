@@ -624,13 +624,13 @@ def jupyterlite_build(app: Sphinx, error):
                 # while building. We don't want to allow these to be overridden
                 # unless they are explicitly set through Sphinx config.
                 if key in ["contents", "output_dir", "lite_dir"]:
-                    jupyterlite_command_error_message = """
-                Cannot use [contents, output_dir, lite_dir] in jupyterlite_build_command_options.
-                Please use the corresponding option directly in conf.py.
-                For a list of available options, run the 'jupyter lite build --help-all'
-                command and refer to the documentation for jupyterlite-sphinx:
-                https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
-                """
+                    jupyterlite_command_error_message = f"""
+                    Additional option, {key}, passed to `jupyter lite build` through
+                    `jupyterlite_build_command_options` in conf.py is already an existing
+                    option.  "contents", "output_dir", and "lite_dir" can be configured in
+                    conf.py as described in the jupyterlite-sphinx documentation:
+                    https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
+                    """
                     raise ValueError(jupyterlite_command_error_message)
                 command.extend([f"--{key}", str(value)])
 
