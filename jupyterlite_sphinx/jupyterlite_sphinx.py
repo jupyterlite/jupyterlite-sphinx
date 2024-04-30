@@ -631,7 +631,7 @@ def jupyterlite_build(app: Sphinx, error):
                     conf.py as described in the jupyterlite-sphinx documentation:
                     https://jupyterlite-sphinx.readthedocs.io/en/stable/configuration.html
                     """
-                    raise ValueError(jupyterlite_command_error_message)
+                    raise RuntimeError(jupyterlite_command_error_message)
                 command.extend([f"--{key}", str(value)])
 
         assert all(
