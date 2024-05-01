@@ -185,7 +185,7 @@ window.loadTryExamplesConfig = async (configFilePath) => {
     Patterns = data.ignore_patterns;
     for (let pattern of Patterns) {
       let regex = new RegExp(pattern);
-      if (!regex.test(currentPageUrl)) {
+      if (regex.test(currentPageUrl)) {
         var buttons = document.getElementsByClassName(
           "try_examples_button hidden",
         );
