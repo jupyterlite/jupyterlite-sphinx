@@ -180,15 +180,18 @@ window.loadTryExamplesConfig = async (configFilePath) => {
       tryExamplesGlobalMinHeight = parseInt(data.global_min_height);
     }
 
-    // Disable interactive examples if file matches one of the ignore patterns
-    // by hiding try_examples_buttons.
+    // Selectively enable interactive examples if file matches one of the ignore patterns
+    // by un-hiding try_examples_buttons.
     Patterns = data.ignore_patterns;
     for (let pattern of Patterns) {
       let regex = new RegExp(pattern);
-      if (regex.test(currentPageUrl)) {
-        var buttons = document.getElementsByClassName("try_examples_button");
+      if (!regex.test(currentPageUrl)) {
+        var buttons = document.getElementsByClassName(
+          "try_examples_button hidden",
+        );
         for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.add("hidden");
+          console.log(buttons[i]);
+          buttons[i].classList.remove("hidden");
         }
         break;
       }
