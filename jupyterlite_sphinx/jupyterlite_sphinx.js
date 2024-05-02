@@ -163,8 +163,18 @@ window.loadTryExamplesConfig = async (configFilePath) => {
     const response = await fetch(configFileUrl);
     if (!response.ok) {
       if (response.status === 404) {
-        // Try examples ignore file is not present.
+        // Try examples ignore file is not present. Enable all interactive examples
+        // in that case.
         console.log("Optional try_examples config file not found.");
+
+        var buttons = document.getElementsByClassName(
+          "try_examples_button hidden",
+        );
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("hidden");
+        }
+        tryExamplesConfigLoaded = true;
+
         return;
       }
       throw new Error(`Error fetching ${configFilePath}`);
@@ -195,11 +205,11 @@ window.loadTryExamplesConfig = async (configFilePath) => {
         }
         break;
       }
+      tryExamplesConfigLoaded = true;
     }
   } catch (error) {
     console.error(error);
   }
-  tryExamplesConfigLoaded = true;
 };
 
 window.toggleTryExamplesButtons = () => {
