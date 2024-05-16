@@ -2,6 +2,29 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.15.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.14.0...90a0b6327c1b2b3badaf925aa08e9a54083b4492))
+
+### Enhancements made
+
+- Pass additional configuration options to the `jupyter lite build` command [#169](https://github.com/jupyterlite/jupyterlite-sphinx/pull/169) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Add the option to open JupyterLite window in new tab [#165](https://github.com/jupyterlite/jupyterlite-sphinx/pull/165) ([@melissawm](https://github.com/melissawm))
+
+### Maintenance and upkeep improvements
+
+### Documentation improvements
+
+- Some general formatting fixes (punctuation, backticks, etc.) [#172](https://github.com/jupyterlite/jupyterlite-sphinx/pull/172) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-04-30&to=2024-05-16&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-04-30..2024-05-16&type=Issues) | [@melissawm](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amelissawm+updated%3A2024-04-30..2024-05-16&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-04-30..2024-05-16&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-04-30..2024-05-16&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.14.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.13.1...cefbabe2d87e3572f6627c9a6f27923a6f8b8b82))
@@ -24,8 +47,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-03-22&to=2024-04-30&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-03-22..2024-04-30&type=Issues) | [@Carreau](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2024-03-22..2024-04-30&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2024-03-22..2024-04-30&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-03-22..2024-04-30&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-03-22..2024-04-30&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.13.1
 
