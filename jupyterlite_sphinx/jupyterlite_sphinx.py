@@ -24,6 +24,8 @@ from sphinx.parsers import RSTParser
 
 from ._try_examples import examples_to_notebook, insert_try_examples_directive
 
+import nbformat
+
 try:
     import voici
 except ImportError:
@@ -338,10 +340,42 @@ class _LiteDirective(SphinxDirective):
 
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
 
+            # Create a temporary directory and copy the notebooks there. This is done
+            # internally so that we don't overwrite existing notebooks in the source
+            # directories of the docs (if we are modifying their contents). Therefore
+            # we copy from an intermediate directory to the final one where the notebooks
+            # are expected to be found.
+
+            import tempfile
+            temp_dir = tempfile.mkdtemp()
+            # Copy notebooks in notebooks_dir to temp_dir
+            shutil.copy(notebook, temp_dir)
+
+            if self.env.config.strip_tagged_cells:
+                print(f"{notebook}: Removing cells tagged with 'strip' metadata set to 'true'")
+
+                # Note: the directives meant to be stripped must be inside their own
+                # cell so that the cell itself gets removed from the notebook. This
+                # is so that we don't end up removing useful data or directives that
+                # are not meant to be removed.
+                with open(Path(temp_dir) / notebook_name) as f:
+                    print(f"Opened {notebook_name}")
+                    nb = nbformat.read(f, as_version=4)
+                    nb.cells = [
+                        cell
+                        for cell in nb.cells
+                        if "true" not in cell.metadata.get("strip", [])
+                    ]
+                    print(f"Writing stripped notebook to {temp_dir}")
+                    nbformat.write(nb, Path(temp_dir) / notebook_name)
+
             # Copy the Notebook for NotebookLite to find
             os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
             try:
-                shutil.copyfile(notebook, str(notebooks_dir))
+                # copy notebook from temp_dir to notebooks_dir
+                print(f"Copying {notebook_name} from {temp_dir} to {notebooks_dir}")
+                shutil.copy(Path(temp_dir) / notebook_name, notebooks_dir)
+                shutil.rmtree(temp_dir)
             except shutil.SameFileError:
                 pass
         else:
@@ -749,6 +783,7 @@ def setup(app):
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value("jupyterlite_silence", True, rebuild=True)
+    app.add_config_value("strip_tagged_cells", False, rebuild=True)
 
     # Pass a dictionary of additional options to the JupyterLite build command
     app.add_config_value("jupyterlite_build_command_options", None, rebuild="html")
