@@ -53,6 +53,64 @@ to your JupyterLite deployment.
 jupyterlite_config = "jupyterlite_config.json"
 ```
 
+## Strip particular tagged cells from IPython Notebooks
+
+When using the `NotebookLite` or the `JupyterLite` directives with a notebook passed, you can add strip particular tagged cells from the notebook before rendering it in the JupyterLite console.
+
+You can enable this behaviour by setting the following config:
+
+```python
+strip_tagged_cells = True
+```
+
+and then tag the cells you want to strip with the tag `strip` in the JSON metadata of the cell, like this:
+
+```json
+{
+  "tags": [
+    "strip": "true"
+  ]
+}
+```
+
+This is useful when you want to remove some cells from the rendered notebook in the JupyterLite console, for example, cells that are used for adding reST-based directives or other Sphinx-specific content.
+
+For example, you can use this feature to remove the `toctree` directive from the rendered notebook in the JupyterLite console:
+
+```ipynb
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "tags": [
+          "strip": "true"
+        ]
+      },
+      "source": [
+        "# Table of Contents\n",
+        "\n",
+        "```{toctree}\n",
+        ":maxdepth: 2\n",
+        "\n",
+        "directives/jupyterlite\n",
+        "directives/notebooklite\n",
+        "directives/replite\n",
+        "directives/voici\n",
+        "directives/try_examples\n",
+        "full\n",
+        "changelog\n",
+        "```"
+      ]
+    }
+  ]
+}
+```
+
+where the cell with the `toctree` directive will be removed from the rendered notebook in the JupyterLite console.
+
+Note that this feature is only available for the `NotebookLite` and `JupyterLite` directives and works with the `ipynb` files passed to them, and therefore does not work with the `TryExamples` directive.
+
 ## Disable the `.ipynb` docs source binding
 
 By default, jupyterlite-sphinx binds the `.ipynb` source suffix so that it renders Notebooks included in the doctree with JupyterLite.
