@@ -347,12 +347,15 @@ class _LiteDirective(SphinxDirective):
             # are expected to be found.
 
             import tempfile
+
             temp_dir = tempfile.mkdtemp()
             # Copy notebooks in notebooks_dir to temp_dir
             shutil.copy(notebook, temp_dir)
 
             if self.env.config.strip_tagged_cells:
-                print(f"{notebook}: Removing cells tagged with 'strip' metadata set to 'true'")
+                print(
+                    f"{notebook}: Removing cells tagged with 'strip' metadata set to 'true'"
+                )
 
                 # Note: the directives meant to be stripped must be inside their own
                 # cell so that the cell itself gets removed from the notebook. This
