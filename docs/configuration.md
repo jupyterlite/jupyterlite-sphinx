@@ -77,7 +77,7 @@ This is useful when you want to remove some cells from the rendered notebook in 
 
 For example, you can use this feature to remove the `toctree` directive from the rendered notebook in the JupyterLite console:
 
-```ipynb
+```json
 {
   "cells": [
     {
