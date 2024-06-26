@@ -55,9 +55,10 @@ jupyterlite_config = "jupyterlite_config.json"
 
 ## Strip particular tagged cells from IPython Notebooks
 
-When using the `NotebookLite` or the `JupyterLite` directives with a notebook passed, you can add strip particular tagged cells from the notebook before rendering it in the JupyterLite console.
+When using the `NotebookLite`, `JupyterLite`, or `Voici` directives with a notebook passed, you can
+strip particular tagged cells from the notebook before rendering it in the JupyterLite console.
 
-You can enable this behaviour by setting the following config:
+This behaviour can be enabled by setting the following config:
 
 ```python
 strip_tagged_cells = True
@@ -73,9 +74,12 @@ and then tag the cells you want to strip with the tag `strip` in the JSON metada
 }
 ```
 
-This is useful when you want to remove some cells from the rendered notebook in the JupyterLite console, for example, cells that are used for adding reST-based directives or other Sphinx-specific content.
+This is useful when you want to remove some cells from the rendered notebook in the JupyterLite
+console, for example, cells that are used for adding reST-based directives or other
+Sphinx-specific content.
 
-For example, you can use this feature to remove the `toctree` directive from the rendered notebook in the JupyterLite console:
+For example, you can use this feature to remove the `toctree` directive from the rendered notebook
+in the JupyterLite console:
 
 ```json
 {
@@ -107,9 +111,12 @@ For example, you can use this feature to remove the `toctree` directive from the
 }
 ```
 
-where the cell with the `toctree` directive will be removed from the rendered notebook in the JupyterLite console.
+where the cell with the `toctree` directive will be removed from the rendered notebook in
+the JupyterLite console.
 
-Note that this feature is only available for the `NotebookLite` and `JupyterLite` directives and works with the `ipynb` files passed to them, and therefore does not work with the `TryExamples` directive.
+Note that this feature is only available for the `NotebookLite`, `JupyterLite`, and the
+`Voici` directives and works with the `ipynb` files passed to them, and therefore does
+not work with the `TryExamples` directive.
 
 ## Disable the `.ipynb` docs source binding
 
