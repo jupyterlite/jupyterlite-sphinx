@@ -366,9 +366,9 @@ class _LiteDirective(SphinxDirective):
                 print(f"Writing stripped notebook to {notebooks_dir}")
                 nbformat.write(nb, notebooks_dir, version=4)
 
-            # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
-            # If it is True, then they have already been copied to notebooks_dir by the
-            # nbformat.write() function above.
+                # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
+                # If it is True, then they have already been copied to notebooks_dir by the
+                # nbformat.write() function above.
                 if not notebook_is_stripped:
                     print(
                         f"Notebooks are not stripped, copying {notebook_name} to {notebooks_dir}"
