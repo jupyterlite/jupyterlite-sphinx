@@ -163,8 +163,18 @@ window.loadTryExamplesConfig = async (configFilePath) => {
     const response = await fetch(configFileUrl);
     if (!response.ok) {
       if (response.status === 404) {
-        // Try examples ignore file is not present.
+        // Try examples ignore file is not present. Enable all interactive examples
+        // in that case.
         console.log("Optional try_examples config file not found.");
+
+        var buttons = document.getElementsByClassName(
+          "try_examples_button hidden",
+        );
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("hidden");
+        }
+        tryExamplesConfigLoaded = true;
+
         return;
       }
       throw new Error(`Error fetching ${configFilePath}`);
@@ -180,29 +190,32 @@ window.loadTryExamplesConfig = async (configFilePath) => {
       tryExamplesGlobalMinHeight = parseInt(data.global_min_height);
     }
 
-    // Disable interactive examples if file matches one of the ignore patterns
-    // by hiding try_examples_buttons.
+    // Selectively enable interactive examples if file matches one of the ignore patterns
+    // by un-hiding try_examples_buttons.
     Patterns = data.ignore_patterns;
     for (let pattern of Patterns) {
       let regex = new RegExp(pattern);
-      if (regex.test(currentPageUrl)) {
-        var buttons = document.getElementsByClassName("try_examples_button");
+      if (!regex.test(currentPageUrl)) {
+        var buttons = document.getElementsByClassName(
+          "try_examples_button hidden",
+        );
         for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.add("hidden");
+          console.log(buttons[i]);
+          buttons[i].classList.remove("hidden");
         }
         break;
       }
+      tryExamplesConfigLoaded = true;
     }
   } catch (error) {
     console.error(error);
   }
-  tryExamplesConfigLoaded = true;
 };
 
 window.toggleTryExamplesButtons = () => {
   /* Toggle visibility of TryExamples buttons. For use in console for debug
    * purposes. */
-  var buttons = document.getElementsByClassName("try_examples_button");
+  var buttons = document.getElementsByClassName("try_examples_button hidden");
 
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].classList.toggle("hidden");
