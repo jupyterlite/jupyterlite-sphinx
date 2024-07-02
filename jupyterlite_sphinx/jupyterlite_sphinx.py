@@ -512,7 +512,7 @@ class TryExamplesDirective(SphinxDirective):
 
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
