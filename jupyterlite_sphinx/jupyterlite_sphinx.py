@@ -346,10 +346,6 @@ class _LiteDirective(SphinxDirective):
             os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
 
             if notebook_is_stripped:
-                print(
-                    f"{notebook}: Removing cells tagged with 'strip' metadata set to 'true'"
-                )
-
                 # Note: the directives meant to be stripped must be inside their own
                 # cell so that the cell itself gets removed from the notebook. This
                 # is so that we don't end up removing useful data or directives that
@@ -363,17 +359,13 @@ class _LiteDirective(SphinxDirective):
                     for cell in nb.cells
                     if "true" not in cell.metadata.get("strip", [])
                 ]
-                print(f"Writing stripped notebook to {notebooks_dir}")
                 nbformat.write(nb, notebooks_dir, version=4)
 
-                # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
-                # If it is True, then they have already been copied to notebooks_dir by the
-                # nbformat.write() function above.
-                if not notebook_is_stripped:
-                    print(
-                        f"Notebooks are not stripped, copying {notebook_name} to {notebooks_dir}"
-                    )
-                    shutil.copy(notebook, notebooks_dir)
+            # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
+            # If it is True, then they have already been copied to notebooks_dir by the
+            # nbformat.write() function above.
+            else:
+                shutil.copy(notebook, notebooks_dir)
         else:
             notebook_name = None
 
