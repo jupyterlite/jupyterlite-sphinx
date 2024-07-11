@@ -357,7 +357,7 @@ class _LiteDirective(SphinxDirective):
                 nb.cells = [
                     cell
                     for cell in nb.cells
-                    if "true" not in cell.metadata.get("strip", [])
+                    if "true" not in cell.metadata.get("jupyterlite_sphinx_strip", [])
                 ]
                 nbformat.write(nb, notebooks_dir, version=4)
 
