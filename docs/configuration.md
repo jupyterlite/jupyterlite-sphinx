@@ -55,7 +55,7 @@ jupyterlite_config = "jupyterlite_config.json"
 
 ## Strip particular tagged cells from IPython Notebooks
 
-When using the `NotebookLite`, `JupyterLite`, or `Voici` directives with a notebook passed, you can
+When using the `NotebookLite`, `JupyterLite`, or `Voici` directives with a notebook passed to them, you can
 strip particular tagged cells from the notebook before rendering it in the JupyterLite console.
 
 This behaviour can be enabled by setting the following config:
@@ -64,7 +64,7 @@ This behaviour can be enabled by setting the following config:
 strip_tagged_cells = True
 ```
 
-and then tag the cells you want to strip with the tag `jupyterlite_sphinx_strip` in the JSON metadata
+and then by tagging the cells you want to strip with the tag `jupyterlite_sphinx_strip` in the JSON metadata
 of the cell, like this:
 
 ```json
@@ -89,7 +89,7 @@ in the JupyterLite console:
       "cell_type": "markdown",
       "metadata": {
         "tags": [
-          "strip": "true"
+          "jupyterlite_sphinx_strip": "true"
         ]
       },
       "source": [
@@ -116,8 +116,8 @@ where the cell with the `toctree` directive will be removed from the rendered no
 the JupyterLite console.
 
 Note that this feature is only available for the `NotebookLite`, `JupyterLite`, and the
-`Voici` directives and works with the `ipynb` files passed to them, and therefore does
-not work with the `TryExamples` directive.
+`Voici` directives and works with the `.ipynb` files passed to them. It is not implemented
+for the `TryExamples` directive.
 
 ## Disable the `.ipynb` docs source binding
 
