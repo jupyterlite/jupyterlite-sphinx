@@ -64,12 +64,13 @@ This behaviour can be enabled by setting the following config:
 strip_tagged_cells = True
 ```
 
-and then tag the cells you want to strip with the tag `strip` in the JSON metadata of the cell, like this:
+and then tag the cells you want to strip with the tag `jupyterlite_sphinx_strip` in the JSON metadata
+of the cell, like this:
 
 ```json
 {
   "tags": [
-    "strip": "true"
+    "jupyterlite_sphinx_strip": "true"
   ]
 }
 ```
