@@ -522,7 +522,9 @@ class TryExamplesDirective(SphinxDirective):
             ] = notebook_unique_name
             # Copy the Notebook for NotebookLite to find
             os.makedirs(notebooks_dir, exist_ok=True)
-            with open(notebooks_dir / Path(notebook_unique_name), "w", encoding="utf-8") as f:
+            with open(
+                notebooks_dir / Path(notebook_unique_name), "w", encoding="utf-8"
+            ) as f:
                 # nbf.write incorrectly formats multiline arrays in output.
                 json.dump(nb, f, indent=4, ensure_ascii=False)
 
@@ -655,9 +657,9 @@ def jupyterlite_build(app: Sphinx, error):
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
 
-        jupyterlite_build_command_options: Dict[str, Any] = (
-            app.env.config.jupyterlite_build_command_options
-        )
+        jupyterlite_build_command_options: Dict[
+            str, Any
+        ] = app.env.config.jupyterlite_build_command_options
 
         config = []
         if jupyterlite_config:
