@@ -363,7 +363,10 @@ class _LiteDirective(SphinxDirective):
             # If it is True, then they have already been copied to notebooks_dir by the
             # nbformat.write() function above.
             else:
-                shutil.copy(notebook, notebooks_dir)
+                try:
+                    shutil.copy(notebook, notebooks_dir)
+                except shutil.SameFileError:
+                    pass
         else:
             notebook_name = None
 
