@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.16.2
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.1...45ba6d8bcd312ecbcb30f8e8db92d72dd8756faa))
+
+### Bugs fixed
+
+- Restore SameFileError check when copying notebooks [#190](https://github.com/jupyterlite/jupyterlite-sphinx/pull/190) ([@melissawm](https://github.com/melissawm))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-07-18&to=2024-07-18&type=c))
+
+[@melissawm](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amelissawm+updated%3A2024-07-18..2024-07-18&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.16.1
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.0...a9c704ef2e1d602a87501bc3be284c842c0e8ff2))
@@ -15,8 +31,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-07-18&to=2024-07-18&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-07-18..2024-07-18&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.16.0
 
