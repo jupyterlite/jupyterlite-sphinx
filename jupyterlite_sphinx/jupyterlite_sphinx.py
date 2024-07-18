@@ -657,9 +657,9 @@ def jupyterlite_build(app: Sphinx, error):
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
 
-        jupyterlite_build_command_options: Dict[
-            str, Any
-        ] = app.env.config.jupyterlite_build_command_options
+        jupyterlite_build_command_options: Dict[str, Any] = (
+            app.env.config.jupyterlite_build_command_options
+        )
 
         config = []
         if jupyterlite_config:
