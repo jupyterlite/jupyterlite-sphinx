@@ -522,7 +522,9 @@ class TryExamplesDirective(SphinxDirective):
             ] = notebook_unique_name
             # Copy the Notebook for NotebookLite to find
             os.makedirs(notebooks_dir, exist_ok=True)
-            with open(notebooks_dir / Path(notebook_unique_name), "w") as f:
+            with open(
+                notebooks_dir / Path(notebook_unique_name), "w", encoding="utf-8"
+            ) as f:
                 # nbf.write incorrectly formats multiline arrays in output.
                 json.dump(nb, f, indent=4, ensure_ascii=False)
 
