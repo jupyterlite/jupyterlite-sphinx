@@ -68,9 +68,9 @@ and then by tagging the cells you want to strip with the tag `jupyterlite_sphinx
 of the cell, like this:
 
 ```json
-{
+"metadata": {
   "tags": [
-    "jupyterlite_sphinx_strip": "true"
+    "jupyterlite_sphinx_strip"
   ]
 }
 ```
@@ -89,7 +89,7 @@ in the JupyterLite console:
       "cell_type": "markdown",
       "metadata": {
         "tags": [
-          "jupyterlite_sphinx_strip": "true"
+          "jupyterlite_sphinx_strip"
         ]
       },
       "source": [

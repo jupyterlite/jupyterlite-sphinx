@@ -352,12 +352,10 @@ class _LiteDirective(SphinxDirective):
                 # are not meant to be removed.
 
                 nb = nbformat.read(notebook, as_version=4)
-                print(f"Opened {notebook_name}")
-                nb = nbformat.read(notebook, as_version=4)
                 nb.cells = [
                     cell
                     for cell in nb.cells
-                    if "true" not in cell.metadata.get("jupyterlite_sphinx_strip", [])
+                    if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
                 ]
                 nbformat.write(nb, notebooks_dir, version=4)
 
