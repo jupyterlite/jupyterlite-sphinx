@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.16.1
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.0...a9c704ef2e1d602a87501bc3be284c842c0e8ff2))
+
+### Bugs fixed
+
+- Fix invalid schema for `jupyterlite_sphinx_strip` tag when `strip_tagged_cells` is `True` [#189](https://github.com/jupyterlite/jupyterlite-sphinx/pull/189) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-07-18&to=2024-07-18&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-07-18..2024-07-18&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.16.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.15.0...4074ee2049947f1a537e8b822b5fb5643d4a42b3))
@@ -30,8 +46,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-05-16&to=2024-07-18&type=c))
 
 [@AA-Turner](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AAA-Turner+updated%3A2024-05-16..2024-07-18&type=Issues) | [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-05-16..2024-07-18&type=Issues) | [@Carreau](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2024-05-16..2024-07-18&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2024-05-16..2024-07-18&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-05-16..2024-07-18&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-05-16..2024-07-18&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.15.0
 
