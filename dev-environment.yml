@@ -5,9 +5,9 @@ dependencies:
     - pip
     - jupyter_server
     - jupyterlab_server
-    - jupyterlite-xeus >=0.1.8,<0.2.0
-    - jupyterlite-core >=0.2,<0.4
+    - jupyterlite-core >=0.3,<0.4
     - pydata-sphinx-theme
+    - micromamba
     - myst-parser
     - docutils
     - sphinx
@@ -15,3 +15,4 @@ dependencies:
     - voici
     - pip:
         - .
+        - jupyterlite-xeus >=0.2.0a0

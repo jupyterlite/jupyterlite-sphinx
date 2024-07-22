@@ -53,6 +53,72 @@ to your JupyterLite deployment.
 jupyterlite_config = "jupyterlite_config.json"
 ```
 
+## Strip particular tagged cells from IPython Notebooks
+
+When using the `NotebookLite`, `JupyterLite`, or `Voici` directives with a notebook passed to them, you can
+strip particular tagged cells from the notebook before rendering it in the JupyterLite console.
+
+This behaviour can be enabled by setting the following config:
+
+```python
+strip_tagged_cells = True
+```
+
+and then by tagging the cells you want to strip with the tag `jupyterlite_sphinx_strip` in the JSON metadata
+of the cell, like this:
+
+```json
+"metadata": {
+  "tags": [
+    "jupyterlite_sphinx_strip"
+  ]
+}
+```
+
+This is useful when you want to remove some cells from the rendered notebook in the JupyterLite
+console, for example, cells that are used for adding reST-based directives or other
+Sphinx-specific content.
+
+For example, you can use this feature to remove the `toctree` directive from the rendered notebook
+in the JupyterLite console:
+
+```json
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "tags": [
+          "jupyterlite_sphinx_strip"
+        ]
+      },
+      "source": [
+        "# Table of Contents\n",
+        "\n",
+        "```{toctree}\n",
+        ":maxdepth: 2\n",
+        "\n",
+        "directives/jupyterlite\n",
+        "directives/notebooklite\n",
+        "directives/replite\n",
+        "directives/voici\n",
+        "directives/try_examples\n",
+        "full\n",
+        "changelog\n",
+        "```"
+      ]
+    }
+  ]
+}
+```
+
+where the cell with the `toctree` directive will be removed from the rendered notebook in
+the JupyterLite console.
+
+Note that this feature is only available for the `NotebookLite`, `JupyterLite`, and the
+`Voici` directives and works with the `.ipynb` files passed to them. It is not implemented
+for the `TryExamples` directive.
+
 ## Disable the `.ipynb` docs source binding
 
 By default, jupyterlite-sphinx binds the `.ipynb` source suffix so that it renders Notebooks included in the doctree with JupyterLite.

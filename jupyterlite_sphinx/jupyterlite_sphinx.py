@@ -24,6 +24,8 @@ from sphinx.parsers import RSTParser
 
 from ._try_examples import examples_to_notebook, insert_try_examples_directive
 
+import nbformat
+
 try:
     import voici
 except ImportError:
@@ -109,6 +111,39 @@ class _PromptedIframe(Element):
         )
 
 
+class _InTab(Element):
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+        app_path = self.lite_app
+        if notebook is not None:
+            lite_options["path"] = notebook
+            app_path = f"{self.lite_app}{self.notebooks_path}"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(
+            rawsource,
+            **attributes,
+        )
+
+    def html(self):
+        return (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.open('{self.lab_src}')\">"
+            "Open as a notebook</button>"
+        )
+
+
 class _LiteIframe(_PromptedIframe):
     def __init__(
         self,
@@ -161,6 +196,16 @@ class JupyterLiteIframe(_LiteIframe):
     """Appended to the doctree by the JupyterliteDirective directive
 
     Renders an iframe that shows a Notebook with JupyterLite.
+    """
+
+    lite_app = "lab/"
+    notebooks_path = ""
+
+
+class JupyterLiteTab(_InTab):
+    """Appended to the doctree by the JupyterliteDirective directive
+
+    Renders a button that opens a Notebook with JupyterLite in a new tab.
     """
 
     lite_app = "lab/"
@@ -264,6 +309,7 @@ class _LiteDirective(SphinxDirective):
         "prompt": directives.unchanged,
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
+        "new_tab": directives.unchanged,
     }
 
     def run(self):
@@ -274,6 +320,8 @@ class _LiteDirective(SphinxDirective):
         prompt_color = self.options.pop("prompt_color", None)
 
         search_params = search_params_parser(self.options.pop("search_params", False))
+
+        new_tab = self.options.pop("new_tab", False)
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
@@ -292,14 +340,49 @@ class _LiteDirective(SphinxDirective):
 
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
 
-            # Copy the Notebook for NotebookLite to find
+            notebook_is_stripped: bool = self.env.config.strip_tagged_cells
+
+            # Create a folder to copy the notebooks to and for NotebookLite to find
             os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
-            try:
-                shutil.copyfile(notebook, str(notebooks_dir))
-            except shutil.SameFileError:
-                pass
+
+            if notebook_is_stripped:
+                # Note: the directives meant to be stripped must be inside their own
+                # cell so that the cell itself gets removed from the notebook. This
+                # is so that we don't end up removing useful data or directives that
+                # are not meant to be removed.
+
+                nb = nbformat.read(notebook, as_version=4)
+                nb.cells = [
+                    cell
+                    for cell in nb.cells
+                    if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
+                ]
+                nbformat.write(nb, notebooks_dir, version=4)
+
+            # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
+            # If it is True, then they have already been copied to notebooks_dir by the
+            # nbformat.write() function above.
+            else:
+                try:
+                    shutil.copy(notebook, notebooks_dir)
+                except shutil.SameFileError:
+                    pass
         else:
             notebook_name = None
+
+        if new_tab:
+            return [
+                self.newtab_cls(
+                    prefix=prefix,
+                    notebook=notebook_name,
+                    width=width,
+                    height=height,
+                    prompt=prompt,
+                    prompt_color=prompt_color,
+                    search_params=search_params,
+                    lite_options=self.options,
+                )
+            ]
 
         return [
             self.iframe_cls(
@@ -322,6 +405,7 @@ class JupyterLiteDirective(_LiteDirective):
     """
 
     iframe_cls = JupyterLiteIframe
+    newtab_cls = JupyterLiteTab
 
 
 class NotebookLiteDirective(_LiteDirective):
@@ -439,7 +523,9 @@ class TryExamplesDirective(SphinxDirective):
             ] = notebook_unique_name
             # Copy the Notebook for NotebookLite to find
             os.makedirs(notebooks_dir, exist_ok=True)
-            with open(notebooks_dir / Path(notebook_unique_name), "w") as f:
+            with open(
+                notebooks_dir / Path(notebook_unique_name), "w", encoding="utf-8"
+            ) as f:
                 # nbf.write incorrectly formats multiline arrays in output.
                 json.dump(nb, f, indent=4, ensure_ascii=False)
 
@@ -451,7 +537,7 @@ class TryExamplesDirective(SphinxDirective):
 
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
@@ -688,6 +774,7 @@ def setup(app):
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value("jupyterlite_silence", True, rebuild=True)
+    app.add_config_value("strip_tagged_cells", False, rebuild=True)
 
     # Pass a dictionary of additional options to the JupyterLite build command
     app.add_config_value("jupyterlite_build_command_options", None, rebuild="html")
@@ -715,6 +802,14 @@ def setup(app):
     app.add_directive("retrolite", NotebookLiteDirective)
     app.add_node(
         JupyterLiteIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_node(
+        JupyterLiteTab,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),
