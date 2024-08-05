@@ -4,7 +4,7 @@ from uuid import uuid4
 import shutil
 import glob
 import re
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from pathlib import Path
 
@@ -608,9 +608,9 @@ class TryExamplesDirective(SphinxDirective):
         return [content_container_node, notebook_container, script_node]
 
 
-def _process_docstring_examples(app, docname, source):
-    source_path = app.env.doc2path(docname)
-    if source_path.endswith(".py"):
+def _process_docstring_examples(app: Sphinx, docname: str, source: List[str]) -> None:
+    source_path: os.PathLike = Path(app.env.doc2path(docname))
+    if source_path.suffix == ".py":
         source[0] = insert_try_examples_directive(source[0])
 
 
