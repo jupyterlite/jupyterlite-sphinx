@@ -609,7 +609,7 @@ class TryExamplesDirective(SphinxDirective):
 
 
 def _process_docstring_examples(app: Sphinx, docname: str, source: List[str]) -> None:
-    source_path: str = app.env.doc2path(docname)
+    source_path: os.PathLike = Path(app.env.doc2path(docname))
     if source_path.suffix == ".py":
         source[0] = insert_try_examples_directive(source[0])
 
