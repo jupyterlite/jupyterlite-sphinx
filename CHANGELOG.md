@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.16.5
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.4...450a81d3a5e3a0ce0b56b67aafaa413323bc22b9))
+
+### Bugs fixed
+
+- Restore backwards compatibility with Sphinx \<8 [#201](https://github.com/jupyterlite/jupyterlite-sphinx/pull/201) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-08-07&to=2024-08-08&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-08-07..2024-08-08&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.16.4
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.9.3...cf767125be27d1832c9a61ad3e46e7bb19c927ee))
@@ -66,8 +82,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2023-09-13&to=2024-08-07&type=c))
 
 [@AA-Turner](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AAA-Turner+updated%3A2023-09-13..2024-08-07&type=Issues) | [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2023-09-13..2024-08-07&type=Issues) | [@Carreau](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2023-09-13..2024-08-07&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2023-09-13..2024-08-07&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2023-09-13..2024-08-07&type=Issues) | [@matthewfeickert](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amatthewfeickert+updated%3A2023-09-13..2024-08-07&type=Issues) | [@mattip](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amattip+updated%3A2023-09-13..2024-08-07&type=Issues) | [@melissawm](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amelissawm+updated%3A2023-09-13..2024-08-07&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2023-09-13..2024-08-07&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2023-09-13..2024-08-07&type=Issues) | [@WarrenWeckesser](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AWarrenWeckesser+updated%3A2023-09-13..2024-08-07&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.16.3
 
