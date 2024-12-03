@@ -553,6 +553,7 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         # Button with the onclick event to swap embedded notebook back to examples.
+        # This includes a 'hidden' class by default to hide until the page is loaded.
         go_back_button_html = (
             '<button class="try_examples_button hidden" '
             f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
