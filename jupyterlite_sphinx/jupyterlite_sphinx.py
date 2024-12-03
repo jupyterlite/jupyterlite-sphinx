@@ -423,12 +423,12 @@ class _LiteDirective(SphinxDirective):
 
             # For MyST Markdown notebooks, we create a unique target filename to avoid
             # collisions with other IPyNB files that may have the same name.
-            if notebook_path.suffix.lower() == '.md':
+            if notebook_path.suffix.lower() == ".md":
                 target_name = f"{notebook_path.stem}_{uuid4().hex[:8]}.ipynb"
                 target_path = notebooks_dir / target_name
 
                 nb = jupytext.read(str(notebook_path))
-                with open(target_path, 'w', encoding='utf-8') as f:
+                with open(target_path, "w", encoding="utf-8") as f:
                     nbformat.write(nb, f, version=4)
 
                 notebook = str(target_path)
@@ -449,7 +449,8 @@ class _LiteDirective(SphinxDirective):
                     nb.cells = [
                         cell
                         for cell in nb.cells
-                        if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
+                        if "jupyterlite_sphinx_strip"
+                        not in cell.metadata.get("tags", [])
                     ]
                     nbformat.write(nb, target_path, version=4)
 
