@@ -129,7 +129,9 @@ class _InTab(Element):
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
-        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        self.lab_src = (
+            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        )
 
         super().__init__(
             rawsource,
@@ -170,7 +172,7 @@ class _LiteIframe(_PromptedIframe):
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         if "iframe_src" in attributes:
             if attributes["iframe_src"] != iframe_src:
@@ -246,7 +248,7 @@ class VoiciIframe(_PromptedIframe):
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
