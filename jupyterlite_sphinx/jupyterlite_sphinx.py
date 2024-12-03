@@ -391,6 +391,14 @@ class _LiteDirective(SphinxDirective):
         "button_text": directives.unchanged,
     }
 
+    def _should_convert_notebook(self, source_path: Path, target_path: Path) -> bool:
+        """Check if a Markdown notebook needs conversion to IPyNB format based on
+        some rudimentary timestamp-based caching."""
+        if not target_path.exists():
+            return True
+
+        return source_path.stat().st_mtime > target_path.stat().st_mtime
+
     def run(self):
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "1000px")
@@ -424,12 +432,13 @@ class _LiteDirective(SphinxDirective):
             # For MyST Markdown notebooks, we create a unique target filename to avoid
             # collisions with other IPyNB files that may have the same name.
             if notebook_path.suffix.lower() == ".md":
-                target_name = f"{notebook_path.stem}_{uuid4().hex[:8]}.ipynb"
+                target_name = f"{notebook_path.stem}.ipynb"
                 target_path = notebooks_dir / target_name
 
-                nb = jupytext.read(str(notebook_path))
-                with open(target_path, "w", encoding="utf-8") as f:
-                    nbformat.write(nb, f, version=4)
+                if self._should_convert_notebook(notebook_path, target_path):
+                    nb = jupytext.read(str(notebook_path))
+                    with open(target_path, "w", encoding="utf-8") as f:
+                        nbformat.write(nb, f, version=4)
 
                 notebook = str(target_path)
                 notebook_name = target_name
