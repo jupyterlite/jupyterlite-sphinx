@@ -165,14 +165,26 @@ window.loadTryExamplesConfig = async (configFilePath) => {
       if (response.status === 404) {
         // Try examples ignore file is not present. Enable all interactive examples
         // in that case.
-        console.log("Optional try_examples config file not found.");
+        console.log(
+          "Optional try_examples config file not found. Enabling all interactive examples.",
+        );
 
-        var buttons = document.getElementsByClassName(
+        // Grab all hidden try examples buttons and fade them in
+        const buttons = document.getElementsByClassName(
           "try_examples_button hidden",
         );
-        for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.remove("hidden");
-        }
+
+        requestAnimationFrame(() => {
+          for (let button of buttons) {
+            button.style.opacity = "0";
+            button.classList.remove("hidden");
+            button.classList.add("fade-in");
+            requestAnimationFrame(() => {
+              button.style.opacity = "1";
+            });
+          }
+        });
+
         tryExamplesConfigLoaded = true;
 
         return;
@@ -182,6 +194,17 @@ window.loadTryExamplesConfig = async (configFilePath) => {
 
     const data = await response.json();
     if (!data) {
+      // If config file exists but is empty, treat it like a missing config
+      // and enable all interactive examples since there is no ignore pattern
+      console.log(
+        "Try examples config file is empty. Enabling all interactive examples.",
+      );
+      const buttons = document.getElementsByClassName(
+        "try_examples_button hidden",
+      );
+      for (let button of buttons) {
+        button.classList.remove("hidden");
+      }
       return;
     }
 
@@ -191,25 +214,44 @@ window.loadTryExamplesConfig = async (configFilePath) => {
     }
 
     // Selectively enable interactive examples if file matches one of the ignore patterns
-    // by un-hiding try_examples_buttons.
-    Patterns = data.ignore_patterns;
+    // by un-hiding try_examples_buttons with a smooth transition
+    const Patterns = data.ignore_patterns || [];
+    let shouldShowButtons = true;
+
     for (let pattern of Patterns) {
       let regex = new RegExp(pattern);
-      if (!regex.test(currentPageUrl)) {
-        var buttons = document.getElementsByClassName(
-          "try_examples_button hidden",
-        );
-        for (var i = 0; i < buttons.length; i++) {
-          console.log(buttons[i]);
-          buttons[i].classList.remove("hidden");
-        }
+      if (regex.test(currentPageUrl)) {
+        shouldShowButtons = false;
         break;
       }
-      tryExamplesConfigLoaded = true;
+    }
+
+    if (shouldShowButtons) {
+      const buttons = document.getElementsByClassName(
+        "try_examples_button hidden",
+      );
+      requestAnimationFrame(() => {
+        for (let button of buttons) {
+          button.style.opacity = "0";
+          button.classList.remove("hidden");
+          button.classList.add("fade-in");
+          requestAnimationFrame(() => {
+            button.style.opacity = "1";
+          });
+        }
+      });
     }
   } catch (error) {
-    console.error(error);
+    // On error, enable all buttons as a fallback to maintain current behavior
+    console.error("Error loading try_examples config:", error);
+    const buttons = document.getElementsByClassName(
+      "try_examples_button hidden",
+    );
+    for (let button of buttons) {
+      button.classList.remove("hidden");
+    }
   }
+  tryExamplesConfigLoaded = true;
 };
 
 window.toggleTryExamplesButtons = () => {
