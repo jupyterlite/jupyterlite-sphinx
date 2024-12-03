@@ -24,6 +24,7 @@ from sphinx.parsers import RSTParser
 
 from ._try_examples import examples_to_notebook, insert_try_examples_directive
 
+import jupytext
 import nbformat
 
 try:
@@ -416,37 +417,51 @@ class _LiteDirective(SphinxDirective):
             rel_filename, notebook = self.env.relfn2path(self.arguments[0])
             self.env.note_dependency(rel_filename)
 
-            notebook_name = os.path.basename(notebook)
+            notebook_path = Path(notebook)
+            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            os.makedirs(notebooks_dir, exist_ok=True)
 
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
+            # For MyST Markdown notebooks, we create a unique target filename to avoid
+            # collisions with other IPyNB files that may have the same name.
+            if notebook_path.suffix.lower() == '.md':
+                target_name = f"{notebook_path.stem}_{uuid4().hex[:8]}.ipynb"
+                target_path = notebooks_dir / target_name
 
-            notebook_is_stripped: bool = self.env.config.strip_tagged_cells
+                nb = jupytext.read(str(notebook_path))
+                with open(target_path, 'w', encoding='utf-8') as f:
+                    nbformat.write(nb, f, version=4)
 
-            # Create a folder to copy the notebooks to and for NotebookLite to find
-            os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
-
-            if notebook_is_stripped:
-                # Note: the directives meant to be stripped must be inside their own
-                # cell so that the cell itself gets removed from the notebook. This
-                # is so that we don't end up removing useful data or directives that
-                # are not meant to be removed.
-
-                nb = nbformat.read(notebook, as_version=4)
-                nb.cells = [
-                    cell
-                    for cell in nb.cells
-                    if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
-                ]
-                nbformat.write(nb, notebooks_dir, version=4)
-
-            # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
-            # If it is True, then they have already been copied to notebooks_dir by the
-            # nbformat.write() function above.
+                notebook = str(target_path)
+                notebook_name = target_name
             else:
-                try:
-                    shutil.copy(notebook, notebooks_dir)
-                except shutil.SameFileError:
-                    pass
+                notebook_name = notebook_path.name
+                target_path = notebooks_dir / notebook_name
+
+                notebook_is_stripped: bool = self.env.config.strip_tagged_cells
+
+                if notebook_is_stripped:
+                    # Note: the directives meant to be stripped must be inside their own
+                    # cell so that the cell itself gets removed from the notebook. This
+                    # is so that we don't end up removing useful data or directives that
+                    # are not meant to be removed.
+
+                    nb = nbformat.read(notebook, as_version=4)
+                    nb.cells = [
+                        cell
+                        for cell in nb.cells
+                        if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
+                    ]
+                    nbformat.write(nb, target_path, version=4)
+
+                # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
+                # If it is True, then they have already been copied to notebooks_dir by the
+                # nbformat.write() function above.
+                else:
+                    try:
+                        shutil.copy(notebook, target_path)
+                    except shutil.SameFileError:
+                        pass
+
         else:
             notebook_name = None
 
