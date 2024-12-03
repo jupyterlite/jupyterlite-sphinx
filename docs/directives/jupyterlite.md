@@ -36,6 +36,24 @@ You can also pass a Notebook file to open automatically:
    :prompt_color: #00aa42
 ```
 
+The notebook can also be a MyST-flavoured Markdown file that will be converted to a Jupyter Notebook before being opened.
+
+```rst
+.. jupyterlite:: my_notebook.md
+   :width: 100%
+   :height: 600px
+   :prompt: Try JupyterLite!
+   :prompt_color: #00aa42
+```
+
+```{eval-rst}
+.. jupyterlite:: my_notebook.md
+   :width: 100%
+   :height: 600px
+   :prompt: Try JupyterLite!
+   :prompt_color: #00aa42
+```
+
 If you use the `:new_tab:` option in the directive, the Notebook will be opened in a new browser tab.
 
 ```rst
