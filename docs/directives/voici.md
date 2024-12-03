@@ -12,7 +12,10 @@
    :height: 600px
 ```
 
-You can provide a notebook that will be rendered with Voici:
+You can provide a notebook file (either Jupyter-based or MyST-Markdown flavoured) that will be
+rendered with Voici:
+
+1. Jupyter Notebook
 
 ```rst
 .. voici:: my_notebook.ipynb
@@ -26,6 +29,22 @@ You can provide a notebook that will be rendered with Voici:
    :height: 600px
    :prompt: Try Voici!
    :prompt_color: #dc3545
+```
+
+2. MyST Markdown
+
+```rst
+.. voici:: my_notebook.md
+   :height: 600px
+   :prompt: Try Voici!
+   :prompt_color: `#dc3545`
+```
+
+```{eval-rst}
+.. voici:: my_notebook.md
+   :height: 600px
+   :prompt: Try Voici!
+   :prompt_color: `#dc3545`
 ```
 
 If you use the `:new_tab:` option in the directive, the Voici dashboard will execute and render
