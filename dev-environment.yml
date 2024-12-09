@@ -6,6 +6,7 @@ dependencies:
     - jupyter_server
     - jupyterlab_server
     - jupyterlite-core >=0.3,<0.4
+    - jupytext
     - pydata-sphinx-theme
     - micromamba
     - myst-parser
