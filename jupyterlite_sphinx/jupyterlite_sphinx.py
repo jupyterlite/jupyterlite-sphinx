@@ -399,6 +399,19 @@ class _LiteDirective(SphinxDirective):
 
         return source_path.stat().st_mtime > target_path.stat().st_mtime
 
+    def _get_target_name(self, source_path: Path, notebooks_dir: Path) -> str:
+        """Get target filename. Here, we aim to handle potential collisions with
+        existing notebooks."""
+        base_target = f"{source_path.stem}.ipynb"
+        converted_target = f"{source_path.stem}.converted.ipynb"
+
+        # For MyST-flavoured files, check if a similarly-named IPyNB exists
+        # If it does, we will append ".converted.ipynb" to the target name.
+        if source_path.suffix.lower() == ".md":
+            if (notebooks_dir / base_target).exists():
+                return converted_target
+        return base_target
+
     def run(self):
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "1000px")
@@ -429,12 +442,13 @@ class _LiteDirective(SphinxDirective):
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             os.makedirs(notebooks_dir, exist_ok=True)
 
-            # For MyST Markdown notebooks, we create a unique target filename to avoid
-            # collisions with other IPyNB files that may have the same name.
-            if notebook_path.suffix.lower() == ".md":
-                target_name = f"{notebook_path.stem}.ipynb"
-                target_path = notebooks_dir / target_name
+            target_name = self._get_target_name(notebook_path, notebooks_dir)
+            target_path = notebooks_dir / target_name
 
+            # For MyST Markdown notebooks, we create a unique target filename
+            # via _get_target_name() to avoid collisions with other IPyNB files
+            # that may have the same name.
+            if notebook_path.suffix.lower() == ".md":
                 if self._should_convert_notebook(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
                     with open(target_path, "w", encoding="utf-8") as f:
