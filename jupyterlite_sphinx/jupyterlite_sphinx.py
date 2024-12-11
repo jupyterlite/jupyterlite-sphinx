@@ -405,12 +405,39 @@ class _LiteDirective(SphinxDirective):
         base_target = f"{source_path.stem}.ipynb"
         converted_target = f"{source_path.stem}.converted.ipynb"
 
-        # For MyST-flavoured files, check if a similarly-named IPyNB exists
-        # If it does, we will append ".converted.ipynb" to the target name.
+        # For MyST-flavoured files, check for the edge case where an IPyNB
+        # of the same name exists.
+        # If it does, we will append ".converted.ipynb" to the target name
+        # so that both can coexist in the same directory.
         if source_path.suffix.lower() == ".md":
             if (notebooks_dir / base_target).exists():
                 return converted_target
         return base_target
+
+    def _strip_notebook_cells(
+        self, nb: nbformat.NotebookNode
+    ) -> List[nbformat.NotebookNode]:
+        """Strip cells based on the presence of the "jupyterlite_sphinx_strip" tag
+        in the metadata. The content meant to be stripped must be inside its own cell
+        cell so that the cell itself gets removed from the notebooks. This is so that
+        we don't end up removing useful data or directives that are not meant to be
+        removed.
+
+        Parameters
+        ----------
+        nb : nbformat.NotebookNode
+            The notebook object to be stripped.
+
+        Returns
+        -------
+        List[nbformat.NotebookNode]
+            A list of cells that are not meant to be stripped.
+        """
+        return [
+            cell
+            for cell in nb.cells
+            if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
+        ]
 
     def run(self):
         width = self.options.pop("width", "100%")
@@ -445,12 +472,16 @@ class _LiteDirective(SphinxDirective):
             target_name = self._get_target_name(notebook_path, notebooks_dir)
             target_path = notebooks_dir / target_name
 
+            notebook_is_stripped: bool = self.env.config.strip_tagged_cells
+
             # For MyST Markdown notebooks, we create a unique target filename
             # via _get_target_name() to avoid collisions with other IPyNB files
             # that may have the same name.
             if notebook_path.suffix.lower() == ".md":
                 if self._should_convert_notebook(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
+                    if notebook_is_stripped:
+                        nb.cells = self._strip_notebook_cells(nb)
                     with open(target_path, "w", encoding="utf-8") as f:
                         nbformat.write(nb, f, version=4)
 
@@ -460,23 +491,10 @@ class _LiteDirective(SphinxDirective):
                 notebook_name = notebook_path.name
                 target_path = notebooks_dir / notebook_name
 
-                notebook_is_stripped: bool = self.env.config.strip_tagged_cells
-
                 if notebook_is_stripped:
-                    # Note: the directives meant to be stripped must be inside their own
-                    # cell so that the cell itself gets removed from the notebook. This
-                    # is so that we don't end up removing useful data or directives that
-                    # are not meant to be removed.
-
                     nb = nbformat.read(notebook, as_version=4)
-                    nb.cells = [
-                        cell
-                        for cell in nb.cells
-                        if "jupyterlite_sphinx_strip"
-                        not in cell.metadata.get("tags", [])
-                    ]
+                    nb.cells = self._strip_notebook_cells(nb)
                     nbformat.write(nb, target_path, version=4)
-
                 # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
                 # If it is True, then they have already been copied to notebooks_dir by the
                 # nbformat.write() function above.
