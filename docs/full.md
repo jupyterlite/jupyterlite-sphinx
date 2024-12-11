@@ -14,4 +14,4 @@ You can access the JupyterLite deployment that `jupyterlite-sphinx` made for you
 
 ```
 
-If you want to open a specific notebook in fullscreen JupyterLab/Notebook, you can use the `path` URL parameter, e.g. `./lite/lab/?path=my_noteboook.ipynb`.
+If you want to open a specific notebook in fullscreen JupyterLab/Notebook, you can use the `path` URL parameter, e.g. `./lite/lab/index.html?path=my_noteboook.ipynb`.
