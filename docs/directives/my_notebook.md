@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-# This is a Jupyter Notebook
+# This is a MyST Markdown-flavoured notebook
 
 ```{code-cell} ipython3
 def foo():
@@ -20,8 +20,4 @@ def foo():
 
 ```{code-cell} ipython3
 foo()
-```
-
-```{code-cell} ipython3
-
 ```
