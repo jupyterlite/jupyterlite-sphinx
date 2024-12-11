@@ -204,7 +204,15 @@ class JupyterLiteIframe(_LiteIframe):
     notebooks_path = ""
 
 
-class JupyterLiteTab(_InTab):
+class BaseNotebookTab(_InTab):
+    """Base class for notebook tab implementations. We subclass this
+    to create more specific configurations around how tabs are rendered."""
+
+    lite_app = None
+    notebooks_path = None
+
+
+class JupyterLiteTab(BaseNotebookTab):
     """Appended to the doctree by the JupyterliteDirective directive
 
     Renders a button that opens a Notebook with JupyterLite in a new tab.
@@ -212,6 +220,16 @@ class JupyterLiteTab(_InTab):
 
     lite_app = "lab/"
     notebooks_path = ""
+
+
+class NotebookLiteTab(BaseNotebookTab):
+    """Appended to the doctree by the NotebookliteDirective directive
+
+    Renders a button that opens a Notebook with NotebookLite in a new tab.
+    """
+
+    lite_app = "tree/"
+    notebooks_path = "../notebooks/"
 
 
 class NotebookLiteIframe(_LiteIframe):
@@ -400,7 +418,24 @@ class _LiteDirective(SphinxDirective):
         ]
 
 
-class JupyterLiteDirective(_LiteDirective):
+class BaseNotebookDirective(_LiteDirective):
+    """Base class for notebook directives."""
+
+    iframe_cls = None  # to be defined by subclasses
+    newtab_cls = None  # to be defined by subclasses
+
+    option_spec = {
+        "width": directives.unchanged,
+        "height": directives.unchanged,
+        "theme": directives.unchanged,
+        "prompt": directives.unchanged,
+        "prompt_color": directives.unchanged,
+        "search_params": directives.unchanged,
+        "new_tab": directives.unchanged,
+    }
+
+
+class JupyterLiteDirective(BaseNotebookDirective):
     """The ``.. jupyterlite::`` directive.
 
     Renders a Notebook with JupyterLite in the docs.
@@ -410,13 +445,14 @@ class JupyterLiteDirective(_LiteDirective):
     newtab_cls = JupyterLiteTab
 
 
-class NotebookLiteDirective(_LiteDirective):
+class NotebookLiteDirective(BaseNotebookDirective):
     """The ``.. notebooklite::`` directive.
 
     Renders a Notebook with NotebookLite in the docs.
     """
 
     iframe_cls = NotebookLiteIframe
+    newtab_cls = NotebookLiteTab
 
 
 class VoiciDirective(_LiteDirective):
@@ -810,14 +846,15 @@ def setup(app):
         text=(skip, None),
         man=(skip, None),
     )
-    app.add_node(
-        JupyterLiteTab,
-        html=(visit_element_html, None),
-        latex=(skip, None),
-        textinfo=(skip, None),
-        text=(skip, None),
-        man=(skip, None),
-    )
+    for node_class in [NotebookLiteTab, JupyterLiteTab]:
+        app.add_node(
+            node_class,
+            html=(visit_element_html, None),
+            latex=(skip, None),
+            textinfo=(skip, None),
+            text=(skip, None),
+            man=(skip, None),
+        )
     app.add_directive("jupyterlite", JupyterLiteDirective)
 
     # Initialize Replite directive
