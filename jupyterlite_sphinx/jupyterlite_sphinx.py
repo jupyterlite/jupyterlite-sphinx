@@ -129,7 +129,9 @@ class _InTab(Element):
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
-        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        self.lab_src = (
+            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        )
 
         super().__init__(
             rawsource,
@@ -170,7 +172,7 @@ class _LiteIframe(_PromptedIframe):
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         if "iframe_src" in attributes:
             if attributes["iframe_src"] != iframe_src:
@@ -276,7 +278,7 @@ class VoiciIframe(_PromptedIframe):
         )
 
         # If a notebook is provided, open it in the render view. Else, we default to the tree view.
-        iframe_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
@@ -304,7 +306,9 @@ class VoiciTab(Element):
         )
 
         # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
-        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        self.lab_src = (
+            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        )
 
         super().__init__(
             rawsource,
