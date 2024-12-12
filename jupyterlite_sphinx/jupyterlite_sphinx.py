@@ -242,6 +242,21 @@ class NotebookLiteIframe(_LiteIframe):
     notebooks_path = "../notebooks/"
 
 
+class VoiciBase:
+    """Base class with common Voici application paths and URL structure"""
+
+    lite_app = "voici/"
+
+    @classmethod
+    def get_full_path(cls, notebook=None):
+        """Get the complete Voici path based on whether a notebook is provided."""
+        if notebook is not None:
+            # For notebooks, use render path with html extension
+            return f"{cls.lite_app}render/{notebook.replace('.ipynb', '.html')}"
+        # Default to tree view
+        return f"{cls.lite_app}tree"
+
+
 class VoiciIframe(_PromptedIframe):
     """Appended to the doctree by the VoiciDirective directive
 
@@ -257,18 +272,53 @@ class VoiciIframe(_PromptedIframe):
         lite_options={},
         **attributes,
     ):
-        if notebook is not None:
-            app_path = f"voici/render/{notebook.replace('.ipynb', '.html')}"
-        else:
-            app_path = "voici/tree"
-
+        app_path = VoiciBase.get_full_path(notebook)
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
+        # If a notebook is provided, open it in the render view. Else, we default to the tree view.
         iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
+
+
+# We do not inherit from BaseNotebookTab here because
+# Voici has a different URL structure.
+class VoiciTab(Element):
+    """Tabbed implementation for the Voici interface"""
+
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+
+        self.lab_src = f"{prefix}/"
+
+        app_path = VoiciBase.get_full_path(notebook)
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
+        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(
+            rawsource,
+            **attributes,
+        )
+
+    def html(self):
+        return (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.open('{self.lab_src}')\">"
+            "Open with Voici</button>"
+        )
 
 
 class RepliteDirective(SphinxDirective):
@@ -418,8 +468,8 @@ class _LiteDirective(SphinxDirective):
         ]
 
 
-class BaseNotebookDirective(_LiteDirective):
-    """Base class for notebook directives."""
+class BaseJupyterViewDirective(_LiteDirective):
+    """Base class for jupyterlite-sphinx directives."""
 
     iframe_cls = None  # to be defined by subclasses
     newtab_cls = None  # to be defined by subclasses
@@ -435,7 +485,7 @@ class BaseNotebookDirective(_LiteDirective):
     }
 
 
-class JupyterLiteDirective(BaseNotebookDirective):
+class JupyterLiteDirective(BaseJupyterViewDirective):
     """The ``.. jupyterlite::`` directive.
 
     Renders a Notebook with JupyterLite in the docs.
@@ -445,7 +495,7 @@ class JupyterLiteDirective(BaseNotebookDirective):
     newtab_cls = JupyterLiteTab
 
 
-class NotebookLiteDirective(BaseNotebookDirective):
+class NotebookLiteDirective(BaseJupyterViewDirective):
     """The ``.. notebooklite::`` directive.
 
     Renders a Notebook with NotebookLite in the docs.
@@ -455,13 +505,14 @@ class NotebookLiteDirective(BaseNotebookDirective):
     newtab_cls = NotebookLiteTab
 
 
-class VoiciDirective(_LiteDirective):
+class VoiciDirective(BaseJupyterViewDirective):
     """The ``.. voici::`` directive.
 
     Renders a Notebook with Voici in the docs.
     """
 
     iframe_cls = VoiciIframe
+    newtab_cls = VoiciTab
 
     def run(self):
         if voici is None:
@@ -868,9 +919,17 @@ def setup(app):
     )
     app.add_directive("replite", RepliteDirective)
 
-    # Initialize Voici directive
+    # Initialize Voici directive and tabbed interface
     app.add_node(
         VoiciIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_node(
+        VoiciTab,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),
