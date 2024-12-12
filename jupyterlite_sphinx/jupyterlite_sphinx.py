@@ -743,6 +743,7 @@ def jupyterlite_build(app: Sphinx, error):
     if app.builder.format == "html":
         print("[jupyterlite-sphinx] Running JupyterLite build")
         jupyterlite_config = app.env.config.jupyterlite_config
+        jupyterlite_overrides = app.env.config.jupyterlite_overrides
         jupyterlite_contents = app.env.config.jupyterlite_contents
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
@@ -752,8 +753,23 @@ def jupyterlite_build(app: Sphinx, error):
         )
 
         config = []
+        overrides = []
         if jupyterlite_config:
             config = ["--config", jupyterlite_config]
+
+        if jupyterlite_overrides:
+            # JupyterLite's build command does not validate the existence
+            # of the JSON file, so we do it ourselves.
+            # We will raise a FileNotFoundError if the file does not exist
+            # in the Sphinx project directory.
+            overrides_path = Path(app.srcdir) / jupyterlite_overrides
+            if not Path(overrides_path).exists():
+                raise FileNotFoundError(
+                    f"Overrides file {overrides_path} does not exist. "
+                    "Please check your configuration."
+                )
+
+            overrides = ["--settings-overrides", jupyterlite_overrides]
 
         if jupyterlite_contents is None:
             jupyterlite_contents = []
@@ -783,6 +799,7 @@ def jupyterlite_build(app: Sphinx, error):
             "build",
             "--debug",
             *config,
+            *overrides,
             *contents,
             "--contents",
             os.path.join(app.srcdir, CONTENT_DIR),
@@ -859,6 +876,7 @@ def setup(app):
 
     # Config options
     app.add_config_value("jupyterlite_config", None, rebuild="html")
+    app.add_config_value("jupyterlite_overrides", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", str(app.srcdir), rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
