@@ -190,7 +190,7 @@ class RepliteIframe(_LiteIframe):
     Renders an iframe that shows a repl with JupyterLite.
     """
 
-    lite_app = "repl/index.html"
+    lite_app = "repl/"
     notebooks_path = ""
 
 
