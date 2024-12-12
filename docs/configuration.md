@@ -49,6 +49,14 @@ dependencies:
 You can provide [custom configuration files](https://jupyterlite.readthedocs.io/en/latest/howto/configure/config_files.html)
 to your JupyterLite deployment for build-time configuration and settings overrides.
 
+The build-time configuration can be used to change the default settings for JupyterLite, such
+as changing which assets are included, the locations of the assets, which plugins are enabled,
+and more.
+
+The runtime configuration can be used to change the settings of the JupyterLite deployment
+after it has been built, such as changing the theme, the default kernel, the default language,
+and more.
+
 <!-- TODO: Run-time configuration via `jupyter-lite.json` not added yet here
 because I can't yet find a direct jupyter lite CLI mapping for that option -->
 
