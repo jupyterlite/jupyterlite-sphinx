@@ -263,8 +263,7 @@ class RepliteTab(Element):
         if content:
             code_lines: list[str] = ["" if not line.strip() else line for line in content]
             code = "\n".join(code_lines)
-            # Encode into RFC 3986 format
-            lite_options["code"] = quote(code)
+            lite_options["code"] = code
 
         app_path = self.lite_app
         if notebook is not None:
