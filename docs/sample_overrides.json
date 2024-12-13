@@ -1,0 +1,20 @@
+{
+  "@jupyterlab/notebook-extension:panel": {
+    "toolbar": [
+      {
+        "name": "download",
+        "label": "Download",
+        "args": {},
+        "command": "docmanager:download",
+        "icon": "ui-components:download",
+        "rank": 50
+      }
+    ]
+  },
+  "@jupyterlab/apputils-extension:themes": {
+    "theme": "JupyterLab Christmas"
+  },
+  "@jupyter-notebook/application-extension:top": {
+    "visible": "no"
+  }
+}

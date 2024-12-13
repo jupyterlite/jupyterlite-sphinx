@@ -13,6 +13,13 @@ jupyterlite_contents = "./custom_contents"
 jupyterlite_bind_ipynb_suffix = False
 strip_tagged_cells = True
 
+# Enable this to use the provided sample overrides JSON file.
+# jupyterlite_overrides = "sample_overrides.json"
+
+# Enable this to unsilence JupyterLite and aid debugging
+# within our own documentation.
+# jupyterlite_silence = False
+
 master_doc = "index"
 
 # General information about the project.
