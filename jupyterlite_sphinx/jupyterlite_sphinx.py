@@ -236,6 +236,64 @@ class NotebookLiteTab(BaseNotebookTab):
     notebooks_path = "../notebooks/"
 
 
+# We do not inherit from _InTab here because Replite
+# has a different URL structure and we need to ensure
+# that the code is serialised to be passed to the URL.
+class RepliteTab(Element):
+    """Appended to the doctree by the RepliteDirective directive
+
+    Renders a button that opens a REPL with JupyterLite in a new tab.
+    """
+    lite_app = "repl/"
+    notebooks_path = ""
+
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        content=[],
+        notebook=None,
+        lite_options={},
+        button_text=None,
+        **attributes,
+    ):
+        # For a new-tabbed variant, we need to ensure we process the content
+        # into properly encoded code for passing it to the URL.
+        if content:
+            code_lines: list[str] = ["" if not line.strip() else line for line in content]
+            code = "\n".join(code_lines)
+            # Encode into RFC 3986 format
+            lite_options["code"] = quote(code)
+
+        app_path = self.lite_app
+        if notebook is not None:
+            lite_options["path"] = notebook
+            app_path = f"{self.lite_app}{self.notebooks_path}"
+
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        self.lab_src = (
+            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        )
+
+        self.button_text = button_text
+
+        super().__init__(
+            rawsource,
+            **attributes,
+        )
+
+    def html(self):
+        return (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.open('{self.lab_src}')\">"
+            f"{self.button_text}</button>"
+        )
+
+
 class NotebookLiteIframe(_LiteIframe):
     """Appended to the doctree by the NotebookliteDirective directive
 
@@ -345,6 +403,8 @@ class RepliteDirective(SphinxDirective):
         "prompt": directives.unchanged,
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
+        "new_tab": directives.unchanged,
+        "button_text": directives.unchanged,
     }
 
     def run(self):
@@ -356,10 +416,42 @@ class RepliteDirective(SphinxDirective):
 
         search_params = search_params_parser(self.options.pop("search_params", False))
 
+        new_tab = self.options.pop("new_tab", False)
+
+        content = self.content
+
+        button_text = None
+
         prefix = os.path.relpath(
             os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
             os.path.dirname(self.get_source_info()[0]),
         )
+
+        if new_tab:
+            directive_button_text = self.options.pop("button_text", None)
+            if directive_button_text is not None:
+                button_text = directive_button_text
+            else:
+                button_text = self.env.config.replite_button_text
+        elif "button_text" in self.options:
+            raise ValueError(
+                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
+            )
+
+        if new_tab:
+            return [
+                RepliteTab(
+                    prefix=prefix,
+                    width=width,
+                    height=height,
+                    prompt=prompt,
+                    prompt_color=prompt_color,
+                    content=content,
+                    search_params=search_params,
+                    lite_options=self.options,
+                    button_text=button_text,
+                )
+            ]
 
         return [
             RepliteIframe(
@@ -368,7 +460,7 @@ class RepliteDirective(SphinxDirective):
                 height=height,
                 prompt=prompt,
                 prompt_color=prompt_color,
-                content=self.content,
+                content=content,
                 search_params=search_params,
                 lite_options=self.options,
             )
@@ -936,6 +1028,7 @@ def setup(app):
         "notebooklite_button_text", "Open as a notebook", rebuild="html"
     )
     app.add_config_value("voici_button_text", "Open with Voici", rebuild="html")
+    app.add_config_value("replite_button_text", "Open in a REPL", rebuild="html")
 
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
@@ -968,9 +1061,17 @@ def setup(app):
         )
     app.add_directive("jupyterlite", JupyterLiteDirective)
 
-    # Initialize Replite directive
+    # Initialize Replite directive and tab
     app.add_node(
         RepliteIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_node(
+        RepliteTab,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),
