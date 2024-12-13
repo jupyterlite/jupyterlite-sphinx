@@ -244,6 +244,7 @@ class RepliteTab(Element):
 
     Renders a button that opens a REPL with JupyterLite in a new tab.
     """
+
     lite_app = "repl/"
     notebooks_path = ""
 
@@ -261,7 +262,9 @@ class RepliteTab(Element):
         # For a new-tabbed variant, we need to ensure we process the content
         # into properly encoded code for passing it to the URL.
         if content:
-            code_lines: list[str] = ["" if not line.strip() else line for line in content]
+            code_lines: list[str] = [
+                "" if not line.strip() else line for line in content
+            ]
             code = "\n".join(code_lines)
             lite_options["code"] = code
 
