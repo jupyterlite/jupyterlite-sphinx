@@ -46,7 +46,7 @@ dependencies:
 
 ## JupyterLite configuration
 
-You can provide [custom configuration files](https://jupyterlite.readthedocs.io/en/latest/howto/configure/config_files.html)
+You can provide [custom configuration files](https://jupyterlite.readthedocs.io/en/stable/howto/configure/config_files.html)
 to your JupyterLite deployment for build-time configuration and settings overrides.
 
 The build-time configuration can be used to change the default settings for JupyterLite, such
