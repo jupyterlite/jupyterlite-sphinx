@@ -41,3 +41,17 @@ the notebook in a new browser tab, instead of in the current page.
    :new_tab: True
 ```
 
+When using this option, it is also possible to customise the button text, overriding the
+global value using an additional `:button_text:` parameter:
+
+```rst
+.. voici:: my_notebook.ipynb
+   :new_tab: True
+   :button_text: My custom Voici button text
+```
+
+```{eval-rst}
+.. voici:: my_notebook.ipynb
+   :new_tab: True
+   :button_text: My custom Voici button text
+```

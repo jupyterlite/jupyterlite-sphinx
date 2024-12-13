@@ -119,6 +119,7 @@ class _InTab(Element):
         prefix=JUPYTERLITE_DIR,
         notebook=None,
         lite_options={},
+        button_text=None,
         **attributes,
     ):
         app_path = self.lite_app
@@ -133,6 +134,8 @@ class _InTab(Element):
             f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
         )
 
+        self.button_text = button_text
+
         super().__init__(
             rawsource,
             **attributes,
@@ -142,7 +145,7 @@ class _InTab(Element):
         return (
             '<button class="try_examples_button" '
             f"onclick=\"window.open('{self.lab_src}')\">"
-            "Open as a notebook</button>"
+            f"{self.button_text}</button>"
         )
 
 
@@ -210,6 +213,7 @@ class BaseNotebookTab(_InTab):
 
     lite_app = None
     notebooks_path = None
+    default_button_text = "Open as a notebook"
 
 
 class JupyterLiteTab(BaseNotebookTab):
@@ -295,6 +299,7 @@ class VoiciTab(Element):
         prefix=JUPYTERLITE_DIR,
         notebook=None,
         lite_options={},
+        button_text=None,
         **attributes,
     ):
 
@@ -308,6 +313,8 @@ class VoiciTab(Element):
         # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
         self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
 
+        self.button_text = button_text
+
         super().__init__(
             rawsource,
             **attributes,
@@ -317,7 +324,7 @@ class VoiciTab(Element):
         return (
             '<button class="try_examples_button" '
             f"onclick=\"window.open('{self.lab_src}')\">"
-            "Open with Voici</button>"
+            f"{self.button_text}</button>"
         )
 
 
@@ -380,6 +387,7 @@ class _LiteDirective(SphinxDirective):
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
+        "button_text": directives.unchanged,
     }
 
     def run(self):
@@ -392,6 +400,8 @@ class _LiteDirective(SphinxDirective):
         search_params = search_params_parser(self.options.pop("search_params", False))
 
         new_tab = self.options.pop("new_tab", False)
+
+        button_text = None
 
         source_location = os.path.dirname(self.get_source_info()[0])
 
@@ -441,6 +451,24 @@ class _LiteDirective(SphinxDirective):
             notebook_name = None
 
         if new_tab:
+            directive_button_text = self.options.pop("button_text", None)
+            if directive_button_text is not None:
+                button_text = directive_button_text
+            else:
+                # If none, we use the appropriate global config based on
+                # the type of directive passed.
+                if isinstance(self, JupyterLiteDirective):
+                    button_text = self.env.config.jupyterlite_button_text
+                elif isinstance(self, NotebookLiteDirective):
+                    button_text = self.env.config.notebooklite_button_text
+                elif isinstance(self, VoiciDirective):
+                    button_text = self.env.config.voici_button_text
+        elif "button_text" in self.options:
+            raise ValueError(
+                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
+            )
+
+        if new_tab:
             return [
                 self.newtab_cls(
                     prefix=prefix,
@@ -451,6 +479,7 @@ class _LiteDirective(SphinxDirective):
                     prompt_color=prompt_color,
                     search_params=search_params,
                     lite_options=self.options,
+                    button_text=button_text,
                 )
             ]
 
@@ -482,6 +511,9 @@ class BaseJupyterViewDirective(_LiteDirective):
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
+        # "button_text" below is valid only if "new_tab" is True, otherwise
+        # we have "prompt" and "prompt_color" as options already.
+        "button_text": directives.unchanged,
     }
 
 
@@ -894,6 +926,16 @@ def setup(app):
         default=None,
         rebuild="html",
     )
+
+    # Allow customising the button text for each directive (only when "new_tab" is True,
+    # error otherwise)
+    app.add_config_value(
+        "jupyterlite_button_text", "Open as a notebook", rebuild="html"
+    )
+    app.add_config_value(
+        "notebooklite_button_text", "Open as a notebook", rebuild="html"
+    )
+    app.add_config_value("voici_button_text", "Open with Voici", rebuild="html")
 
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
