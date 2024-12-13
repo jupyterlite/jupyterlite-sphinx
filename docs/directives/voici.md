@@ -27,3 +27,17 @@ You can provide a notebook that will be rendered with Voici:
    :prompt: Try Voici!
    :prompt_color: #dc3545
 ```
+
+If you use the `:new_tab:` option in the directive, the Voici dashboard will execute and render
+the notebook in a new browser tab, instead of in the current page.
+
+```rst
+.. voici:: my_notebook.ipynb
+   :new_tab: True
+```
+
+```{eval-rst}
+.. voici:: my_notebook.ipynb
+   :new_tab: True
+```
+

@@ -204,7 +204,15 @@ class JupyterLiteIframe(_LiteIframe):
     notebooks_path = ""
 
 
-class JupyterLiteTab(_InTab):
+class BaseNotebookTab(_InTab):
+    """Base class for notebook tab implementations. We subclass this
+    to create more specific configurations around how tabs are rendered."""
+
+    lite_app = None
+    notebooks_path = None
+
+
+class JupyterLiteTab(BaseNotebookTab):
     """Appended to the doctree by the JupyterliteDirective directive
 
     Renders a button that opens a Notebook with JupyterLite in a new tab.
@@ -212,6 +220,16 @@ class JupyterLiteTab(_InTab):
 
     lite_app = "lab/"
     notebooks_path = ""
+
+
+class NotebookLiteTab(BaseNotebookTab):
+    """Appended to the doctree by the NotebookliteDirective directive
+
+    Renders a button that opens a Notebook with NotebookLite in a new tab.
+    """
+
+    lite_app = "tree/"
+    notebooks_path = "../notebooks/"
 
 
 class NotebookLiteIframe(_LiteIframe):
@@ -222,6 +240,21 @@ class NotebookLiteIframe(_LiteIframe):
 
     lite_app = "tree/"
     notebooks_path = "../notebooks/"
+
+
+class VoiciBase:
+    """Base class with common Voici application paths and URL structure"""
+
+    lite_app = "voici/"
+
+    @classmethod
+    def get_full_path(cls, notebook=None):
+        """Get the complete Voici path based on whether a notebook is provided."""
+        if notebook is not None:
+            # For notebooks, use render path with html extension
+            return f"{cls.lite_app}render/{notebook.replace('.ipynb', '.html')}"
+        # Default to tree view
+        return f"{cls.lite_app}tree"
 
 
 class VoiciIframe(_PromptedIframe):
@@ -239,18 +272,53 @@ class VoiciIframe(_PromptedIframe):
         lite_options={},
         **attributes,
     ):
-        if notebook is not None:
-            app_path = f"voici/render/{notebook.replace('.ipynb', '.html')}"
-        else:
-            app_path = "voici/tree"
-
+        app_path = VoiciBase.get_full_path(notebook)
         options = "&".join(
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
+        # If a notebook is provided, open it in the render view. Else, we default to the tree view.
         iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
+
+
+# We do not inherit from BaseNotebookTab here because
+# Voici has a different URL structure.
+class VoiciTab(Element):
+    """Tabbed implementation for the Voici interface"""
+
+    def __init__(
+        self,
+        rawsource="",
+        *children,
+        prefix=JUPYTERLITE_DIR,
+        notebook=None,
+        lite_options={},
+        **attributes,
+    ):
+
+        self.lab_src = f"{prefix}/"
+
+        app_path = VoiciBase.get_full_path(notebook)
+        options = "&".join(
+            [f"{key}={quote(value)}" for key, value in lite_options.items()]
+        )
+
+        # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
+        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+
+        super().__init__(
+            rawsource,
+            **attributes,
+        )
+
+    def html(self):
+        return (
+            '<button class="try_examples_button" '
+            f"onclick=\"window.open('{self.lab_src}')\">"
+            "Open with Voici</button>"
+        )
 
 
 class RepliteDirective(SphinxDirective):
@@ -400,7 +468,24 @@ class _LiteDirective(SphinxDirective):
         ]
 
 
-class JupyterLiteDirective(_LiteDirective):
+class BaseJupyterViewDirective(_LiteDirective):
+    """Base class for jupyterlite-sphinx directives."""
+
+    iframe_cls = None  # to be defined by subclasses
+    newtab_cls = None  # to be defined by subclasses
+
+    option_spec = {
+        "width": directives.unchanged,
+        "height": directives.unchanged,
+        "theme": directives.unchanged,
+        "prompt": directives.unchanged,
+        "prompt_color": directives.unchanged,
+        "search_params": directives.unchanged,
+        "new_tab": directives.unchanged,
+    }
+
+
+class JupyterLiteDirective(BaseJupyterViewDirective):
     """The ``.. jupyterlite::`` directive.
 
     Renders a Notebook with JupyterLite in the docs.
@@ -410,22 +495,24 @@ class JupyterLiteDirective(_LiteDirective):
     newtab_cls = JupyterLiteTab
 
 
-class NotebookLiteDirective(_LiteDirective):
+class NotebookLiteDirective(BaseJupyterViewDirective):
     """The ``.. notebooklite::`` directive.
 
     Renders a Notebook with NotebookLite in the docs.
     """
 
     iframe_cls = NotebookLiteIframe
+    newtab_cls = NotebookLiteTab
 
 
-class VoiciDirective(_LiteDirective):
+class VoiciDirective(BaseJupyterViewDirective):
     """The ``.. voici::`` directive.
 
     Renders a Notebook with Voici in the docs.
     """
 
     iframe_cls = VoiciIframe
+    newtab_cls = VoiciTab
 
     def run(self):
         if voici is None:
@@ -810,14 +897,15 @@ def setup(app):
         text=(skip, None),
         man=(skip, None),
     )
-    app.add_node(
-        JupyterLiteTab,
-        html=(visit_element_html, None),
-        latex=(skip, None),
-        textinfo=(skip, None),
-        text=(skip, None),
-        man=(skip, None),
-    )
+    for node_class in [NotebookLiteTab, JupyterLiteTab]:
+        app.add_node(
+            node_class,
+            html=(visit_element_html, None),
+            latex=(skip, None),
+            textinfo=(skip, None),
+            text=(skip, None),
+            man=(skip, None),
+        )
     app.add_directive("jupyterlite", JupyterLiteDirective)
 
     # Initialize Replite directive
@@ -831,9 +919,17 @@ def setup(app):
     )
     app.add_directive("replite", RepliteDirective)
 
-    # Initialize Voici directive
+    # Initialize Voici directive and tabbed interface
     app.add_node(
         VoiciIframe,
+        html=(visit_element_html, None),
+        latex=(skip, None),
+        textinfo=(skip, None),
+        text=(skip, None),
+        man=(skip, None),
+    )
+    app.add_node(
+        VoiciTab,
         html=(visit_element_html, None),
         latex=(skip, None),
         textinfo=(skip, None),

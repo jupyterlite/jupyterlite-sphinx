@@ -37,6 +37,8 @@ You can also pass a Notebook file to open automatically:
 ```
 
 If you use the `:new_tab:` option in the directive, the Notebook will be opened in a new browser tab.
+The tab will render the full-fledged Lab interface, which is more complete and showcases all features
+of JupyterLite.
 
 ```rst
 .. jupyterlite:: my_notebook.ipynb
