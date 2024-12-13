@@ -464,7 +464,9 @@ class _LiteDirective(SphinxDirective):
                 elif isinstance(self, VoiciDirective):
                     button_text = self.env.config.voici_button_text
         elif "button_text" in self.options:
-            raise ValueError("'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'.")
+            raise ValueError(
+                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
+            )
 
         if new_tab:
             return [
@@ -927,8 +929,12 @@ def setup(app):
 
     # Allow customising the button text for each directive (only when "new_tab" is True,
     # error otherwise)
-    app.add_config_value("jupyterlite_button_text", "Open as a notebook", rebuild="html")
-    app.add_config_value("notebooklite_button_text", "Open as a notebook", rebuild="html")
+    app.add_config_value(
+        "jupyterlite_button_text", "Open as a notebook", rebuild="html"
+    )
+    app.add_config_value(
+        "notebooklite_button_text", "Open as a notebook", rebuild="html"
+    )
     app.add_config_value("voici_button_text", "Open with Voici", rebuild="html")
 
     # Initialize NotebookLite and JupyterLite directives
