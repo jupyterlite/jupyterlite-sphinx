@@ -50,6 +50,23 @@ of JupyterLite.
    :new_tab: True
 ```
 
+When using this option, it is also possible to customise the button text, overriding the
+global value using an additional `:button_text:` parameter:
+
+```rst
+.. jupyterlite:: my_notebook.ipynb
+   :new_tab: True
+   :button_text: My custom JupyterLite button text
+```
+
+```{eval-rst}
+.. jupyterlite:: my_notebook.ipynb
+   :new_tab: True
+   :button_text: My custom JupyterLite button text
+```
+
+## Search parameters
+
 The directive `search_params` allows to transfer some search parameters from the documentation URL to the Jupyterlite URL.\
 Jupyterlite will then be able to fetch these parameters from its own URL.\
 For example `:search_params: ["param1", "param2"]` will transfer the parameters *param1* and *param2*.
