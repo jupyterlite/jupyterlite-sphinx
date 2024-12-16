@@ -34,14 +34,14 @@ rendered with Voici:
 2. MyST Markdown
 
 ```rst
-.. voici:: my_notebook.md
+.. voici:: my_markdown_notebook.md
    :height: 600px
    :prompt: Try Voici!
    :prompt_color: `#dc3545`
 ```
 
 ```{eval-rst}
-.. voici:: my_notebook.md
+.. voici:: my_markdown_notebook.md
    :height: 600px
    :prompt: Try Voici!
    :prompt_color: `#dc3545`

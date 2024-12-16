@@ -39,7 +39,7 @@ You can also pass a Notebook file to open automatically:
 The notebook can also be a MyST-flavoured Markdown file that will be converted to a Jupyter Notebook before being opened.
 
 ```rst
-.. jupyterlite:: my_notebook.md
+.. jupyterlite:: my_markdown_notebook.md
    :width: 100%
    :height: 600px
    :prompt: Try JupyterLite!
@@ -47,7 +47,7 @@ The notebook can also be a MyST-flavoured Markdown file that will be converted t
 ```
 
 ```{eval-rst}
-.. jupyterlite:: my_notebook.md
+.. jupyterlite:: my_markdown_notebook.md
    :width: 100%
    :height: 600px
    :prompt: Try JupyterLite!

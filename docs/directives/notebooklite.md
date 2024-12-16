@@ -37,14 +37,14 @@ You can provide a notebook (either Jupyter-based or MyST-Markdown flavoured) to 
 2. MyST Markdown
 
 ```rst
-.. notebooklite:: my_notebook.md
+.. notebooklite:: my_markdown_notebook.md
    :width: 100%
    :height: 600px
    :prompt: Try classic Notebook!
 ```
 
 ```{eval-rst}
-.. notebooklite:: my_notebook.md
+.. notebooklite:: my_markdown_notebook.md
    :width: 100%
    :height: 600px
    :prompt: Try classic Notebook!
