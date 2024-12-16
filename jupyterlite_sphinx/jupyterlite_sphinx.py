@@ -485,7 +485,7 @@ class _LiteDirective(SphinxDirective):
             # operate on notebooks that are not meant to be included in the built
             # docs, i.e., those that have not been referenced in the docs via our
             # directives anywhere.
-            if not hasattr(self.env, 'jupyterlite_notebooks'):
+            if not hasattr(self.env, "jupyterlite_notebooks"):
                 self.env.jupyterlite_notebooks = set()
 
             # As with other directives like literalinclude, an absolute path is
