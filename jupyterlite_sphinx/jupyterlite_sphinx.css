@@ -75,3 +75,9 @@
     display: none;
   }
 }
+
+a.try_examples_button {
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
