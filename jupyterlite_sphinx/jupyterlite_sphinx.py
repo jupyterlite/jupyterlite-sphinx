@@ -404,7 +404,7 @@ class _LiteDirective(SphinxDirective):
     # we should also consider them here.
     def _get_target_name(self, source_path: Path, notebooks_dir: Path) -> str:
         """Get the target filename. Here, we aim to prevent duplicate notebook names,
-        regardless of the file extension."""
+        regardless of their file extension."""
         target_stem = source_path.stem
         target_ipynb = f"{target_stem}.ipynb"
 
@@ -415,23 +415,26 @@ class _LiteDirective(SphinxDirective):
         # directory as a result of a previous failed/interrupted build.
         if source_path.parent != notebooks_dir:
 
-            for ext in [".md", ".ipynb"]:
-                potential_conflict = source_path.parent / f"{target_stem}{ext}"
-                if potential_conflict.exists() and potential_conflict != source_path:
-                    # We only consider conflicts if notebook is actually referenced in
-                    # a directive, to prevent false posiitves from being raised.
-                    if str(potential_conflict) in self.env.jupyterlite_notebooks:
-                        colliding_files.append(str(potential_conflict))
+            # We only consider conflicts if notebooks are actually referenced in
+            # a directive, to prevent false posiitves from being raised.
+            if hasattr(self.env, "jupyterlite_notebooks"):
+                for existing_nb in self.env.jupyterlite_notebooks:
+                    existing_path = Path(existing_nb)
+                    if (
+                        existing_path.stem == target_stem
+                        and existing_path != source_path
+                    ):
+                        colliding_files.append(str(existing_path))
 
             if colliding_files:
                 colliding_files.append(str(source_path))
                 raise ValueError(
-                    f"Found multiple notebooks marked for inclusion with JupyterLite "
-                    "that would convert to '{target_ipynb}'.\n"
-                    f"Conflicting files: {', '.join(colliding_files)}. "
+                    "Found multiple notebooks in the documentation sources marked for "
+                    f"inclusion with JupyterLite that would convert to '{target_ipynb}'.\n"
+                    f"The conflicting files are: {', '.join(colliding_files)}. \n"
                     "Please rename them to avoid conflicts, as having multiple "
-                    "notebooks with the same name, is not supported and can lead "
-                    "to unexpected behaviours."
+                    "notebooks with the same name regardless of their file extension "
+                    "is not supported since it can lead to unexpected behaviours."
                 )
 
         return target_ipynb
