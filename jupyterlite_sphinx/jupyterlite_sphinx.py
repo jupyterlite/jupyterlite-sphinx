@@ -24,6 +24,7 @@ from sphinx.parsers import RSTParser
 
 from ._try_examples import examples_to_notebook, insert_try_examples_directive
 
+import jupytext
 import nbformat
 
 try:
@@ -390,6 +391,79 @@ class _LiteDirective(SphinxDirective):
         "button_text": directives.unchanged,
     }
 
+    def _should_convert_notebook(self, source_path: Path, target_path: Path) -> bool:
+        """Check if a Markdown notebook needs conversion to IPyNB format based on
+        some rudimentary timestamp-based caching."""
+        if not target_path.exists():
+            return True
+
+        return source_path.stat().st_mtime > target_path.stat().st_mtime
+
+    # TODO: Jupytext support many more formats for conversion, but we only
+    # consider Markdown and IPyNB for now. If we add more formats someday,
+    # we should also consider them here.
+    def _get_target_name(self, source_path: Path, notebooks_dir: Path) -> str:
+        """Get the target filename. Here, we aim to prevent duplicate notebook names,
+        regardless of their file extension."""
+        target_stem = source_path.stem
+        target_ipynb = f"{target_stem}.ipynb"
+
+        colliding_files = []
+
+        # Only look for conflicts in source directories and among referenced notebooks.
+        # We do this to prevent conflicts with other files, say, in the "_contents/"
+        # directory as a result of a previous failed/interrupted build.
+        if source_path.parent != notebooks_dir:
+
+            # We only consider conflicts if notebooks are actually referenced in
+            # a directive, to prevent false posiitves from being raised.
+            if hasattr(self.env, "jupyterlite_notebooks"):
+                for existing_nb in self.env.jupyterlite_notebooks:
+                    existing_path = Path(existing_nb)
+                    if (
+                        existing_path.stem == target_stem
+                        and existing_path != source_path
+                    ):
+                        colliding_files.append(str(existing_path))
+
+            if colliding_files:
+                colliding_files.append(str(source_path))
+                raise ValueError(
+                    "Found multiple notebooks in the documentation sources marked for "
+                    f"inclusion with JupyterLite that would convert to '{target_ipynb}'.\n"
+                    f"The conflicting files are: {', '.join(colliding_files)}. \n"
+                    "Please rename them to avoid conflicts, as having multiple "
+                    "notebooks with the same name regardless of their file extension "
+                    "is not supported since it can lead to unexpected behaviours."
+                )
+
+        return target_ipynb
+
+    def _strip_notebook_cells(
+        self, nb: nbformat.NotebookNode
+    ) -> List[nbformat.NotebookNode]:
+        """Strip cells based on the presence of the "jupyterlite_sphinx_strip" tag
+        in the metadata. The content meant to be stripped must be inside its own cell
+        cell so that the cell itself gets removed from the notebooks. This is so that
+        we don't end up removing useful data or directives that are not meant to be
+        removed.
+
+        Parameters
+        ----------
+        nb : nbformat.NotebookNode
+            The notebook object to be stripped.
+
+        Returns
+        -------
+        List[nbformat.NotebookNode]
+            A list of cells that are not meant to be stripped.
+        """
+        return [
+            cell
+            for cell in nb.cells
+            if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
+        ]
+
     def run(self):
         width = self.options.pop("width", "100%")
         height = self.options.pop("height", "1000px")
@@ -410,43 +484,58 @@ class _LiteDirective(SphinxDirective):
         )
 
         if self.arguments:
+            # Keep track of the notebooks we are going through, so that we don't
+            # operate on notebooks that are not meant to be included in the built
+            # docs, i.e., those that have not been referenced in the docs via our
+            # directives anywhere.
+            if not hasattr(self.env, "jupyterlite_notebooks"):
+                self.env.jupyterlite_notebooks = set()
+
             # As with other directives like literalinclude, an absolute path is
             # assumed to be relative to the document root, and a relative path
             # is assumed to be relative to the source file
             rel_filename, notebook = self.env.relfn2path(self.arguments[0])
             self.env.note_dependency(rel_filename)
 
-            notebook_name = os.path.basename(notebook)
+            notebook_path = Path(notebook)
 
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR / notebook_name
+            self.env.jupyterlite_notebooks.add(str(notebook_path))
+
+            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            os.makedirs(notebooks_dir, exist_ok=True)
+
+            target_name = self._get_target_name(notebook_path, notebooks_dir)
+            target_path = notebooks_dir / target_name
 
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
 
-            # Create a folder to copy the notebooks to and for NotebookLite to find
-            os.makedirs(os.path.dirname(notebooks_dir), exist_ok=True)
+            if notebook_path.suffix.lower() == ".md":
+                if self._should_convert_notebook(notebook_path, target_path):
+                    nb = jupytext.read(str(notebook_path))
+                    if notebook_is_stripped:
+                        nb.cells = self._strip_notebook_cells(nb)
+                    with open(target_path, "w", encoding="utf-8") as f:
+                        nbformat.write(nb, f, version=4)
 
-            if notebook_is_stripped:
-                # Note: the directives meant to be stripped must be inside their own
-                # cell so that the cell itself gets removed from the notebook. This
-                # is so that we don't end up removing useful data or directives that
-                # are not meant to be removed.
-
-                nb = nbformat.read(notebook, as_version=4)
-                nb.cells = [
-                    cell
-                    for cell in nb.cells
-                    if "jupyterlite_sphinx_strip" not in cell.metadata.get("tags", [])
-                ]
-                nbformat.write(nb, notebooks_dir, version=4)
-
-            # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
-            # If it is True, then they have already been copied to notebooks_dir by the
-            # nbformat.write() function above.
+                notebook = str(target_path)
+                notebook_name = target_name
             else:
-                try:
-                    shutil.copy(notebook, notebooks_dir)
-                except shutil.SameFileError:
-                    pass
+                notebook_name = notebook_path.name
+                target_path = notebooks_dir / notebook_name
+
+                if notebook_is_stripped:
+                    nb = nbformat.read(notebook, as_version=4)
+                    nb.cells = self._strip_notebook_cells(nb)
+                    nbformat.write(nb, target_path, version=4)
+                # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
+                # If it is True, then they have already been copied to notebooks_dir by the
+                # nbformat.write() function above.
+                else:
+                    try:
+                        shutil.copy(notebook, target_path)
+                    except shutil.SameFileError:
+                        pass
+
         else:
             notebook_name = None
 

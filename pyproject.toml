@@ -30,6 +30,7 @@ docs = [
     "myst_parser",
     "pydata-sphinx-theme",
     "jupyterlite-xeus>=0.1.8,<0.3.0",
+    "jupytext",
 ]
 
 [tool.hatch.version]
