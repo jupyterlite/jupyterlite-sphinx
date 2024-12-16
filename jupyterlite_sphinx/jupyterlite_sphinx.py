@@ -143,9 +143,10 @@ class _InTab(Element):
 
     def html(self):
         return (
-            '<button class="try_examples_button" '
-            f"onclick=\"window.open('{self.lab_src}')\">"
-            f"{self.button_text}</button>"
+            f'<a href="{self.lab_src}" '
+            'target="_blank" rel="noopener noreferrer" '
+            'class="try_examples_button" style="text-decoration: none; display: inline-block; color: inherit;">'
+            f"{self.button_text}</a>"
         )
 
 
@@ -322,9 +323,10 @@ class VoiciTab(Element):
 
     def html(self):
         return (
-            '<button class="try_examples_button" '
-            f"onclick=\"window.open('{self.lab_src}')\">"
-            f"{self.button_text}</button>"
+            f'<a href="{self.lab_src}" '
+            'target="_blank" rel="noopener noreferrer" '
+            'class="try_examples_button" style="text-decoration: none; display: inline-block; color: inherit;">'
+            f"{self.button_text}</a>"
         )
 
 
@@ -675,17 +677,23 @@ class TryExamplesDirective(SphinxDirective):
 
         # Button with the onclick event to swap embedded notebook back to examples.
         go_back_button_html = (
-            '<button class="try_examples_button" '
-            f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
-            f"'{iframe_parent_div_id}')\">"
-            "Go Back</button>"
+            '<a href="#" '
+            'role="button" '
+            'aria-label="Return to original content and close the examples frame" '
+            f'onclick="window.tryExamplesHideIframe(\'{examples_div_id}\', '
+            f'\'{iframe_parent_div_id}\'); return false;" '
+            'class="try_examples_button" '
+            'style="text-decoration: none; display: inline-block;">'
+            'Go Back</a>'
         )
 
+
         full_screen_button_html = (
-            '<button class="try_examples_button" '
-            f"onclick=\"window.openInNewTab('{examples_div_id}',"
-            f"'{iframe_parent_div_id}')\">"
-            "Open In Tab</button>"
+            f'<a href="{iframe_src}" '
+            'target="_blank" rel="noopener noreferrer" '
+            'class="try_examples_button" '
+            'style="text-decoration: none; display: inline-block;">'
+            "Open In Tab</a>"
         )
 
         # Button with the onclick event to swap examples with embedded notebook.
