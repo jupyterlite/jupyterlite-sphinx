@@ -399,20 +399,42 @@ class _LiteDirective(SphinxDirective):
 
         return source_path.stat().st_mtime > target_path.stat().st_mtime
 
+    # TODO: Jupytext support many more formats for conversion, but we only
+    # consider Markdown and IPyNB for now. If we add more formats someday,
+    # we should also consider them here.
     def _get_target_name(self, source_path: Path, notebooks_dir: Path) -> str:
-        """Get target filename. Here, we aim to handle potential collisions with
-        existing notebooks."""
-        base_target = f"{source_path.stem}.ipynb"
-        converted_target = f"{source_path.stem}.converted.ipynb"
+        """Get the target filename. Here, we aim to prevent duplicate notebook names,
+        regardless of the file extension."""
+        target_stem = source_path.stem
+        target_ipynb = f"{target_stem}.ipynb"
 
-        # For MyST-flavoured files, check for the edge case where an IPyNB
-        # of the same name exists.
-        # If it does, we will append ".converted.ipynb" to the target name
-        # so that both can coexist in the same directory.
-        if source_path.suffix.lower() == ".md":
-            if (notebooks_dir / base_target).exists():
-                return converted_target
-        return base_target
+        colliding_files = []
+
+        # Only look for conflicts in source directories and among referenced notebooks.
+        # We do this to prevent conflicts with other files, say, in the "_contents/"
+        # directory as a result of a previous failed/interrupted build.
+        if source_path.parent != notebooks_dir:
+
+            for ext in [".md", ".ipynb"]:
+                potential_conflict = source_path.parent / f"{target_stem}{ext}"
+                if potential_conflict.exists() and potential_conflict != source_path:
+                    # We only consider conflicts if notebook is actually referenced in
+                    # a directive, to prevent false posiitves from being raised.
+                    if str(potential_conflict) in self.env.jupyterlite_notebooks:
+                        colliding_files.append(str(potential_conflict))
+
+            if colliding_files:
+                colliding_files.append(str(source_path))
+                raise ValueError(
+                    f"Found multiple notebooks marked for inclusion with JupyterLite "
+                    "that would convert to '{target_ipynb}'.\n"
+                    f"Conflicting files: {', '.join(colliding_files)}. "
+                    "Please rename them to avoid conflicts, as having multiple "
+                    "notebooks with the same name, is not supported and can lead "
+                    "to unexpected behaviours."
+                )
+
+        return target_ipynb
 
     def _strip_notebook_cells(
         self, nb: nbformat.NotebookNode
@@ -459,6 +481,13 @@ class _LiteDirective(SphinxDirective):
         )
 
         if self.arguments:
+            # Keep track of the notebooks we are going through, so that we don't
+            # operate on notebooks that are not meant to be included in the built
+            # docs, i.e., those that have not been referenced in the docs via our
+            # directives anywhere.
+            if not hasattr(self.env, 'jupyterlite_notebooks'):
+                self.env.jupyterlite_notebooks = set()
+
             # As with other directives like literalinclude, an absolute path is
             # assumed to be relative to the document root, and a relative path
             # is assumed to be relative to the source file
@@ -466,6 +495,9 @@ class _LiteDirective(SphinxDirective):
             self.env.note_dependency(rel_filename)
 
             notebook_path = Path(notebook)
+
+            self.env.jupyterlite_notebooks.add(str(notebook_path))
+
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             os.makedirs(notebooks_dir, exist_ok=True)
 
@@ -474,9 +506,6 @@ class _LiteDirective(SphinxDirective):
 
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
 
-            # For MyST Markdown notebooks, we create a unique target filename
-            # via _get_target_name() to avoid collisions with other IPyNB files
-            # that may have the same name.
             if notebook_path.suffix.lower() == ".md":
                 if self._should_convert_notebook(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
