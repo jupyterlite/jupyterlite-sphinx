@@ -435,12 +435,6 @@ class RepliteDirective(SphinxDirective):
                 button_text = directive_button_text
             else:
                 button_text = self.env.config.replite_button_text
-        elif "button_text" in self.options:
-            raise ValueError(
-                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
-            )
-
-        if new_tab:
             return [
                 RepliteTab(
                     prefix=prefix,
@@ -454,6 +448,10 @@ class RepliteDirective(SphinxDirective):
                     button_text=button_text,
                 )
             ]
+        elif "button_text" in self.options:
+            raise ValueError(
+                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
+            )
 
         return [
             RepliteIframe(
