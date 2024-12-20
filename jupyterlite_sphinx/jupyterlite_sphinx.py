@@ -1019,7 +1019,9 @@ def setup(app):
         "notebooklite_new_tab_button_text", "Open as a notebook", rebuild="html"
     )
     app.add_config_value("voici_new_tab_button_text", "Open with Voici", rebuild="html")
-    app.add_config_value("replite_new_tab_button_text", "Open in a REPL", rebuild="html")
+    app.add_config_value(
+        "replite_new_tab_button_text", "Open in a REPL", rebuild="html"
+    )
 
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
