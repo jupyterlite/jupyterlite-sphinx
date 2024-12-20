@@ -391,9 +391,9 @@ class _LiteDirective(SphinxDirective):
         "button_text": directives.unchanged,
     }
 
-    def _should_convert_notebook(self, source_path: Path, target_path: Path) -> bool:
-        """Check if a Markdown notebook needs conversion to IPyNB format based on
-        some rudimentary timestamp-based caching."""
+    def _target_is_stale(self, source_path: Path, target_path: Path) -> bool:
+        # Used as a heuristic to determine if a markdown notebook needs to be
+        # converted or reconverted to ipynb.
         if not target_path.exists():
             return True
 
@@ -507,7 +507,7 @@ class _LiteDirective(SphinxDirective):
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
 
             if notebook_path.suffix.lower() == ".md":
-                if self._should_convert_notebook(notebook_path, target_path):
+                if self._target_is_stale(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
                     if notebook_is_stripped:
                         nb.cells = self._strip_notebook_cells(nb)
