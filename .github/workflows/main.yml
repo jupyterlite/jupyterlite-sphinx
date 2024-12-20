@@ -32,7 +32,7 @@ jobs:
         activate-environment: jupyterlite-sphinx
         environment-file: dev-environment.yml
         python-version: ${{ matrix.python-version }}
-        miniforge-variant: Mambaforge
+        miniforge-variant: Miniforge
         miniforge-version: latest
         auto-activate-base: false
 
