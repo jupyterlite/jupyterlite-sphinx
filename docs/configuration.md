@@ -77,7 +77,7 @@ following values in your `conf.py` file:
 
 ```python
 jupyterlite_new_tab_button_text = "My custom JupyterLite button text"
-notebooklite_button_text = "My custom NotebookLite button text"
+notebooklite_new_tab_button_text = "My custom NotebookLite button text"
 replite_new_tab_button_text = "My custom Replite button text"
 voici_new_tab_button_text = "My custom Voici button text"
 ```
