@@ -402,9 +402,11 @@ class _LiteDirective(SphinxDirective):
     # TODO: Jupytext support many more formats for conversion, but we only
     # consider Markdown and IPyNB for now. If we add more formats someday,
     # we should also consider them here.
-    def _get_target_name(self, source_path: Path, notebooks_dir: Path) -> str:
-        """Get the target filename. Here, we aim to prevent duplicate notebook names,
-        regardless of their file extension."""
+    def _assert_no_conflicting_nb_names(
+        self, source_path: Path, notebooks_dir: Path
+    ) -> None:
+        """Checks for duplicate notebook names in the documentation sources.
+        Raises if any notebooks would conflict when converted to IPyNB."""
         target_stem = source_path.stem
         target_ipynb = f"{target_stem}.ipynb"
 
@@ -501,7 +503,8 @@ class _LiteDirective(SphinxDirective):
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             os.makedirs(notebooks_dir, exist_ok=True)
 
-            target_name = self._get_target_name(notebook_path, notebooks_dir)
+            self._assert_no_conflicting_nb_names(notebook_path, notebooks_dir)
+            target_name = f"{notebook_path.stem}.ipynb"
             target_path = notebooks_dir / target_name
 
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
