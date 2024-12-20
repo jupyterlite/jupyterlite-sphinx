@@ -51,18 +51,18 @@ of JupyterLite.
 ```
 
 When using this option, it is also possible to customise the button text, overriding the
-global value using an additional `:button_text:` parameter:
+global value using an additional `:new_tab_button_text:` parameter:
 
 ```rst
 .. jupyterlite:: my_notebook.ipynb
    :new_tab: True
-   :button_text: My custom JupyterLite button text
+   :new_tab_button_text: My custom JupyterLite button text
 ```
 
 ```{eval-rst}
 .. jupyterlite:: my_notebook.ipynb
    :new_tab: True
-   :button_text: My custom JupyterLite button text
+   :new_tab_button_text: My custom JupyterLite button text
 ```
 
 ## Search parameters

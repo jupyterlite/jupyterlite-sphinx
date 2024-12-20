@@ -75,13 +75,13 @@ with the code pre-filled.
 ```
 
 When using this option, it is also possible to customise the button text, overriding the
-global value using an additional `:button_text:` parameter:
+global value using an additional `:new_tab_button_text:` parameter:
 
 ```rst
 .. replite::
    :kernel: xeus-python
    :new_tab: True
-   :button_text: My custom Replite button text
+   :new_tab_button_text: My custom Replite button text
 
    import matplotlib.pyplot as plt
    import numpy as np
@@ -98,7 +98,7 @@ global value using an additional `:button_text:` parameter:
 .. replite::
    :kernel: xeus-python
    :new_tab: True
-   :button_text: My custom Replite button text
+   :new_tab_button_text: My custom Replite button text
 
    import matplotlib.pyplot as plt
    import numpy as np

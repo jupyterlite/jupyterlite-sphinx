@@ -82,7 +82,7 @@ replite_button_text = "My custom Replite button text"
 voici_button_text = "My custom Voici button text"
 ```
 
-You can override this text on a per-directive basis by passing the `:button_text:` option
+You can override this text on a per-directive basis by passing the `:new_tab_button_text:` option
 to the directive. Note that this is compatible only if `:new_tab:` is also provided.
 
 ## Strip particular tagged cells from IPython Notebooks
