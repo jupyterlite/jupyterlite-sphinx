@@ -405,12 +405,10 @@ class _LiteDirective(SphinxDirective):
     def _assert_no_conflicting_nb_names(
         self, source_path: Path, notebooks_dir: Path
     ) -> None:
-        """Checks for duplicate notebook names in the documentation sources.
+        """Check for duplicate notebook names in the documentation sources.
         Raises if any notebooks would conflict when converted to IPyNB."""
         target_stem = source_path.stem
         target_ipynb = f"{target_stem}.ipynb"
-
-        colliding_files = []
 
         # Only look for conflicts in source directories and among referenced notebooks.
         # We do this to prevent conflicts with other files, say, in the "_contents/"
@@ -426,15 +424,11 @@ class _LiteDirective(SphinxDirective):
                         existing_path.stem == target_stem
                         and existing_path != source_path
                     ):
-                        colliding_files.append(str(existing_path))
 
-            if colliding_files:
-                colliding_files.append(str(source_path))
-                raise RuntimeError(
-                    "All notebooks marked for inclusion with JupyterLite must have a "
-                    "unique file basename. Found conflicting files: "
-                    f"{', '.join(colliding_files)}."
-                )
+                        raise RuntimeError(
+                            "All notebooks marked for inclusion with JupyterLite must have a "
+                            f"unique file basename. Found conflict between {source_path} and {existing_path}."
+                        )
 
         return target_ipynb
 
