@@ -428,7 +428,7 @@ class _LiteDirective(SphinxDirective):
 
             if colliding_files:
                 colliding_files.append(str(source_path))
-                raise ValueError(
+                raise RuntimeError(
                     "Found multiple notebooks in the documentation sources marked for "
                     f"inclusion with JupyterLite that would convert to '{target_ipynb}'.\n"
                     f"The conflicting files are: {', '.join(colliding_files)}. \n"
