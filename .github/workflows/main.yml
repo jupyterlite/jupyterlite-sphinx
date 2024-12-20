@@ -24,15 +24,14 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup conda
-      uses: conda-incubator/setup-miniconda@v2
+      uses: conda-incubator/setup-miniconda@v3
       with:
         activate-environment: jupyterlite-sphinx
         environment-file: dev-environment.yml
         python-version: ${{ matrix.python-version }}
-        miniforge-variant: Mambaforge
         miniforge-version: latest
         auto-activate-base: false
 
