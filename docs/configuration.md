@@ -76,10 +76,10 @@ You can optionally the button text on a global level for these directives by set
 following values in your `conf.py` file:
 
 ```python
-jupyterlite_button_text = "My custom JupyterLite button text"
+jupyterlite_new_tab_button_text = "My custom JupyterLite button text"
 notebooklite_button_text = "My custom NotebookLite button text"
-replite_button_text = "My custom Replite button text"
-voici_button_text = "My custom Voici button text"
+replite_new_tab_button_text = "My custom Replite button text"
+voici_new_tab_button_text = "My custom Voici button text"
 ```
 
 You can override this text on a per-directive basis by passing the `:new_tab_button_text:` option

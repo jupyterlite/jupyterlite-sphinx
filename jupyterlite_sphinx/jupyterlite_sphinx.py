@@ -434,7 +434,7 @@ class RepliteDirective(SphinxDirective):
             if directive_button_text is not None:
                 button_text = directive_button_text
             else:
-                button_text = self.env.config.replite_button_text
+                button_text = self.env.config.replite_new_tab_button_text
             return [
                 RepliteTab(
                     prefix=prefix,
@@ -546,11 +546,11 @@ class _LiteDirective(SphinxDirective):
                 # If none, we use the appropriate global config based on
                 # the type of directive passed.
                 if isinstance(self, JupyterLiteDirective):
-                    button_text = self.env.config.jupyterlite_button_text
+                    button_text = self.env.config.jupyterlite_new_tab_button_text
                 elif isinstance(self, NotebookLiteDirective):
-                    button_text = self.env.config.notebooklite_button_text
+                    button_text = self.env.config.notebooklite_new_tab_button_text
                 elif isinstance(self, VoiciDirective):
-                    button_text = self.env.config.voici_button_text
+                    button_text = self.env.config.voici_new_tab_button_text
 
             return [
                 self.newtab_cls(
@@ -1013,13 +1013,13 @@ def setup(app):
     # Allow customising the button text for each directive (this is useful
     # only when "new_tab" is set to True)
     app.add_config_value(
-        "jupyterlite_button_text", "Open as a notebook", rebuild="html"
+        "jupyterlite_new_tab_button_text", "Open as a notebook", rebuild="html"
     )
     app.add_config_value(
-        "notebooklite_button_text", "Open as a notebook", rebuild="html"
+        "notebooklite_new_tab_button_text", "Open as a notebook", rebuild="html"
     )
-    app.add_config_value("voici_button_text", "Open with Voici", rebuild="html")
-    app.add_config_value("replite_button_text", "Open in a REPL", rebuild="html")
+    app.add_config_value("voici_new_tab_button_text", "Open with Voici", rebuild="html")
+    app.add_config_value("replite_new_tab_button_text", "Open in a REPL", rebuild="html")
 
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
