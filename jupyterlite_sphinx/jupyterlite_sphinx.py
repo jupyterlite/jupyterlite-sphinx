@@ -406,7 +406,7 @@ class RepliteDirective(SphinxDirective):
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
-        "button_text": directives.unchanged,
+        "new_tab_button_text": directives.unchanged,
     }
 
     def run(self):
@@ -430,7 +430,7 @@ class RepliteDirective(SphinxDirective):
         )
 
         if new_tab:
-            directive_button_text = self.options.pop("button_text", None)
+            directive_button_text = self.options.pop("new_tab_button_text", None)
             if directive_button_text is not None:
                 button_text = directive_button_text
             else:
@@ -448,10 +448,6 @@ class RepliteDirective(SphinxDirective):
                     button_text=button_text,
                 )
             ]
-        elif "button_text" in self.options:
-            raise ValueError(
-                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
-            )
 
         return [
             RepliteIframe(
@@ -479,7 +475,7 @@ class _LiteDirective(SphinxDirective):
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
-        "button_text": directives.unchanged,
+        "new_tab_button_text": directives.unchanged,
     }
 
     def run(self):
@@ -543,7 +539,7 @@ class _LiteDirective(SphinxDirective):
             notebook_name = None
 
         if new_tab:
-            directive_button_text = self.options.pop("button_text", None)
+            directive_button_text = self.options.pop("new_tab_button_text", None)
             if directive_button_text is not None:
                 button_text = directive_button_text
             else:
@@ -555,12 +551,7 @@ class _LiteDirective(SphinxDirective):
                     button_text = self.env.config.notebooklite_button_text
                 elif isinstance(self, VoiciDirective):
                     button_text = self.env.config.voici_button_text
-        elif "button_text" in self.options:
-            raise ValueError(
-                "'button_text' is only valid if 'new_tab' is True. To modify the prompt text, use 'prompt' and 'prompt_color'."
-            )
 
-        if new_tab:
             return [
                 self.newtab_cls(
                     prefix=prefix,
@@ -603,9 +594,9 @@ class BaseJupyterViewDirective(_LiteDirective):
         "prompt_color": directives.unchanged,
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
-        # "button_text" below is valid only if "new_tab" is True, otherwise
+        # "new_tab_button_text" below is useful only if "new_tab" is True, otherwise
         # we have "prompt" and "prompt_color" as options already.
-        "button_text": directives.unchanged,
+        "new_tab_button_text": directives.unchanged,
     }
 
 
@@ -1019,8 +1010,8 @@ def setup(app):
         rebuild="html",
     )
 
-    # Allow customising the button text for each directive (only when "new_tab" is True,
-    # error otherwise)
+    # Allow customising the button text for each directive (this is useful
+    # only when "new_tab" is set to True)
     app.add_config_value(
         "jupyterlite_button_text", "Open as a notebook", rebuild="html"
     )
