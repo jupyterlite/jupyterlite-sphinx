@@ -47,16 +47,16 @@ Lab interface.
 ```
 
 When using this option, it is also possible to customise the button text, overriding the
-global value using an additional `:button_text:` parameter:
+global value using an additional `:new_tab_button_text:` parameter:
 
 ```rst
 .. notebooklite:: my_notebook.ipynb
    :new_tab: True
-   :button_text: My custom NotebookLite button text
+   :new_tab_button_text: My custom NotebookLite button text
 ```
 
 ```{eval-rst}
 .. notebooklite:: my_notebook.ipynb
    :new_tab: True
-   :button_text: My custom NotebookLite button text
+   :new_tab_button_text: My custom NotebookLite button text
 ```

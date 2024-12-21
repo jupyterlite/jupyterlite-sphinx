@@ -67,21 +67,22 @@ jupyterlite_config = "jupyter_lite_config.json"
 jupyterlite_overrides = "overrides.json"
 ```
 
-# Setting default button texts for the `JupyterLite`, `NotebookLite`, and `Voici` directives
+# Setting default button texts for the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives
 
-When using the `:new_tab:` option in the `JupyterLite`, `NotebookLite`, and `Voici` directives,
-the button text defaults to "Open as a notebook" and "Open with Voici", respectively.
+When using the `:new_tab:` option in the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives,
+the button text defaults to "Open as a notebook", "Open in a REPL", and "Open with Voici", respectively.
 
 You can optionally the button text on a global level for these directives by setting the
 following values in your `conf.py` file:
 
 ```python
-jupyterlite_button_text = "My custom JupyterLite button text"
-notebooklite_button_text = "My custom NotebookLite button text"
-voici_button_text = "My custom Voici button text"
+jupyterlite_new_tab_button_text = "My custom JupyterLite button text"
+notebooklite_new_tab_button_text = "My custom NotebookLite button text"
+replite_new_tab_button_text = "My custom Replite button text"
+voici_new_tab_button_text = "My custom Voici button text"
 ```
 
-You can override this text on a per-directive basis by passing the `:button_text:` option
+You can override this text on a per-directive basis by passing the `:new_tab_button_text:` option
 to the directive. Note that this is compatible only if `:new_tab:` is also provided.
 
 ## Strip particular tagged cells from IPython Notebooks

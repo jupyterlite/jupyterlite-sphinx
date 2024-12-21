@@ -38,3 +38,75 @@ This directive takes extra options which are the same options as the `replite` p
    ax.plot(x, y)
    plt.show()
 ```
+
+If you use the `:new_tab:` option in the directive, the Replite console will be opened in a new browser tab
+with the code pre-filled.
+
+```rst
+.. replite::
+   :kernel: xeus-python
+   :new_tab: True
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
+
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
+```
+
+```{eval-rst}
+.. replite::
+   :kernel: xeus-python
+   :new_tab: True
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
+
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
+```
+
+When using this option, it is also possible to customise the button text, overriding the
+global value using an additional `:new_tab_button_text:` parameter:
+
+```rst
+.. replite::
+   :kernel: xeus-python
+   :new_tab: True
+   :new_tab_button_text: My custom Replite button text
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
+
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
+```
+
+```{eval-rst}
+.. replite::
+   :kernel: xeus-python
+   :new_tab: True
+   :new_tab_button_text: My custom Replite button text
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
+
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
+```
