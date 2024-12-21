@@ -96,7 +96,7 @@ This behaviour can be enabled by setting the following config:
 strip_tagged_cells = True
 ```
 
-and then by tagging the cells you want to strip with the tag `jupyterlite_sphinx_strip` in the JSON metadata
+and then by tagging the cells you want to strip with the `jupyterlite_sphinx_strip` tag in the JSON metadata
 of the cell, like this:
 
 ```json
@@ -109,7 +109,7 @@ of the cell, like this:
 
 This is useful when you want to remove some cells from the rendered notebook in the JupyterLite
 console, for example, cells that are used for adding reST-based directives or other
-Sphinx-specific content.
+Sphinx-specific content. It can be used to remove either code cells or Markdown cells.
 
 For example, you can use this feature to remove the `toctree` directive from the rendered notebook
 in the JupyterLite console:
@@ -147,9 +147,43 @@ in the JupyterLite console:
 where the cell with the `toctree` directive will be removed from the rendered notebook in
 the JupyterLite console.
 
+In the case of a MyST notebook, you can use the following syntax to tag the cells:
+
+````markdown
+
++++ {"tags": ["jupyterlite_sphinx_strip"]}
+
+# Heading 1
+
+This is a Markdown cell that will be stripped from the rendered notebook in the
+JupyterLite console.
+
++++
+
+```{code-cell} ipython3
+:tags: [jupyterlite_sphinx_strip]
+
+# This is a code cell that will be stripped from the rendered notebook in the
+# JupyterLite console.
+def foo():
+    print(3)
+```
+
+```{code-cell} ipython3
+# This cell will not be stripped
+def bar():
+    print(4)
+```
+````
+
+The Markdown cells are not wrapped, and hence the `+++` and `+++` markers are used to
+indicate where the cells start and end. For more details around writing and customising
+MyST-flavoured notebooks, please refer to the
+[MyST Markdown overview](https://jupyterbook.org/en/stable/content/myst.html).
+
 Note that this feature is only available for the `NotebookLite`, `JupyterLite`, and the
-`Voici` directives and works with the `.ipynb` files passed to them. It is not implemented
-for the `TryExamples` directive.
+`Voici` directives and works with the `.md` (MyST) or `.ipynb` files passed to them. It
+is not implemented for the `TryExamples` directive.
 
 ## Disable the `.ipynb` docs source binding
 
