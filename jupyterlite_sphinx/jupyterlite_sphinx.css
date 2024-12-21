@@ -12,6 +12,7 @@
   position: relative;
   cursor: pointer;
   box-shadow: 0 0.2rem 0.5rem #d8d8d8;
+  margin-bottom: 1.5rem;
 }
 
 .jupyterlite_sphinx_iframe {
