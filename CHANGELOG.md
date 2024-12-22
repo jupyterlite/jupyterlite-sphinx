@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.17.1
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.17.0...f51bdc6e0971c45862af66eb68e10bfe6935f538))
+
+### Bugs fixed
+
+- Add missing dependency on `jupytext` [#236](https://github.com/jupyterlite/jupyterlite-sphinx/pull/236) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-12-22&to=2024-12-22&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-12-22..2024-12-22&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.17.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.5...548b2151dfd593ae6633348e4df10348191495a9))
@@ -30,8 +46,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-08-08&to=2024-12-22&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-08-08..2024-12-22&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-08-08..2024-12-22&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-08-08..2024-12-22&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.16.5
 
