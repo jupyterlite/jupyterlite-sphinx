@@ -17,6 +17,7 @@ dependencies = [
     "jupyter_server",
     "jupyterlab_server",
     "jupyterlite-core >=0.2,<0.5",
+    "jupytext",
     "nbformat",
     "sphinx>=4",
 ]
@@ -30,7 +31,6 @@ docs = [
     "myst_parser",
     "pydata-sphinx-theme",
     "jupyterlite-xeus>=0.1.8,<0.3.0",
-    "jupytext",
 ]
 
 [tool.hatch.version]
