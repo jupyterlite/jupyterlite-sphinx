@@ -2,6 +2,37 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.17.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.5...548b2151dfd593ae6633348e4df10348191495a9))
+
+### Enhancements made
+
+- Add a new-tabbed variant for the `Replite` directive, and allow customisation of its button text [#228](https://github.com/jupyterlite/jupyterlite-sphinx/pull/228) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Allow global and custom button texts for the new-tabbed variants of the `JupyterLite`, `NotebookLite`, and the `Voici` directives [#227](https://github.com/jupyterlite/jupyterlite-sphinx/pull/227) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Allow the use of a custom `overrides.json` file for configuring JupyterLite at runtime [#225](https://github.com/jupyterlite/jupyterlite-sphinx/pull/225) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Add an option to open the Notebook UI and Voici apps in a new tab via the`NotebookLite` and `Voici` directives [#223](https://github.com/jupyterlite/jupyterlite-sphinx/pull/223) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Support the usage of Markdown-based notebooks with "Lite" directives [#221](https://github.com/jupyterlite/jupyterlite-sphinx/pull/221) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Bugs fixed
+
+- Fix paths for Replite apps [#224](https://github.com/jupyterlite/jupyterlite-sphinx/pull/224) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Maintenance and upkeep improvements
+
+- Add some spacing below the Lite iframes [#235](https://github.com/jupyterlite/jupyterlite-sphinx/pull/235) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Switch to Miniforge and drop Mambaforge [#233](https://github.com/jupyterlite/jupyterlite-sphinx/pull/233) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Bump OS image and dependencies for Read the Docs build config [#229](https://github.com/jupyterlite/jupyterlite-sphinx/pull/229) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Fix the opening of notebooks in a new tab when using the `JupyterLite`, `NotebookLite`, and `Voici` directives [#220](https://github.com/jupyterlite/jupyterlite-sphinx/pull/220) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-08-08&to=2024-12-22&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-08-08..2024-12-22&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-08-08..2024-12-22&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-08-08..2024-12-22&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.16.5
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.16.4...450a81d3a5e3a0ce0b56b67aafaa413323bc22b9))
@@ -15,8 +46,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-08-07&to=2024-08-08&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-08-07..2024-08-08&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.16.4
 
