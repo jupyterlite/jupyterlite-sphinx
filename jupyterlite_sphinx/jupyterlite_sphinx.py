@@ -269,6 +269,9 @@ class RepliteTab(Element):
             code = "\n".join(code_lines)
             lite_options["code"] = code
 
+        if "execute" in lite_options and lite_options["execute"] == "0":
+            lite_options["execute"] = "0"
+
         app_path = self.lite_app
         if notebook is not None:
             lite_options["path"] = notebook
@@ -401,6 +404,7 @@ class RepliteDirective(SphinxDirective):
         "width": directives.unchanged,
         "height": directives.unchanged,
         "kernel": directives.unchanged,
+        "execute": directives.unchanged,
         "toolbar": directives.unchanged,
         "theme": directives.unchanged,
         "prompt": directives.unchanged,
@@ -420,6 +424,17 @@ class RepliteDirective(SphinxDirective):
         search_params = search_params_parser(self.options.pop("search_params", False))
 
         new_tab = self.options.pop("new_tab", False)
+
+        # We first check the global config, and then the per-directive
+        # option. It defaults to true for backwards compatibility.
+        execute = self.options.pop("execute", None)
+        if execute is None:
+            execute = str(self.env.config.replite_auto_execute).lower()
+        else:
+            execute = execute.lower()
+
+        if execute == "false":
+            self.options["execute"] = "0"
 
         content = self.content
 
@@ -1155,6 +1170,7 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
+    app.add_config_value("replite_auto_execute", True, rebuild="html")
 
     # Initialize Voici directive and tabbed interface
     app.add_node(
