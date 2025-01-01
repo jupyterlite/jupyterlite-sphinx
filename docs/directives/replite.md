@@ -110,3 +110,44 @@ global value using an additional `:new_tab_button_text:` parameter:
    ax.plot(x, y)
    plt.show()
 ```
+
+It is also possible to disable the execution of the code in the Replite console by setting the `:execute:` option to `False`:
+
+```rst
+.. replite::
+   :kernel: xeus-python
+   :new_tab: True # False works too
+   :new_tab_button_text: Open REPL with the code execution disabled
+   :execute: False
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
+
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
+```
+
+```{eval-rst}
+.. replite::
+   :kernel: xeus-python
+   :new_tab: True # False works too
+   :new_tab_button_text: Open REPL with the code execution disabled
+   :execute: False
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   x = np.linspace(0, 2 * np.pi, 200)
+   y = np.sin(x)
+
+   fig, ax = plt.subplots()
+   ax.plot(x, y)
+   plt.show()
+```
+
+The behaviour can also be [configured globally](../configuration.md#replite-auto-execution-with-the-replite-directive)
+and then overridden in individual directives.
