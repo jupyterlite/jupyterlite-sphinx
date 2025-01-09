@@ -89,7 +89,7 @@ to the directive. Note that this is compatible only if `:new_tab:` is also provi
 
 It is possible to control whether code snippets in REPL environments automatically executes when loaded.
 For this, you may set `replite_auto_execute = False` globally in `conf.py` with  (defaults to `True` if
-not present), or override it on a per-directive basis  with `:execute: true` or `:execute: false`.
+not present), or override it on a per-directive basis  with `:execute: True` or `:execute: False`.
 
 ## Strip particular tagged cells from IPython Notebooks
 
