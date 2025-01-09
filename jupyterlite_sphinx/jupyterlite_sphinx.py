@@ -423,17 +423,14 @@ class RepliteDirective(SphinxDirective):
 
         search_params = search_params_parser(self.options.pop("search_params", False))
 
-        new_tab = self.options.pop("new_tab", False)
-
         # We first check the global config, and then the per-directive
-        # option. It defaults to true for backwards compatibility.
-        execute = self.options.pop("execute", None)
-        if execute is None:
-            execute = str(self.env.config.replite_auto_execute).lower()
-        else:
-            execute = execute.lower()
+        # option. It defaults to True for backwards compatibility.
+        execute = self.options.pop("execute", str(self.env.config.replite_auto_execute))
 
-        if execute == "false":
+        if execute not in ("True", "False"):
+            raise ValueError("The :execute: option must be either True or False")
+
+        if execute == "False":
             self.options["execute"] = "0"
 
         content = self.content
@@ -444,6 +441,8 @@ class RepliteDirective(SphinxDirective):
             os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
             os.path.dirname(self.get_source_info()[0]),
         )
+
+        new_tab = self.options.pop("new_tab", False)
 
         if new_tab:
             directive_button_text = self.options.pop("new_tab_button_text", None)
