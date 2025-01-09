@@ -87,7 +87,7 @@ to the directive. Note that this is compatible only if `:new_tab:` is also provi
 
 ## REPL code auto-execution with the `Replite` directive
 
-It is possible to control whether code snippets in REPL environments automatically executeswhen loaded.
+It is possible to control whether code snippets in REPL environments automatically executes when loaded.
 For this, you may set `replite_auto_execute = False` globally in `conf.py` with  (defaults to `True` if
 not present), or override it on a per-directive basis  with `:execute: true` or `:execute: false`.
 
