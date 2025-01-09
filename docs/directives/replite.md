@@ -111,7 +111,14 @@ global value using an additional `:new_tab_button_text:` parameter:
    plt.show()
 ```
 
-It is also possible to disable the execution of the code in the Replite console by setting the `:execute:` option to `False`:
+````{tip}
+
+   With `jupyterlite-core` **versions 0.5.0 and later**, it is also possible to disable the execution of
+   the code in the Replite console by setting the `:execute:` option to `False`. This option defaults to `True`,
+   and setting it has no effect in versions prior to 0.5.0.
+
+   The behaviour can also be [configured globally](../configuration.md#replite-auto-execution-with-the-replite-directive)
+   and then overridden in individual directives as needed.
 
 ```rst
 .. replite::
@@ -149,5 +156,4 @@ It is also possible to disable the execution of the code in the Replite console 
    plt.show()
 ```
 
-The behaviour can also be [configured globally](../configuration.md#replite-auto-execution-with-the-replite-directive)
-and then overridden in individual directives.
+````
