@@ -149,7 +149,7 @@ var tryExamplesGlobalMinHeight = 0;
  */
 var tryExamplesConfigLoaded = false;
 
-// A config loader with imprved error handling + request deduplication
+// A config loader with improved error handling + request deduplication
 const ConfigLoader = (() => {
   // setting a private state for managing requests and errors
   let configLoadPromise = null;
