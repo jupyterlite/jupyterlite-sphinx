@@ -315,6 +315,10 @@ _next_section_pattern = re.compile(
         + [r"\!\! processed by numpydoc \!\!"]
         # Attributes section sometimes has no directive.
         + [r":Attributes:"]
+        # The See Also section shows up for old numpydoc versions where ordering
+        # is neither guaranteed nor enforced; such as SymPy, therefore we check
+        # for it as a special case.
+        + [r".. seealso::"]
     )
 )
 
