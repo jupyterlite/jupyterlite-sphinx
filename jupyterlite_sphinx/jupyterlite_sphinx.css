@@ -67,12 +67,3 @@
     transform: rotate(1turn);
   }
 }
-
-/* we do not want the button to show on smaller screens (phones), as clicking
- * can download a lot of data. 480px is a commonly used breakpoint to identify if a device is a smartphone.  */
-
-@media (max-width: 480px), (max-height: 480px) {
-  div.try_examples_button_container {
-    display: none;
-  }
-}
