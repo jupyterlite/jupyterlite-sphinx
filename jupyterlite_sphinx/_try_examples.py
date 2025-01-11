@@ -308,7 +308,7 @@ _examples_start_pattern = re.compile(r".. (rubric|admonition):: Examples")
 _next_section_pattern = re.compile(
     "|".join(
         [
-            rf".. (rubric|admonition)::\s*{header}"
+            rf"\.\. (rubric|admonition)::\s*{header}"
             for header in _non_example_docstring_section_headers
         ]
         # If examples section is last, processed by numpydoc may appear at end.
@@ -318,7 +318,7 @@ _next_section_pattern = re.compile(
         # The See Also section shows up for old numpydoc versions where ordering
         # is neither guaranteed nor enforced; such as SymPy, therefore we check
         # for it as a special case.
-        + [r".. seealso::"]
+        + [r"\.\. seealso::"]
     )
 )
 
