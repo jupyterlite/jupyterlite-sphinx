@@ -185,28 +185,9 @@ window.isMobileDevice = () => {
   return isLikelyMobile;
 };
 
-// A config loader with improved error handling + request deduplication
+// A config loader with request deduplication + permanent caching
 const ConfigLoader = (() => {
-  // setting a private state for managing requests and errors
   let configLoadPromise = null;
-  let lastErrorTimestamp = 0;
-  const ERROR_THROTTLE_MS = 5000; // error messages at most every 5 seconds
-  const failedRequestsCache = new Set();
-
-  const shouldShowError = () => {
-    const now = Date.now();
-    if (now - lastErrorTimestamp > ERROR_THROTTLE_MS) {
-      lastErrorTimestamp = now;
-      return true;
-    }
-    return false;
-  };
-
-  const logError = (message) => {
-    if (shouldShowError()) {
-      console.log(message);
-    }
-  };
 
   const loadConfig = async (configFilePath) => {
     if (window.isMobileDevice()) {
@@ -222,10 +203,6 @@ const ConfigLoader = (() => {
       return;
     }
 
-    if (failedRequestsCache.has(configFilePath)) {
-      return;
-    }
-
     // Return the existing promise if the request is in progress, as we
     // don't want to make multiple requests for the same file. This
     // can happen if there are several try_examples directives on the
@@ -234,6 +211,7 @@ const ConfigLoader = (() => {
       return configLoadPromise;
     }
 
+    // Create and cache the promise for the config request
     configLoadPromise = (async () => {
       try {
         // Add a timestamp as query parameter to ensure a cached version of the
@@ -245,8 +223,7 @@ const ConfigLoader = (() => {
         const response = await fetch(configFileUrl);
         if (!response.ok) {
           if (response.status === 404) {
-            failedRequestsCache.add(configFilePath);
-            logError("Optional try_examples config file not found.");
+            console.log("Optional try_examples config file not found.");
             return;
           }
           throw new Error(`Error fetching ${configFilePath}`);
@@ -281,7 +258,6 @@ const ConfigLoader = (() => {
         console.error(error);
       } finally {
         tryExamplesConfigLoaded = true;
-        configLoadPromise = null;
       }
     })();
 
@@ -290,11 +266,10 @@ const ConfigLoader = (() => {
 
   return {
     loadConfig,
+    // for testing/debugging only, could be removed
     resetState: () => {
       tryExamplesConfigLoaded = false;
       configLoadPromise = null;
-      failedRequestsCache.clear();
-      lastErrorTimestamp = 0;
     },
   };
 })();
