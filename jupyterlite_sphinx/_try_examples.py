@@ -308,13 +308,16 @@ _examples_start_pattern = re.compile(r".. (rubric|admonition):: Examples")
 _next_section_pattern = re.compile(
     "|".join(
         [
-            rf".. (rubric|admonition)::\s*{header}"
+            rf"\.\. (rubric|admonition)::\s*{header}"
             for header in _non_example_docstring_section_headers
         ]
         # If examples section is last, processed by numpydoc may appear at end.
         + [r"\!\! processed by numpydoc \!\!"]
         # Attributes section sometimes has no directive.
         + [r":Attributes:"]
+        # See Also sections are mapped to Sphinx's `.. seealso::` directive,
+        # not admonitions or rubrics.
+        + [r"\.\. seealso::"]
     )
 )
 
