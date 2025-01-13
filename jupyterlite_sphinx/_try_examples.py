@@ -303,6 +303,28 @@ _non_example_docstring_section_headers = (
     "Yields",
 )
 
+# Sourced from docutils.parsers.rst.directives._directive_registry.keys()
+# and from https://docutils.sourceforge.io/docs/ref/rst/directives.html
+# We hardcode a subset of this list as there is no public API in docutils
+# or Sphinx to get this information directly.
+# See https://docutils.sourceforge.io/docs/ref/rst/directives.html
+#
+# This subset is only a list of sensible defaults and widely used directives
+# based on our discretion that can signify the start of a new section in a
+# docstring and is not meant to be exhaustive.
+_irrelevant_directives = [
+    "class",
+    "contents",
+    "epigraph",
+    "footer",
+    "header",
+    "highlights",
+    "parsed-literal",
+    "pull-quote",
+    "seealso",
+    "sidebar",
+    "topic",
+]
 
 _examples_start_pattern = re.compile(r".. (rubric|admonition):: Examples")
 _next_section_pattern = re.compile(
@@ -315,10 +337,10 @@ _next_section_pattern = re.compile(
         + [r"\!\! processed by numpydoc \!\!"]
         # Attributes section sometimes has no directive.
         + [r":Attributes:"]
-        # The See Also section shows up for old numpydoc versions such as that
-        # of SymPy where it is accounted for as an admonition and not a rubric,
-        # therefore we check for it as a special case for now.
-        + [r"\.\. seealso::"]
+        # Directives that can start a new section in a docstring and are
+        # not handled by numpydoc in terms of reordering. Noticed in SymPy
+        # as it does not use modern numpydoc at the time of writing.
+        + [rf"\.\. ({directive})::" for directive in _irrelevant_directives]
     )
 )
 
