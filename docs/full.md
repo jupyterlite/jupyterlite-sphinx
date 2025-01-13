@@ -16,11 +16,12 @@ You can access the JupyterLite app that `jupyterlite-sphinx` made for you, in fu
 
 If you want to open a specific notebook in fullscreen JupyterLab/Notebook/Voici, you can use the `path` URL parameter, e.g. 
 
-- `./lite/lab/index.html?path=my_noteboook.ipynb` for Lab
+- `./lite/lab/index.html?path=my_notebook.ipynb` for Lab
 - `./lite/notebooks/index.html?path=my_notebook.ipynb` for Notebook
 - `./lite/voici/render/my_notebook.html` for Voici
 
 If you want to add code to the REPL for execution, you can use the `code` URL parameter, e.g. `./lite/repl/index.html?code=print("Hello, world!")`. You may also use `&execute=0` to prevent the code from being executed until you press Enter.
+
 More configuration options are available with the [REPL documentation](https://jupyterlite.readthedocs.io/en/stable/quickstart/embed-repl.html#configuration)
 
-Please see the documentation individual options and global [Configuration](configuration.md) options for more information.
+Please see the documentation for individual options for each directive and [global configuration options](configuration.md)  for more information.
