@@ -269,6 +269,9 @@ class RepliteTab(Element):
             code = "\n".join(code_lines)
             lite_options["code"] = code
 
+        if "execute" in lite_options and lite_options["execute"] == "0":
+            lite_options["execute"] = "0"
+
         app_path = self.lite_app
         if notebook is not None:
             lite_options["path"] = notebook
@@ -401,6 +404,7 @@ class RepliteDirective(SphinxDirective):
         "width": directives.unchanged,
         "height": directives.unchanged,
         "kernel": directives.unchanged,
+        "execute": directives.unchanged,
         "toolbar": directives.unchanged,
         "theme": directives.unchanged,
         "prompt": directives.unchanged,
@@ -419,7 +423,15 @@ class RepliteDirective(SphinxDirective):
 
         search_params = search_params_parser(self.options.pop("search_params", False))
 
-        new_tab = self.options.pop("new_tab", False)
+        # We first check the global config, and then the per-directive
+        # option. It defaults to True for backwards compatibility.
+        execute = self.options.pop("execute", str(self.env.config.replite_auto_execute))
+
+        if execute not in ("True", "False"):
+            raise ValueError("The :execute: option must be either True or False")
+
+        if execute == "False":
+            self.options["execute"] = "0"
 
         content = self.content
 
@@ -429,6 +441,8 @@ class RepliteDirective(SphinxDirective):
             os.path.join(self.env.app.srcdir, JUPYTERLITE_DIR),
             os.path.dirname(self.get_source_info()[0]),
         )
+
+        new_tab = self.options.pop("new_tab", False)
 
         if new_tab:
             directive_button_text = self.options.pop("new_tab_button_text", None)
@@ -1155,6 +1169,7 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
+    app.add_config_value("replite_auto_execute", True, rebuild="html")
 
     # Initialize Voici directive and tabbed interface
     app.add_node(
