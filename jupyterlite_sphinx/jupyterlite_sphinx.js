@@ -166,6 +166,7 @@ const ConfigLoader = (() => {
       return configLoadPromise;
     }
 
+    // Create and cache the promise for the config request
     configLoadPromise = (async () => {
       try {
         // Add a timestamp as query parameter to ensure a cached version of the
@@ -212,7 +213,6 @@ const ConfigLoader = (() => {
         console.error(error);
       } finally {
         tryExamplesConfigLoaded = true;
-        configLoadPromise = null;
       }
     })();
 
