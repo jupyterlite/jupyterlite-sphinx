@@ -315,12 +315,8 @@ _next_section_pattern = re.compile(
         + [r"\!\! processed by numpydoc \!\!"]
         # Attributes section sometimes has no directive.
         + [r":Attributes:"]
-        # The See Also section is also a heading that needs to be escaped. This
-        # showed up in the SymPy documentation which used an older version of
-        # numpydoc that did not enforce ordering, and modern numpydoc did, hence
-        # it was not noticed. For future reference, see:
-        # https://github.com/jupyterlite/jupyterlite-sphinx/pull/251
-        # https://github.com/sympy/sympy/pull/27419
+        # See Also sections are mapped to Sphinx's `.. seealso::` directive,
+        # not admonitions or rubrics.
         + [r"\.\. seealso::"]
     )
 )
