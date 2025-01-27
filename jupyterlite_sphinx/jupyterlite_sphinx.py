@@ -854,15 +854,16 @@ class TryExamplesDirective(SphinxDirective):
         )
 
         # Button with the onclick event to swap embedded notebook back to examples.
+        # This includes a 'hidden' class by default to hide until the page is loaded.
         go_back_button_html = (
-            '<button class="try_examples_button" '
+            '<button class="try_examples_button hidden" '
             f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
             f"'{iframe_parent_div_id}')\">"
             "Go Back</button>"
         )
 
         full_screen_button_html = (
-            '<button class="try_examples_button" '
+            '<button class="try_examples_button hidden" '
             f"onclick=\"window.openInNewTab('{examples_div_id}',"
             f"'{iframe_parent_div_id}')\">"
             "Open In Tab</button>"
@@ -871,7 +872,7 @@ class TryExamplesDirective(SphinxDirective):
         # Button with the onclick event to swap examples with embedded notebook.
         try_it_button_html = (
             '<div class="try_examples_button_container">'
-            '<button class="try_examples_button" '
+            '<button class="try_examples_button hidden" '
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
             f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
             f"'{height}')\">"
