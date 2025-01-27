@@ -149,55 +149,87 @@ var tryExamplesGlobalMinHeight = 0;
  */
 var tryExamplesConfigLoaded = false;
 
-window.loadTryExamplesConfig = async (configFilePath) => {
-  if (tryExamplesConfigLoaded) {
-    return;
-  }
-  try {
-    // Add a timestamp as query parameter to ensure a cached version of the
-    // file is not used.
-    const timestamp = new Date().getTime();
-    const configFileUrl = `${configFilePath}?cb=${timestamp}`;
-    const currentPageUrl = window.location.pathname;
+// A config loader with request deduplication + permanent caching
+const ConfigLoader = (() => {
+  let configLoadPromise = null;
 
-    const response = await fetch(configFileUrl);
-    if (!response.ok) {
-      if (response.status === 404) {
-        // Try examples ignore file is not present.
-        console.log("Optional try_examples config file not found.");
-        return;
-      }
-      throw new Error(`Error fetching ${configFilePath}`);
-    }
-
-    const data = await response.json();
-    if (!data) {
+  const loadConfig = async (configFilePath) => {
+    if (tryExamplesConfigLoaded) {
       return;
     }
 
-    // Set minimum iframe height based on value in config file
-    if (data.global_min_height) {
-      tryExamplesGlobalMinHeight = parseInt(data.global_min_height);
+    // Return the existing promise if the request is in progress, as we
+    // don't want to make multiple requests for the same file. This
+    // can happen if there are several try_examples directives on the
+    // same page.
+    if (configLoadPromise) {
+      return configLoadPromise;
     }
 
-    // Disable interactive examples if file matches one of the ignore patterns
-    // by hiding try_examples_buttons.
-    Patterns = data.ignore_patterns;
-    for (let pattern of Patterns) {
-      let regex = new RegExp(pattern);
-      if (regex.test(currentPageUrl)) {
-        var buttons = document.getElementsByClassName("try_examples_button");
-        for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.add("hidden");
+    // Create and cache the promise for the config request
+    configLoadPromise = (async () => {
+      try {
+        // Add a timestamp as query parameter to ensure a cached version of the
+        // file is not used.
+        const timestamp = new Date().getTime();
+        const configFileUrl = `${configFilePath}?cb=${timestamp}`;
+        const currentPageUrl = window.location.pathname;
+
+        const response = await fetch(configFileUrl);
+        if (!response.ok) {
+          if (response.status === 404) {
+            console.log("Optional try_examples config file not found.");
+            return;
+          }
+          throw new Error(`Error fetching ${configFilePath}`);
         }
-        break;
+
+        const data = await response.json();
+        if (!data) {
+          return;
+        }
+
+        // Set minimum iframe height based on value in config file
+        if (data.global_min_height) {
+          tryExamplesGlobalMinHeight = parseInt(data.global_min_height);
+        }
+
+        // Disable interactive examples if file matches one of the ignore patterns
+        // by hiding try_examples_buttons.
+        Patterns = data.ignore_patterns;
+        for (let pattern of Patterns) {
+          let regex = new RegExp(pattern);
+          if (regex.test(currentPageUrl)) {
+            var buttons = document.getElementsByClassName(
+              "try_examples_button",
+            );
+            for (var i = 0; i < buttons.length; i++) {
+              buttons[i].classList.add("hidden");
+            }
+            break;
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        tryExamplesConfigLoaded = true;
       }
-    }
-  } catch (error) {
-    console.error(error);
-  }
-  tryExamplesConfigLoaded = true;
-};
+    })();
+
+    return configLoadPromise;
+  };
+
+  return {
+    loadConfig,
+    // for testing/debugging only, could be removed
+    resetState: () => {
+      tryExamplesConfigLoaded = false;
+      configLoadPromise = null;
+    },
+  };
+})();
+
+window.loadTryExamplesConfig = ConfigLoader.loadConfig;
 
 window.toggleTryExamplesButtons = () => {
   /* Toggle visibility of TryExamples buttons. For use in console for debug
