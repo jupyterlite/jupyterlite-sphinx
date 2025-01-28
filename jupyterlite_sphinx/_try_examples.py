@@ -271,7 +271,7 @@ def _process_literal_blocks(md_text):
 
 # try_examples identifies section headers after processing by numpydoc or
 # sphinx.ext.napoleon.
-# See https://numpydoc.readthedocs.io/en/latest/format.html for info on numpydoc
+# See https://numpydoc.readthedocs.io/en/stable/format.html for info on numpydoc
 # sections and
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html#docstring-sections
 # for info on sphinx.ext.napoleon sections.
