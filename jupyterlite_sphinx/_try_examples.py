@@ -269,6 +269,7 @@ def _process_literal_blocks(md_text):
 
     return "\n".join(new_lines)
 
+
 # try_examples identifies section headers after processing by numpydoc or
 # sphinx.ext.napoleon.
 # See https://numpydoc.readthedocs.io/en/stable/format.html for info on numpydoc
