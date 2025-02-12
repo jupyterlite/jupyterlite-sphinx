@@ -22,6 +22,6 @@ If you want to open a specific notebook in fullscreen JupyterLab/Notebook/Voici,
 
 If you want to add code to the REPL for execution, you can use the `code` URL parameter, e.g. `./lite/repl/index.html?code=print("Hello, world!")`. You may also use `&execute=0` to prevent the code from being executed until you press Enter.
 
-More configuration options are available with the [REPL documentation](https://jupyterlite.readthedocs.io/en/stable/quickstart/embed-repl.html#configuration)
+More configuration options are available with the [REPL documentation](https://jupyterlite.readthedocs.io/en/stable/quickstart/embed-repl.html#configuration).
 
 Please see the documentation for individual options for each directive and [global configuration options](configuration.md)  for more information.
