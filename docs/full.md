@@ -5,7 +5,7 @@ JupyterLite instance in a separate tab.
 
 ## Custom links to JupyterLite apps
 
-You can access the JupyterLite app that `jupyterlite-sphinx` made for you, in fullscreen, using the following links:
+You can access the JupyterLite apps that `jupyterlite-sphinx` deployed for you, in fullscreen, using the following links:
 
 - [JupyterLab](lite/lab/index.html)
 - [Notebook](lite/tree/index.html)
