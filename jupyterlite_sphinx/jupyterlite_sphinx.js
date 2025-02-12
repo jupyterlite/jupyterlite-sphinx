@@ -149,11 +149,71 @@ var tryExamplesGlobalMinHeight = 0;
  */
 var tryExamplesConfigLoaded = false;
 
+// This function is used to check if the current device is a mobile device.
+// We assume the authenticity of the user agent string is enough to
+// determine that, and we also check the window size as a fallback.
+window.isMobileDevice = (() => {
+  let cachedUAResult = null;
+  let hasLogged = false;
+
+  const checkUserAgent = () => {
+    if (cachedUAResult !== null) {
+      return cachedUAResult;
+    }
+
+    const mobilePatterns = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /IEMobile/i,
+      /Windows Phone/i,
+      /Opera Mini/i,
+      /SamsungBrowser/i,
+      /UC.*Browser|UCWEB/i,
+      /MiuiBrowser/i,
+      /Mobile/i,
+      /Tablet/i,
+    ];
+
+    cachedUAResult = mobilePatterns.some((pattern) =>
+      pattern.test(navigator.userAgent),
+    );
+    return cachedUAResult;
+  };
+
+  return () => {
+    const isMobileBySize =
+      window.innerWidth <= 480 || window.innerHeight <= 480;
+    const isLikelyMobile = checkUserAgent() || isMobileBySize;
+
+    if (isLikelyMobile && !hasLogged) {
+      console.log(
+        "Either a mobile device detected or the screen was resized. Disabling interactive example buttons to conserve bandwidth.",
+      );
+      hasLogged = true;
+    }
+
+    return isLikelyMobile;
+  };
+})();
+
 // A config loader with request deduplication + permanent caching
 const ConfigLoader = (() => {
   let configLoadPromise = null;
 
   const loadConfig = async (configFilePath) => {
+    if (window.isMobileDevice()) {
+      const buttons = document.getElementsByClassName("try_examples_button");
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.add("hidden");
+      }
+      tryExamplesConfigLoaded = true; // mock it
+      return;
+    }
+
     if (tryExamplesConfigLoaded) {
       return;
     }
@@ -228,6 +288,27 @@ const ConfigLoader = (() => {
     },
   };
 })();
+
+// Add a resize handler that will update the buttons' visibility on
+// orientation changes
+let resizeTimeout;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    if (!tryExamplesConfigLoaded) return; // since we won't interfere if the config isn't loaded
+
+    const buttons = document.getElementsByClassName("try_examples_button");
+    const shouldHide = window.isMobileDevice();
+
+    for (let i = 0; i < buttons.length; i++) {
+      if (shouldHide) {
+        buttons[i].classList.add("hidden");
+      } else {
+        buttons[i].classList.remove("hidden");
+      }
+    }
+  }, 250);
+});
 
 window.loadTryExamplesConfig = ConfigLoader.loadConfig;
 
