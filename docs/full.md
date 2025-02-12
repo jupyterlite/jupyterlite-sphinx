@@ -24,4 +24,4 @@ If you want to add code to the REPL for execution, you can use the `code` URL pa
 
 Info on more configuration options is available in the [REPL documentation](https://jupyterlite.readthedocs.io/en/stable/quickstart/embed-repl.html#configuration).
 
-Please see the documentation for individual options for each directive and [global configuration options](configuration.md)  for more information.
+Please see the documentation for individual options for each directive and [global configuration options](configuration.md) for more information.
