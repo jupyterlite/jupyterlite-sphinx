@@ -2,6 +2,35 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.19.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.18.0...9cf9a249d02d99f68eb0c2ad49747607a19ba0b9))
+
+### Enhancements made
+
+- Better mobile device detection for interactive examples buttons [#250](https://github.com/jupyterlite/jupyterlite-sphinx/pull/250) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Bugs fixed
+
+- BUG: Fix list of possible docstring section header patterns for `global_enable_try_examples` [#263](https://github.com/jupyterlite/jupyterlite-sphinx/pull/263) ([@steppi](https://github.com/steppi))
+- Add `ConfigLoader` with deduplicated logging and `try_examples` config caching [#249](https://github.com/jupyterlite/jupyterlite-sphinx/pull/249) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Maintenance and upkeep improvements
+
+- Update to `actions/upload-artifact@v4` [#267](https://github.com/jupyterlite/jupyterlite-sphinx/pull/267) ([@jtpio](https://github.com/jtpio))
+
+### Documentation improvements
+
+- Update documentation around fullscreen usage of `jupyterlite-sphinx` apps [#253](https://github.com/jupyterlite/jupyterlite-sphinx/pull/253) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-01-13&to=2025-02-12&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-01-13..2025-02-12&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2025-01-13..2025-02-12&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-01-13..2025-02-12&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2025-01-13..2025-02-12&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.18.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.17.1...a908c141dbbecfacdacf4a3382b526c30eda24d7))
@@ -24,8 +53,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-12-22&to=2025-01-13&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-12-22..2025-01-13&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2024-12-22..2025-01-13&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-12-22..2025-01-13&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-12-22..2025-01-13&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.17.1
 
