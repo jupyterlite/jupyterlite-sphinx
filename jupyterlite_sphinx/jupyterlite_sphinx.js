@@ -153,12 +153,12 @@ var tryExamplesConfigLoaded = false;
 // We assume the authenticity of the user agent string is enough to
 // determine that, and we also check the window size as a fallback.
 window.isMobileDevice = (() => {
-  let isLikelyMobile = null;
+  let cachedUAResult = null;
   let hasLogged = false;
 
-  return () => {
-    if (isLikelyMobile !== null) {
-      return isLikelyMobile;
+  const checkUserAgent = () => {
+    if (cachedUAResult !== null) {
+      return cachedUAResult;
     }
 
     const mobilePatterns = [
@@ -178,16 +178,20 @@ window.isMobileDevice = (() => {
       /Tablet/i,
     ];
 
-    const isMobileByUA = mobilePatterns.some((pattern) =>
+    cachedUAResult = mobilePatterns.some((pattern) =>
       pattern.test(navigator.userAgent),
     );
+    return cachedUAResult;
+  };
+
+  return () => {
     const isMobileBySize =
       window.innerWidth <= 480 || window.innerHeight <= 480;
-    isLikelyMobile = isMobileByUA || isMobileBySize;
+    const isLikelyMobile = checkUserAgent() || isMobileBySize;
 
     if (isLikelyMobile && !hasLogged) {
       console.log(
-        "Mobile device detected, disabling interactive example buttons to conserve bandwidth.",
+        "Either a mobile device detected or the screen was resized. Disabling interactive example buttons to conserve bandwidth.",
       );
       hasLogged = true;
     }
