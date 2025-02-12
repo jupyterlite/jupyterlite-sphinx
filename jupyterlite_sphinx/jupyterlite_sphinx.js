@@ -163,8 +163,30 @@ window.loadTryExamplesConfig = async (configFilePath) => {
     const response = await fetch(configFileUrl);
     if (!response.ok) {
       if (response.status === 404) {
-        // Try examples ignore file is not present.
-        console.log("Optional try_examples config file not found.");
+        // Try examples ignore file is not present. Enable all interactive examples
+        // in that case.
+        console.log(
+          "Optional try_examples config file not found. Enabling all interactive examples.",
+        );
+
+        // Grab all hidden try examples buttons and fade them in
+        const buttons = document.getElementsByClassName(
+          "try_examples_button hidden",
+        );
+
+        requestAnimationFrame(() => {
+          for (let button of buttons) {
+            button.style.opacity = "0";
+            button.classList.remove("hidden");
+            button.classList.add("fade-in");
+            requestAnimationFrame(() => {
+              button.style.opacity = "1";
+            });
+          }
+        });
+
+        tryExamplesConfigLoaded = true;
+
         return;
       }
       throw new Error(`Error fetching ${configFilePath}`);
@@ -172,6 +194,17 @@ window.loadTryExamplesConfig = async (configFilePath) => {
 
     const data = await response.json();
     if (!data) {
+      // If config file exists but is empty, treat it like a missing config
+      // and enable all interactive examples since there is no ignore pattern
+      console.log(
+        "Try examples config file is empty. Enabling all interactive examples.",
+      );
+      const buttons = document.getElementsByClassName(
+        "try_examples_button hidden",
+      );
+      for (let button of buttons) {
+        button.classList.remove("hidden");
+      }
       return;
     }
 
@@ -180,21 +213,43 @@ window.loadTryExamplesConfig = async (configFilePath) => {
       tryExamplesGlobalMinHeight = parseInt(data.global_min_height);
     }
 
-    // Disable interactive examples if file matches one of the ignore patterns
-    // by hiding try_examples_buttons.
-    Patterns = data.ignore_patterns;
+    // Selectively enable interactive examples if file matches one of the ignore patterns
+    // by un-hiding try_examples_buttons with a smooth transition
+    const Patterns = data.ignore_patterns || [];
+    let shouldShowButtons = true;
+
     for (let pattern of Patterns) {
       let regex = new RegExp(pattern);
       if (regex.test(currentPageUrl)) {
-        var buttons = document.getElementsByClassName("try_examples_button");
-        for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.add("hidden");
-        }
+        shouldShowButtons = false;
         break;
       }
     }
+
+    if (shouldShowButtons) {
+      const buttons = document.getElementsByClassName(
+        "try_examples_button hidden",
+      );
+      requestAnimationFrame(() => {
+        for (let button of buttons) {
+          button.style.opacity = "0";
+          button.classList.remove("hidden");
+          button.classList.add("fade-in");
+          requestAnimationFrame(() => {
+            button.style.opacity = "1";
+          });
+        }
+      });
+    }
   } catch (error) {
-    console.error(error);
+    // On error, enable all buttons as a fallback to maintain current behavior
+    console.error("Error loading try_examples config:", error);
+    const buttons = document.getElementsByClassName(
+      "try_examples_button hidden",
+    );
+    for (let button of buttons) {
+      button.classList.remove("hidden");
+    }
   }
   tryExamplesConfigLoaded = true;
 };
@@ -202,7 +257,7 @@ window.loadTryExamplesConfig = async (configFilePath) => {
 window.toggleTryExamplesButtons = () => {
   /* Toggle visibility of TryExamples buttons. For use in console for debug
    * purposes. */
-  var buttons = document.getElementsByClassName("try_examples_button");
+  var buttons = document.getElementsByClassName("try_examples_button hidden");
 
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].classList.toggle("hidden");
