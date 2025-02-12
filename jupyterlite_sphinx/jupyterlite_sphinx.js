@@ -152,38 +152,49 @@ var tryExamplesConfigLoaded = false;
 // This function is used to check if the current device is a mobile device.
 // We assume the authenticity of the user agent string is enough to
 // determine that, and we also check the window size as a fallback.
-window.isMobileDevice = () => {
-  const mobilePatterns = [
-    /Android/i,
-    /webOS/i,
-    /iPhone/i,
-    /iPad/i,
-    /iPod/i,
-    /BlackBerry/i,
-    /IEMobile/i,
-    /Windows Phone/i,
-    /Opera Mini/i,
-    /SamsungBrowser/i,
-    /UC.*Browser|UCWEB/i,
-    /MiuiBrowser/i,
-    /Mobile/i,
-    /Tablet/i,
-  ];
+window.isMobileDevice = (() => {
+  let isLikelyMobile = null;
+  let hasLogged = false;
 
-  const isMobileByUA = mobilePatterns.some((pattern) =>
-    pattern.test(navigator.userAgent),
-  );
-  const isMobileBySize = window.innerWidth <= 480 || window.innerHeight <= 480;
-  const isLikelyMobile = isMobileByUA || isMobileBySize;
+  return () => {
+    if (isLikelyMobile !== null) {
+      return isLikelyMobile;
+    }
 
-  if (isLikelyMobile) {
-    console.log(
-      "Mobile device detected, disabling interactive example buttons to conserve bandwidth.",
+    const mobilePatterns = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /IEMobile/i,
+      /Windows Phone/i,
+      /Opera Mini/i,
+      /SamsungBrowser/i,
+      /UC.*Browser|UCWEB/i,
+      /MiuiBrowser/i,
+      /Mobile/i,
+      /Tablet/i,
+    ];
+
+    const isMobileByUA = mobilePatterns.some((pattern) =>
+      pattern.test(navigator.userAgent),
     );
-  }
+    const isMobileBySize =
+      window.innerWidth <= 480 || window.innerHeight <= 480;
+    isLikelyMobile = isMobileByUA || isMobileBySize;
 
-  return isLikelyMobile;
-};
+    if (isLikelyMobile && !hasLogged) {
+      console.log(
+        "Mobile device detected, disabling interactive example buttons to conserve bandwidth.",
+      );
+      hasLogged = true;
+    }
+
+    return isLikelyMobile;
+  };
+})();
 
 // A config loader with request deduplication + permanent caching
 const ConfigLoader = (() => {
