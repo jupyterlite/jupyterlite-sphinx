@@ -2,6 +2,31 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.18.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.17.1...a908c141dbbecfacdacf4a3382b526c30eda24d7))
+
+### Enhancements made
+
+- Allow enabling/disabling REPL code execution in the `Replite` directive [#245](https://github.com/jupyterlite/jupyterlite-sphinx/pull/245) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Bugs fixed
+
+- Correctly handle case where "See Also" section follows "Examples" in `global_enable_try_examples` [#251](https://github.com/jupyterlite/jupyterlite-sphinx/pull/251) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Maintenance and upkeep improvements
+
+- Drop Python 3.8 [#239](https://github.com/jupyterlite/jupyterlite-sphinx/pull/239) ([@jtpio](https://github.com/jtpio))
+- Relax `jupyterlite-core` and `jupyterlite-xeus` dependencies [#238](https://github.com/jupyterlite/jupyterlite-sphinx/pull/238) ([@jtpio](https://github.com/jtpio))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-12-22&to=2025-01-13&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-12-22..2025-01-13&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2024-12-22..2025-01-13&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2024-12-22..2025-01-13&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2024-12-22..2025-01-13&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.17.1
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.17.0...f51bdc6e0971c45862af66eb68e10bfe6935f538))
@@ -15,8 +40,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2024-12-22&to=2024-12-22&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2024-12-22..2024-12-22&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.17.0
 

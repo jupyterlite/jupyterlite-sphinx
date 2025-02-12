@@ -85,6 +85,12 @@ voici_new_tab_button_text = "My custom Voici button text"
 You can override this text on a per-directive basis by passing the `:new_tab_button_text:` option
 to the directive. Note that this is compatible only if `:new_tab:` is also provided.
 
+## REPL code auto-execution with the `Replite` directive
+
+It is possible to control whether code snippets in REPL environments automatically executes when loaded.
+For this, you may set `replite_auto_execute = False` globally in `conf.py` with  (defaults to `True` if
+not present), or override it on a per-directive basis  with `:execute: True` or `:execute: False`.
+
 ## Strip particular tagged cells from IPython Notebooks
 
 When using the `NotebookLite`, `JupyterLite`, or `Voici` directives with a notebook passed to them, you can
