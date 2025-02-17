@@ -11,6 +11,7 @@
   font-family: vibur;
   font-size: larger;
   box-shadow: 0 2px 5px rgba(108, 108, 108, 0.2);
+  color: black;
 }
 
 .try_examples_button:hover {
@@ -18,6 +19,7 @@
   transform: scale(1.02);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  color: white;
 }
 
 .try_examples_button_container {
