@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 from uuid import uuid4
 import shutil
@@ -1006,6 +1007,8 @@ def jupyterlite_build(app: Sphinx, error):
             apps_option.extend(["--apps", "voici"])
 
         command = [
+            sys.executable,
+            "-m",
             "jupyter",
             "lite",
             "build",
