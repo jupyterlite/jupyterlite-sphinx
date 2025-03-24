@@ -18,7 +18,7 @@ strip_tagged_cells = True
 
 # Enable this to unsilence JupyterLite and aid debugging
 # within our own documentation.
-# jupyterlite_silence = False
+jupyterlite_silence = False
 
 master_doc = "index"
 
