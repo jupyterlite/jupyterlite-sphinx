@@ -11,7 +11,7 @@
   border-color: #d8d8d8;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 0.2rem 0.5rem #d8d8d8;
+  box-shadow: 0 0.2rem 0.5rem rgba(19, 23, 29, 0.4);
   margin-bottom: 1.5rem;
 }
 
@@ -33,10 +33,11 @@
   text-align: center;
   white-space: nowrap;
   background-color: #f7dc1e;
+  color: #13171d;
   border-radius: 50%;
   font-family: vibur;
   font-size: larger;
-  box-shadow: 0 0.2rem 0.5rem #d8d8d8;
+  box-shadow: 0 0.2rem 0.5rem rgba(19, 23, 29, 0.4);
 }
 
 .try_examples_outer_container {
