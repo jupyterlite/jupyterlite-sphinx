@@ -3,7 +3,6 @@ import sys
 import json
 from uuid import uuid4
 import shutil
-import glob
 import re
 from typing import Dict, Any, List
 
@@ -990,15 +989,38 @@ def jupyterlite_build(app: Sphinx, error):
             jupyterlite_contents = [jupyterlite_contents]
 
         # Expand globs in the contents strings
-        jupyterlite_contents = [
-            match
-            for pattern in jupyterlite_contents
-            for match in glob.glob(pattern, recursive=True)
-        ]
-
         contents = []
-        for content in jupyterlite_contents:
-            contents.extend(["--contents", content])
+        for pattern in jupyterlite_contents:
+            pattern_path = Path(pattern)
+
+            if pattern_path.is_absolute():
+                base_path = pattern_path.parent
+                glob_pattern = pattern_path.name
+            else:
+                # For relative paths, we'll resolve them relative
+                # to app.srcdir
+                base_path = Path(app.srcdir) / pattern_path.parent
+                glob_pattern = pattern_path.name
+
+            if any(c in str(glob_pattern) for c in "*?[]"):
+                matched_paths = list(base_path.glob(glob_pattern))
+            else:
+                full_path = base_path / glob_pattern
+                matched_paths = [full_path] if full_path.exists() else []
+
+            for match_path in matched_paths:
+                # We need to provide paths that will work when the command runs
+                # with cwd=app.srcdir. So, we compute the relative path from
+                # app.srcdir to each match
+                if match_path.is_absolute():
+                    rel_path = str(match_path)
+                else:
+                    try:
+                        rel_path = str(match_path.relative_to(Path(app.srcdir)))
+                    except ValueError:
+                        rel_path = str(match_path.absolute())
+
+                contents.extend(["--contents", rel_path])
 
         apps_option = []
         for liteapp in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
