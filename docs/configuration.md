@@ -10,7 +10,7 @@ You can embed custom content (notebooks and data files) in your JupyterLite buil
 jupyterlite_contents = ["./path/to/my/notebooks/", "my_other_notebook.ipynb"]
 ```
 
-`jupyterlite_contents` can be a string or a list of strings. Each string is expanded using the Python `glob.glob` function with its recursive option. See the [glob documentation](https://docs.python.org/3/library/glob.html#glob.glob) and the [wildcard pattern documentation](https://docs.python.org/3/library/fnmatch.html#fnmatch.fnmatch) for more details.
+`jupyterlite_contents` can be a string or a list of strings. Each string is expanded using the Python `glob.glob` function with its recursive option. See the [glob documentation](https://docs.python.org/3/library/glob.html#glob.glob) and the [wildcard pattern documentation](https://docs.python.org/3/library/fnmatch.html#fnmatch.fnmatch) for more details. This option supports both paths relative to the docs source directory and absolute ones.
 
 ## JupyterLite dir
 
