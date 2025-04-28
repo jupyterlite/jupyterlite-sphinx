@@ -993,7 +993,11 @@ def jupyterlite_build(app: Sphinx, error):
         for pattern in jupyterlite_contents:
             pattern_path = Path(pattern)
 
-            base_path = pattern_path.parent if pattern_path.is_abolute() else Path(app.srcdir) / pattern_path.parent
+            base_path = (
+                pattern_path.parent
+                if pattern_path.is_abolute()
+                else Path(app.srcdir) / pattern_path.parent
+            )
             glob_pattern = pattern_path.name
 
             matched_paths = base_path.glob(glob_pattern)
