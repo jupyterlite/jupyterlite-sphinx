@@ -3,7 +3,6 @@ import sys
 import json
 from uuid import uuid4
 import shutil
-import glob
 import re
 from typing import Dict, Any, List
 
@@ -990,15 +989,30 @@ def jupyterlite_build(app: Sphinx, error):
             jupyterlite_contents = [jupyterlite_contents]
 
         # Expand globs in the contents strings
-        jupyterlite_contents = [
-            match
-            for pattern in jupyterlite_contents
-            for match in glob.glob(pattern, recursive=True)
-        ]
-
         contents = []
-        for content in jupyterlite_contents:
-            contents.extend(["--contents", content])
+        for pattern in jupyterlite_contents:
+            pattern_path = Path(pattern)
+
+            base_path = (
+                pattern_path.parent
+                if pattern_path.is_absolute()
+                else Path(app.srcdir) / pattern_path.parent
+            )
+            glob_pattern = pattern_path.name
+
+            matched_paths = base_path.glob(glob_pattern)
+
+            for matched_path in matched_paths:
+                # If the matched path is absolute, we keep it as is, and
+                # if it is relative, we convert it to a path relative to
+                # the documentation source directory.
+                contents_path = (
+                    str(matched_path)
+                    if matched_path.is_absolute()
+                    else str(matched_path.relative_to(app.srcdir))
+                )
+
+                contents.extend(["--contents", contents_path])
 
         apps_option = []
         for liteapp in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
