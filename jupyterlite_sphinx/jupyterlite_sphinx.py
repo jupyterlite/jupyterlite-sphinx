@@ -993,14 +993,8 @@ def jupyterlite_build(app: Sphinx, error):
         for pattern in jupyterlite_contents:
             pattern_path = Path(pattern)
 
-            if pattern_path.is_absolute():
-                base_path = pattern_path.parent
-                glob_pattern = pattern_path.name
-            else:
-                # For relative paths, we'll resolve them relative
-                # to app.srcdir
-                base_path = Path(app.srcdir) / pattern_path.parent
-                glob_pattern = pattern_path.name
+            base_path = pattern_path.parent if pattern_path.is_abolute() else Path(app.srcdir) / pattern_path.parent
+            glob_pattern = pattern_path.name
 
             if any(c in str(glob_pattern) for c in "*?[]"):
                 matched_paths = list(base_path.glob(glob_pattern))
