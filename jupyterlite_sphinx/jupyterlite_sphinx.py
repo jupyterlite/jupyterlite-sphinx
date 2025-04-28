@@ -996,11 +996,7 @@ def jupyterlite_build(app: Sphinx, error):
             base_path = pattern_path.parent if pattern_path.is_abolute() else Path(app.srcdir) / pattern_path.parent
             glob_pattern = pattern_path.name
 
-            if any(c in str(glob_pattern) for c in "*?[]"):
-                matched_paths = list(base_path.glob(glob_pattern))
-            else:
-                full_path = base_path / glob_pattern
-                matched_paths = [full_path] if full_path.exists() else []
+            matched_paths = base_path.glob(glob_pattern)
 
             for match_path in matched_paths:
                 # We need to provide paths that will work when the command runs
