@@ -339,7 +339,7 @@ def insert_try_examples_directive(lines, **options):
     """Adds try_examples directive to Examples section of a docstring.
 
     Hack to allow for a config option to enable try_examples functionality
-    in all Examples sections (unless a comment "..! disable_try_examples" is
+    in all Examples sections (unless a comment ".. disable_try_examples" is
     added explicitly after the section header.)
 
 
@@ -354,7 +354,7 @@ def insert_try_examples_directive(lines, **options):
     list of str
         Updated version of the input docstring which has a try_examples directive
         inserted in the Examples section (if one exists) with all Examples content
-        indented beneath it. Does nothing if the comment "..! disable_try_examples"
+        indented beneath it. Does nothing if the comment ".. disable_try_examples"
         is included at the top of the Examples section. Also a no-op if the
         try_examples directive is already included.
     """
@@ -375,8 +375,8 @@ def insert_try_examples_directive(lines, **options):
         # Examples section had no content, no need to insert directive.
         return lines[:]
 
-    # Check for the "..! disable_try_examples" comment.
-    if lines[left_index].strip() == "..! disable_try_examples::":
+    # Check for the ".. disable_try_examples" comment.
+    if lines[left_index].strip() == ".. disable_try_examples":
         # If so, do not insert directive.
         return lines[:]
 
