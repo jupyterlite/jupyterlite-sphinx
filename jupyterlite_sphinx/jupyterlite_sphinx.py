@@ -995,7 +995,7 @@ def jupyterlite_build(app: Sphinx, error):
 
             base_path = (
                 pattern_path.parent
-                if pattern_path.is_abolute()
+                if pattern_path.is_absolute()
                 else Path(app.srcdir) / pattern_path.parent
             )
             glob_pattern = pattern_path.name
