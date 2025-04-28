@@ -2,6 +2,31 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.20.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.19.1...9a59d086cb22b57731d05365f7c10747ef9d2ad1))
+
+### Enhancements made
+
+- Allow adding contents from outside the Sphinx source directory [#280](https://github.com/jupyterlite/jupyterlite-sphinx/pull/280) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Fix try button and shadows for dark theme [#279](https://github.com/jupyterlite/jupyterlite-sphinx/pull/279) ([@IsabelParedes](https://github.com/IsabelParedes))
+
+### Bugs fixed
+
+- Fix incorrect disable marker for `TryExamples` buttons [#284](https://github.com/jupyterlite/jupyterlite-sphinx/pull/284) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Maintenance and upkeep improvements
+
+- pin micromamba to v2.0.5 to fix failing RTD builds [#277](https://github.com/jupyterlite/jupyterlite-sphinx/pull/277) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-02-24&to=2025-04-28&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-02-24..2025-04-28&type=Issues) | [@IsabelParedes](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AIsabelParedes+updated%3A2025-02-24..2025-04-28&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-02-24..2025-04-28&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2025-02-24..2025-04-28&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.19.1
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.19.0...1f2bb9736eef1b9c63e2f7659b8ff965ef02fe85))
@@ -21,8 +46,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-02-12&to=2025-02-24&type=c))
 
 [@mfisher87](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amfisher87+updated%3A2025-02-12..2025-02-24&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-02-12..2025-02-24&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2025-02-12..2025-02-24&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.19.0
 
