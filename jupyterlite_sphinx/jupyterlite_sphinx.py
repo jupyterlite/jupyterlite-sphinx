@@ -1002,19 +1002,17 @@ def jupyterlite_build(app: Sphinx, error):
 
             matched_paths = base_path.glob(glob_pattern)
 
-            for match_path in matched_paths:
-                # We need to provide paths that will work when the command runs
-                # with cwd=app.srcdir. So, we compute the relative path from
-                # app.srcdir to each match
-                if match_path.is_absolute():
-                    rel_path = str(match_path)
-                else:
-                    try:
-                        rel_path = str(match_path.relative_to(Path(app.srcdir)))
-                    except ValueError:
-                        rel_path = str(match_path.absolute())
+            for matched_path in matched_paths:
+                # If the matched path is absolute, we keep it as is, and
+                # if it is relative, we convert it to a path relative to
+                # the documentation source directory.
+                contents_path = (
+                    str(matched_path)
+                    if matched_path.is_absolute()
+                    else str(matched_path.relative_to(app.srcdir))
+                )
 
-                contents.extend(["--contents", rel_path])
+                contents.extend(["--contents", contents_path])
 
         apps_option = []
         for liteapp in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
