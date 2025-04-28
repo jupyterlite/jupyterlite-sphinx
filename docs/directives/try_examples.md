@@ -195,7 +195,7 @@ if needed. Adding the comment
 
 
 ```rst
-..! disable_try_examples`
+.. disable_try_examples
 ```
 
 as the first non-empty line under
