@@ -428,14 +428,69 @@ class RepliteDirective(SphinxDirective):
         search_params = search_params_parser(self.options.pop("search_params", False))
 
         # We first check the global config, and then the per-directive
-        # option. It defaults to True for backwards compatibility.
-        execute = self.options.pop("execute", str(self.env.config.replite_auto_execute))
+        # options, with reasonable defaults for backwards compatibility.
+        repl_config_mappings = {
+            "execute": "execute",
+            "clear_cells_on_execute": "clearCellsOnExecute",
+            "clear_code_content_on_execute": "clearCodeContentOnExecute",
+            "hide_code_input": "hideCodeInput",
+            "show_banner": "showBanner",
+            "prompt_cell_position": "promptCellPosition",
+        }
 
-        if execute not in ("True", "False"):
-            raise ValueError("The :execute: option must be either True or False")
+        for option in repl_config_mappings:
+            config_option = repl_config_mappings[option]
+            if option == "execute":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_auto_execute)
+                )
+            elif option == "clear_cells_on_execute":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_clear_cells_on_execute)
+                )
+            elif option == "clear_code_content_on_execute":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_clear_code_content_on_execute)
+                )
+            elif option == "hide_code_input":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_hide_code_input)
+                )
+            elif option == "show_banner":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_show_banner)
+                )
+            elif option == "prompt_cell_position":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_prompt_cell_position)
+                )
+            else:
+                err_msg = (
+                    f"Unknown option {option} for Replite directive. "
+                    "Please check the documentation for valid options."
+                )
+                raise ValueError(err_msg)
 
-        if execute == "False":
-            self.options["execute"] = "0"
+            # Convert to URL parameter format (0/1) for all options
+            # except for prompt_cell_position
+            if option != "prompt_cell_position":
+                if value.lower() == "true":
+                    self.options[config_option] = "1"
+                elif value.lower() == "false":
+                    self.options[config_option] = "0"
+                else:
+                    err_msg = (
+                        f"The {option} option must be either True or False, not {value}"
+                    )
+                    raise ValueError(err_msg)
+            else:
+                # For prompt_cell_position, we need to check if the value is valid
+                if value not in ["top", "bottom", "left", "right"]:
+                    err_msg = (
+                        f"The {option} option must be one of: top, bottom, left, right"
+                    )
+                    raise ValueError(err_msg)
+                self.options[config_option] = value
 
         content = self.content
 
