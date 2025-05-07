@@ -1137,6 +1137,14 @@ def setup(app):
         "replite_new_tab_button_text", "Open in a REPL", rebuild="html"
     )
 
+    # REPL configuration options
+    app.add_config_value("replite_auto_execute", True, rebuild="html")
+    app.add_config_value("replite_clear_cells_on_execute", False, rebuild="html")
+    app.add_config_value("replite_clear_code_content_on_execute", False, rebuild="html")
+    app.add_config_value("replite_hide_code_input", False, rebuild="html") 
+    app.add_config_value("replite_prompt_cell_position", "bottom", rebuild="html")
+    app.add_config_value("replite_show_banner", True, rebuild="html")
+
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
         NotebookLiteIframe,
@@ -1186,7 +1194,6 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
-    app.add_config_value("replite_auto_execute", True, rebuild="html")
 
     # Initialize Voici directive and tabbed interface
     app.add_node(
