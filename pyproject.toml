@@ -16,7 +16,7 @@ dependencies = [
     "docutils",
     "jupyter_server",
     "jupyterlab_server",
-    "jupyterlite-core >=0.2,<0.6",
+    "jupyterlite-core==0.6.0a9",
     "jupytext",
     "nbformat",
     "sphinx>=4",
