@@ -85,7 +85,7 @@ class _PromptedIframe(Element):
             )
 
             placeholder_id = uuid4()
-            container_style = f'width: {self["width"]}; height: {self["height"]};'
+            container_style = f"width: {self['width']}; height: {self['height']};"
 
             return f"""
                 <div
@@ -132,7 +132,7 @@ class _InTab(Element):
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
         self.lab_src = (
-            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+            f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
         )
 
         self.button_text = button_text
@@ -176,7 +176,7 @@ class _LiteIframe(_PromptedIframe):
             [f"{key}={quote(value)}" for key, value in lite_options.items()]
         )
 
-        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
         if "iframe_src" in attributes:
             if attributes["iframe_src"] != iframe_src:
@@ -282,7 +282,7 @@ class RepliteTab(Element):
         )
 
         self.lab_src = (
-            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+            f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
         )
 
         self.button_text = button_text
@@ -346,7 +346,7 @@ class VoiciIframe(_PromptedIframe):
         )
 
         # If a notebook is provided, open it in the render view. Else, we default to the tree view.
-        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
@@ -366,7 +366,6 @@ class VoiciTab(Element):
         button_text=None,
         **attributes,
     ):
-
         self.lab_src = f"{prefix}/"
 
         app_path = VoiciBase.get_full_path(notebook)
@@ -375,7 +374,7 @@ class VoiciTab(Element):
         )
 
         # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
-        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        self.lab_src = f"{prefix}/{app_path}{f'?{options}' if options else ''}"
 
         self.button_text = button_text
 
@@ -521,7 +520,6 @@ class _LiteDirective(SphinxDirective):
         # We do this to prevent conflicts with other files, say, in the "_contents/"
         # directory as a result of a previous failed/interrupted build.
         if source_path.parent != notebooks_dir:
-
             # We only consider conflicts if notebooks are actually referenced in
             # a directive, to prevent false posiitves from being raised.
             if hasattr(self.env, "jupyterlite_notebooks"):
@@ -531,7 +529,6 @@ class _LiteDirective(SphinxDirective):
                         existing_path.stem == target_stem
                         and existing_path != source_path
                     ):
-
                         raise RuntimeError(
                             "All notebooks marked for inclusion with JupyterLite must have a "
                             f"unique file basename. Found conflict between {source_path} and {existing_path}."
@@ -843,7 +840,7 @@ class TryExamplesDirective(SphinxDirective):
 
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
-        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
@@ -1146,7 +1143,7 @@ def setup(app):
     app.add_config_value("replite_auto_execute", True, rebuild="html")
     app.add_config_value("replite_clear_cells_on_execute", False, rebuild="html")
     app.add_config_value("replite_clear_code_content_on_execute", False, rebuild="html")
-    app.add_config_value("replite_hide_code_input", False, rebuild="html") 
+    app.add_config_value("replite_hide_code_input", False, rebuild="html")
     app.add_config_value("replite_prompt_cell_position", "bottom", rebuild="html")
     app.add_config_value("replite_show_banner", True, rebuild="html")
 
