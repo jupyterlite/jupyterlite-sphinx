@@ -85,11 +85,50 @@ voici_new_tab_button_text = "My custom Voici button text"
 You can override this text on a per-directive basis by passing the `:new_tab_button_text:` option
 to the directive. Note that this is compatible only if `:new_tab:` is also provided.
 
-## REPL code auto-execution with the `Replite` directive
+## REPL configuration options
 
-It is possible to control whether code snippets in REPL environments automatically executes when loaded.
-For this, you may set `replite_auto_execute = False` globally in `conf.py` with  (defaults to `True` if
-not present), or override it on a per-directive basis  with `:execute: True` or `:execute: False`.
+We provide several configuration options for the Replite directive that control the behaviour and appearance of the REPL. These options can be set globally in `conf.py` and then overridden on a per-directive basis.
+
+### REPL code auto-execution
+
+```python
+# enable or disable automatic code execution when the REPL loads
+# (available in jupyterlite-core 0.5.0 and later)
+replite_auto_execute = True  # default is True
+```
+
+This setting controls whether code snippets in REPL environments automatically execute when loaded. Set to `False` to disable automatic execution. You can override this on a per-directive basis with `:execute: True` or `:execute: False`.
+
+### REPL interface customisations (JupyterLite 0.6.0 and later)
+
+The following options customise how the REPL interface behaves and is presented:
+
+```python
+# clear previous cells when a new cell is executed
+replite_clear_cells_on_execute = False  # default is False
+
+# clear the code content in the prompt cell after execution
+replite_clear_code_content_on_execute = False  # default is False
+
+# hide input cells, showing only output
+replite_hide_code_input = False  # default is False
+
+# position of the prompt cell ('bottom', 'top', 'left', or 'right')
+replite_prompt_cell_position = "bottom"  # default is "bottom"
+
+# show or hide the kernel banner
+replite_show_banner = True  # default is True
+```
+
+These global settings can be overridden in individual directives using the corresponding options:
+
+- `:clear_cells_on_execute: True/False`
+- `:clear_code_content_on_execute: True/False`
+- `:hide_code_input: True/False`
+- `:prompt_cell_position: bottom/top/left/right`
+- `:show_banner: True/False`
+
+For more details and visual examples of each, see the [Replite directive documentation](directives/replite.md).
 
 ## Strip particular tagged cells from IPython Notebooks
 
@@ -120,7 +159,7 @@ Sphinx-specific content. It can be used to remove either code cells or Markdown 
 For example, you can use this feature to remove the `toctree` directive from the rendered notebook
 in the JupyterLite console:
 
-```json
+````json
 {
   "cells": [
     {
@@ -148,7 +187,7 @@ in the JupyterLite console:
     }
   ]
 }
-```
+````
 
 where the cell with the `toctree` directive will be removed from the rendered notebook in
 the JupyterLite console.
