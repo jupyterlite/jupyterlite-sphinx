@@ -16,4 +16,4 @@ dependencies:
     - pip:
         - .
         - jupyterlite-core ==0.6.0a9
-        - jupyterlite-xeus >=2.1.2
+        # - jupyterlite-xeus >=2.1.2
