@@ -269,8 +269,27 @@ class RepliteTab(Element):
             code = "\n".join(code_lines)
             lite_options["code"] = code
 
+        # REPL URL parameters
         if "execute" in lite_options and lite_options["execute"] == "0":
             lite_options["execute"] = "0"
+        if (
+            "clearCellsOnExecute" in lite_options
+            and lite_options["clearCellsOnExecute"] == "0"
+        ):
+            lite_options["clearCellsOnExecute"] = "0"
+        if (
+            "clearCodeContentOnExecute" in lite_options
+            and lite_options["clearCodeContentOnExecute"] == "0"
+        ):
+            lite_options["clearCodeContentOnExecute"] = "0"
+        if "hideCodeInput" in lite_options and lite_options["hideCodeInput"] == "0":
+            lite_options["hideCodeInput"] = "0"
+        if "showBanner" in lite_options and lite_options["showBanner"] == "0":
+            lite_options["showBanner"] = "0"
+        if "promptCellPosition" in lite_options:
+            valid_positions = {"bottom", "top", "left", "right"}
+            if lite_options["promptCellPosition"] in valid_positions:
+                lite_options["promptCellPosition"] = lite_options["promptCellPosition"]
 
         app_path = self.lite_app
         if notebook is not None:
