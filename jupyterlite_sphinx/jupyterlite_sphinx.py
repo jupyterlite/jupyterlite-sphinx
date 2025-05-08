@@ -816,6 +816,13 @@ class TryExamplesDirective(SphinxDirective):
 
         if notebook_unique_name is None:
             nb = examples_to_notebook(self.content, warning_text=warning_text)
+            preamble_path = Path("try_examples_preamble.py")
+            if preamble_path.is_file():
+                preamble = preamble_path.read_text()
+                # or raise an error if `preamble` is empty
+                if preamble:
+                    # insert after the "experimental" warning
+                    nb.cells.insert(1, new_code_cell(preamble))
             self.content = None
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
