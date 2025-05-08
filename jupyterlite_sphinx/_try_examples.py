@@ -408,11 +408,10 @@ def insert_try_examples_directive(lines, **options):
         + [f"    :{key}: {value}" for key, value in options.items()]
         + [""]
         + ["    " + line for line in lines[left_index:right_index]]
-        + [""]
     )
 
     # Append the remainder of the docstring, if there is any
     if right_index < len(lines):
-        new_lines += lines[right_index:]
+        new_lines += [""] + lines[right_index:]
 
     return new_lines
