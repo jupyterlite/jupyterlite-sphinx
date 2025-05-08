@@ -2,6 +2,24 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.20.1
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.0...637c32e24fd5fe81459cab4e0c8f9d80d0789e15))
+
+### Bugs fixed
+
+- Fix `IndexError`s when the "Examples" is the last section in a docstring [#292](https://github.com/jupyterlite/jupyterlite-sphinx/pull/292) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Maintenance and upkeep improvements
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-04-28&to=2025-05-08&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-04-28..2025-05-08&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2025-04-28..2025-05-08&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-04-28..2025-05-08&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.20.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.19.1...9a59d086cb22b57731d05365f7c10747ef9d2ad1))
@@ -24,8 +42,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-02-24&to=2025-04-28&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-02-24..2025-04-28&type=Issues) | [@IsabelParedes](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AIsabelParedes+updated%3A2025-02-24..2025-04-28&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-02-24..2025-04-28&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2025-02-24..2025-04-28&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.19.1
 
