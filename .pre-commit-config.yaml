@@ -6,7 +6,7 @@ repos:
     types_or: [css, javascript]
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.11.11
+  rev: v0.11.12
   hooks:
     # Run the linter.
     - id: ruff
