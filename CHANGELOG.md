@@ -2,6 +2,24 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.20.2
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.1...6cc40bf3ae417a5c827ce72750b5b6790ecd0c0d))
+
+### Enhancements made
+
+- Bump jupyterlite-core dependency [#299](https://github.com/jupyterlite/jupyterlite-sphinx/pull/299) ([@martinRenou](https://github.com/martinRenou))
+
+### Maintenance and upkeep improvements
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-05-08&to=2025-06-03&type=c))
+
+[@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2025-05-08..2025-06-03&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-05-08..2025-06-03&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.20.1
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.0...637c32e24fd5fe81459cab4e0c8f9d80d0789e15))
@@ -17,8 +35,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-04-28&to=2025-05-08&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-04-28..2025-05-08&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2025-04-28..2025-05-08&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-04-28..2025-05-08&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.20.0
 
