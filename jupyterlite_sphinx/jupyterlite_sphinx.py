@@ -22,7 +22,11 @@ from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
 
-from ._try_examples import examples_to_notebook, insert_try_examples_directive, new_code_cell
+from ._try_examples import (
+    examples_to_notebook,
+    insert_try_examples_directive,
+    new_code_cell,
+)
 
 import jupytext
 import nbformat
