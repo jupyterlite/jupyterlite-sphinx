@@ -1087,7 +1087,7 @@ def jupyterlite_build(app: Sphinx, error):
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
 
-        print(f'Command: {command}')
+        print(f'[jupyterlite-sphinx] Command: {command}')
         completed_process: CompletedProcess[bytes] = subprocess.run(
             command, cwd=app.srcdir, check=True, **kwargs
         )
