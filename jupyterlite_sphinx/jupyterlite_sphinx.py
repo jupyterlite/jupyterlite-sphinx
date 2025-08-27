@@ -947,6 +947,24 @@ def inited(app: Sphinx, config):
         app.add_source_suffix(".ipynb", "jupyterlite_notebook")
 
 
+def jupyterlite_ignore_contents_args(ignore_contents):
+    """Generate `--ignore-contents` argument for each pattern.
+
+    NOTE: Unlike generating `--contents` args, we _do not_ expand globs to generate the
+    arguments. We just hand the config off to the JupyterLite build.
+    """
+    if ignore_contents is None:
+        ignore_contents = []
+    elif isinstance(ignore_contents, str):
+        ignore_contents = [ignore_contents]
+
+    return [
+        arg
+        for pattern in ignore_contents
+        for arg in ["--ignore-contents", pattern]
+    ]
+
+
 def jupyterlite_build(app: Sphinx, error):
     if error is not None:
         # Do not build JupyterLite
@@ -1014,6 +1032,10 @@ def jupyterlite_build(app: Sphinx, error):
 
                 contents.extend(["--contents", contents_path])
 
+        ignore_contents = jupyterlite_ignore_contents_args(
+            app.env.config.jupyterlite_ignore_contents,
+        )
+
         apps_option = []
         for liteapp in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
             apps_option.extend(["--apps", liteapp])
@@ -1032,6 +1054,7 @@ def jupyterlite_build(app: Sphinx, error):
             *contents,
             "--contents",
             os.path.join(app.srcdir, CONTENT_DIR),
+            *ignore_contents,
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
             *apps_option,
@@ -1064,6 +1087,7 @@ def jupyterlite_build(app: Sphinx, error):
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
 
+        print(f'Command: {command}')
         completed_process: CompletedProcess[bytes] = subprocess.run(
             command, cwd=app.srcdir, check=True, **kwargs
         )
@@ -1108,6 +1132,7 @@ def setup(app):
     app.add_config_value("jupyterlite_overrides", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", str(app.srcdir), rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
+    app.add_config_value("jupyterlite_ignore_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value("jupyterlite_silence", True, rebuild=True)
     app.add_config_value("strip_tagged_cells", False, rebuild=True)
