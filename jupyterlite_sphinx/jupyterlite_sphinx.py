@@ -959,9 +959,7 @@ def jupyterlite_ignore_contents_args(ignore_contents):
         ignore_contents = [ignore_contents]
 
     return [
-        arg
-        for pattern in ignore_contents
-        for arg in ["--ignore-contents", pattern]
+        arg for pattern in ignore_contents for arg in ["--ignore-contents", pattern]
     ]
 
 
@@ -1087,7 +1085,7 @@ def jupyterlite_build(app: Sphinx, error):
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
 
-        print(f'[jupyterlite-sphinx] Command: {command}')
+        print(f"[jupyterlite-sphinx] Command: {command}")
         completed_process: CompletedProcess[bytes] = subprocess.run(
             command, cwd=app.srcdir, check=True, **kwargs
         )
