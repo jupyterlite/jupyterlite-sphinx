@@ -3,10 +3,10 @@ name: Tests
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 defaults:
   run:
@@ -20,20 +20,20 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.9']
+        python-version: ["3.9"]
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup conda
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        activate-environment: jupyterlite-sphinx
-        environment-file: dev-environment.yml
-        python-version: ${{ matrix.python-version }}
-        miniforge-version: latest
-        auto-activate-base: false
+      - name: Setup conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: jupyterlite-sphinx
+          environment-file: dev-environment.yml
+          python-version: ${{ matrix.python-version }}
+          miniforge-version: latest
+          auto-activate-base: false
 
-    - name: Test PEP8
-      run: black --check jupyterlite_sphinx
+      - name: Test PEP8
+        run: black --check jupyterlite_sphinx
