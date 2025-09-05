@@ -2,6 +2,27 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.21.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.2...a9b1502e5071749c2bce66c0ac97ad1a54352cd1))
+
+### Enhancements made
+
+- Add `jupyterlite_ignore_contents` config, mapping to `--ignore-contents` arg in JupyterLite build [#309](https://github.com/jupyterlite/jupyterlite-sphinx/pull/309) ([@mfisher87](https://github.com/mfisher87))
+
+### Maintenance and upkeep improvements
+
+- Run `black` at pre-commit time [#311](https://github.com/jupyterlite/jupyterlite-sphinx/pull/311) ([@mfisher87](https://github.com/mfisher87))
+- Gitignore `node_modules/` [#310](https://github.com/jupyterlite/jupyterlite-sphinx/pull/310) ([@mfisher87](https://github.com/mfisher87))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-06-03&to=2025-09-05&type=c))
+
+[@mfisher87](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amfisher87+updated%3A2025-06-03..2025-09-05&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-06-03..2025-09-05&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.20.2
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.1...6cc40bf3ae417a5c827ce72750b5b6790ecd0c0d))
@@ -17,8 +38,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-05-08&to=2025-06-03&type=c))
 
 [@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2025-05-08..2025-06-03&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-05-08..2025-06-03&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.20.1
 
