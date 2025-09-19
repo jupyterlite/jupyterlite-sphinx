@@ -161,3 +161,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 ```
 
 ````
+
+The parameters `:toolbar: 1`, `:showBanner: 0` and `:theme: …` can be used, respectively,
+to enable toolbar buttons, not show the kernel's banner, and alter the REPL's appearance,
+[as described in the JupyterLite REPL documentation](https://jupyterlite.readthedocs.io/en/latest/quickstart/embed-repl.html).
