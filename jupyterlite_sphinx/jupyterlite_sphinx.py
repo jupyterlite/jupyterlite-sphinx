@@ -50,9 +50,19 @@ def visit_element_html(self, node):
 
 
 def _build_options(lite_options: dict[str, str]) -> str:
-    return "&".join(
-        [f"{key}={quote(value)}" for key, value in lite_options.items()]
+    """Concatenates options into query parameters, fixing the capitalization
+    for parameters where the necessarily lowercase docutils directive value
+    needs some uppercase letters in a query parameter."""
+
+    replacements = {
+        "showbanner": "showBanner",
+    }
+
+    lite_options = (
+        (replacements.get(key, key), value) for key, value in lite_options.items()
     )
+
+    return "&".join([f"{key}={quote(value)}" for key, value in lite_options])
 
 
 class _PromptedIframe(Element):
@@ -408,6 +418,7 @@ class RepliteDirective(SphinxDirective):
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
         "new_tab_button_text": directives.unchanged,
+        "showbanner": directives.unchanged,
     }
 
     def run(self):
