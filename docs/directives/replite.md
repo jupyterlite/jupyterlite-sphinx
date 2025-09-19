@@ -5,7 +5,7 @@ This directive takes extra options which are the same options as the `replite` p
 
 ```rst
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :height: 600px
    :prompt: Try Replite!
    :prompt_color: #dc3545
@@ -23,7 +23,7 @@ This directive takes extra options which are the same options as the `replite` p
 
 ```{eval-rst}
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :height: 600px
    :prompt: Try Replite!
    :prompt_color: #dc3545
@@ -39,12 +39,16 @@ This directive takes extra options which are the same options as the `replite` p
    plt.show()
 ```
 
+If the `:kernel:` parameter is not set to an installed kernel
+(e.g. `xython` for xeus-python or `python` for Pyodide),
+the REPL shows a selection dialog at startup.
+
 If you use the `:new_tab:` option in the directive, the Replite console will be opened in a new browser tab
 with the code pre-filled.
 
 ```rst
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :new_tab: True
 
    import matplotlib.pyplot as plt
@@ -60,7 +64,7 @@ with the code pre-filled.
 
 ```{eval-rst}
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :new_tab: True
 
    import matplotlib.pyplot as plt
@@ -79,7 +83,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
 ```rst
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :new_tab: True
    :new_tab_button_text: My custom Replite button text
 
@@ -96,7 +100,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
 ```{eval-rst}
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :new_tab: True
    :new_tab_button_text: My custom Replite button text
 
@@ -122,7 +126,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
 ```rst
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :new_tab: True # False works too
    :new_tab_button_text: Open REPL with the code execution disabled
    :execute: False
@@ -140,7 +144,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
 ```{eval-rst}
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :new_tab: True # False works too
    :new_tab_button_text: Open REPL with the code execution disabled
    :execute: False
