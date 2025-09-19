@@ -49,6 +49,12 @@ def visit_element_html(self, node):
     raise SkipNode
 
 
+def _build_options(lite_options: dict[str, str]) -> str:
+    return "&".join(
+        [f"{key}={quote(value)}" for key, value in lite_options.items()]
+    )
+
+
 class _PromptedIframe(Element):
     def __init__(
         self,
@@ -128,9 +134,7 @@ class _InTab(Element):
             lite_options["path"] = notebook
             app_path = f"{self.lite_app}{self.notebooks_path}"
 
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
         self.lab_src = (
             f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
         )
@@ -172,9 +176,7 @@ class _LiteIframe(_PromptedIframe):
             lite_options["path"] = notebook
             app_path = f"{self.lite_app}{self.notebooks_path}"
 
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
@@ -277,9 +279,7 @@ class RepliteTab(Element):
             lite_options["path"] = notebook
             app_path = f"{self.lite_app}{self.notebooks_path}"
 
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         self.lab_src = (
             f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
@@ -341,9 +341,7 @@ class VoiciIframe(_PromptedIframe):
         **attributes,
     ):
         app_path = VoiciBase.get_full_path(notebook)
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         # If a notebook is provided, open it in the render view. Else, we default to the tree view.
         iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
@@ -370,9 +368,7 @@ class VoiciTab(Element):
         self.lab_src = f"{prefix}/"
 
         app_path = VoiciBase.get_full_path(notebook)
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
         self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
@@ -832,9 +828,7 @@ class TryExamplesDirective(SphinxDirective):
 
         self.options["path"] = notebook_unique_name
         app_path = f"{lite_app}{notebooks_path}"
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in self.options.items()]
-        )
+        options = _build_options(self.options)
 
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
