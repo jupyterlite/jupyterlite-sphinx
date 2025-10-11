@@ -202,6 +202,7 @@ as the first non-empty line under
 the section header for an examples section will prevent a directive from being inserted,
 allowing for specification of examples sections which should not be made interactive.
 
+A code cell containing common setup code (similar to `pytest`'s `doctest_namespace`) can be added using `try_examples_preamble`.
 
 The button text, theme, and warning text can be set globally with the config variables
 `try_examples_global_button_text`, `try_examples_global_theme`, and `try_examples_global_warning_text` in `conf.py`;
@@ -213,6 +214,11 @@ global_enable_try_examples = True
 try_examples_global_button_text = "Try it in your browser!"
 try_examples_global_height = "200px"
 try_examples_global_warning_text = "Interactive examples are experimental and may not always work as expected."
+try_examples_preamble = """
+import datetime as dt
+
+now = dt.datetime.now()
+"""
 ```
 
 There is no option to set a global specific height because the proper height
