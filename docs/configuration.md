@@ -80,7 +80,7 @@ jupyterlite_config = "jupyter_lite_config.json"
 jupyterlite_overrides = "overrides.json"
 ```
 
-# Setting default button texts for the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives
+## Setting default button texts for the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives
 
 When using the `:new_tab:` option in the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives,
 the button text defaults to "Open as a notebook", "Open in a REPL", and "Open with Voici", respectively.
