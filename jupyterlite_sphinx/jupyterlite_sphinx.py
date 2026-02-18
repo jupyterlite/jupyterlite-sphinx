@@ -1102,7 +1102,7 @@ def jupyterlite_build(app: Sphinx, error):
 
         print(f"[jupyterlite-sphinx] Command: {command}")
         completed_process: CompletedProcess[bytes] = subprocess.run(
-            command, cwd=app.srcdir, check=True, **kwargs
+            command, cwd=app.srcdir, check=False, **kwargs
         )
 
         if completed_process.returncode != 0:
