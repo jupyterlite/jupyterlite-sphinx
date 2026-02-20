@@ -1101,11 +1101,11 @@ def jupyterlite_build(app: Sphinx, error):
             kwargs["stderr"] = subprocess.PIPE
 
         print(f"[jupyterlite-sphinx] Command: {command}")
-        completed_process: CompletedProcess[bytes] = subprocess.run(
-            command, cwd=app.srcdir, check=False, **kwargs
-        )
-
-        if completed_process.returncode != 0:
+        try:
+            completed_process: CompletedProcess[bytes] = subprocess.run(
+                command, cwd=app.srcdir, check=True, **kwargs
+            )
+        except subprocess.CalledProcessError:
             if app.env.config.jupyterlite_silence:
                 print(
                     "`jupyterlite build` failed but its output has been silenced."
@@ -1114,13 +1114,8 @@ def jupyterlite_build(app: Sphinx, error):
                 print("stdout:", completed_process.stdout.decode())
                 print("stderr:", completed_process.stderr.decode())
 
-            # Raise the original exception that would have occurred with check=True
-            raise subprocess.CalledProcessError(
-                returncode=completed_process.returncode,
-                cmd=command,
-                output=completed_process.stdout,
-                stderr=completed_process.stderr,
-            )
+            # raise the original error without changing the traceback
+            raise
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
