@@ -1111,8 +1111,16 @@ def jupyterlite_build(app: Sphinx, error):
                     "[jupyterlite-sphinx] `jupyterlite build` failed but its"
                     " output has been silenced. stdout and stderr are reproduced below."
                 )
-                print(f"{'-' * 15} stdout {'-' * 15}", completed_process.stdout.decode(), sep="\n")
-                print(f"{'-' * 15} stderr {'-' * 15}", completed_process.stderr.decode(), sep="\n")
+                print(
+                    f"{'-' * 15} stdout {'-' * 15}",
+                    completed_process.stdout.decode(),
+                    sep="\n",
+                )
+                print(
+                    f"{'-' * 15} stderr {'-' * 15}",
+                    completed_process.stderr.decode(),
+                    sep="\n",
+                )
                 print(f"{'-' * 15} end output {'-' * 15}")
 
             # raise the original error without changing the traceback
