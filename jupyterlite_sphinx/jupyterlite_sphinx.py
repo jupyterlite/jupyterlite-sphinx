@@ -1108,11 +1108,12 @@ def jupyterlite_build(app: Sphinx, error):
         except subprocess.CalledProcessError:
             if app.env.config.jupyterlite_silence:
                 print(
-                    "`jupyterlite build` failed but its output has been silenced."
-                    " stdout and stderr are reproduced below.\n"
+                    "[jupyterlite-sphinx] `jupyterlite build` failed but its"
+                    " output has been silenced. stdout and stderr are reproduced below."
                 )
-                print("stdout:", completed_process.stdout.decode())
-                print("stderr:", completed_process.stderr.decode())
+                print(f"{'-' * 15} stdout {'-' * 15}", completed_process.stdout.decode(), sep="\n")
+                print(f"{'-' * 15} stderr {'-' * 15}", completed_process.stderr.decode(), sep="\n")
+                print(f"{'-' * 15} end output {'-' * 15}")
 
             # raise the original error without changing the traceback
             raise
