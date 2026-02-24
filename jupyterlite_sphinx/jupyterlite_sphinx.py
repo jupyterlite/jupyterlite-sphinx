@@ -105,7 +105,7 @@ class _PromptedIframe(Element):
             )
 
             placeholder_id = uuid4()
-            container_style = f'width: {self["width"]}; height: {self["height"]};'
+            container_style = f"width: {self['width']}; height: {self['height']};"
 
             return f"""
                 <div
@@ -150,7 +150,7 @@ class _InTab(Element):
 
         options = _build_options(lite_options)
         self.lab_src = (
-            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+            f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
         )
 
         self.button_text = button_text
@@ -192,7 +192,7 @@ class _LiteIframe(_PromptedIframe):
 
         options = _build_options(lite_options)
 
-        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
         if "iframe_src" in attributes:
             if attributes["iframe_src"] != iframe_src:
@@ -285,8 +285,27 @@ class RepliteTab(Element):
             code = "\n".join(code_lines)
             lite_options["code"] = code
 
+        # REPL URL parameters
         if "execute" in lite_options and lite_options["execute"] == "0":
             lite_options["execute"] = "0"
+        if (
+            "clearCellsOnExecute" in lite_options
+            and lite_options["clearCellsOnExecute"] == "0"
+        ):
+            lite_options["clearCellsOnExecute"] = "0"
+        if (
+            "clearCodeContentOnExecute" in lite_options
+            and lite_options["clearCodeContentOnExecute"] == "0"
+        ):
+            lite_options["clearCodeContentOnExecute"] = "0"
+        if "hideCodeInput" in lite_options and lite_options["hideCodeInput"] == "0":
+            lite_options["hideCodeInput"] = "0"
+        if "showBanner" in lite_options and lite_options["showBanner"] == "0":
+            lite_options["showBanner"] = "0"
+        if "promptCellPosition" in lite_options:
+            valid_positions = {"bottom", "top", "left", "right"}
+            if lite_options["promptCellPosition"] in valid_positions:
+                lite_options["promptCellPosition"] = lite_options["promptCellPosition"]
 
         app_path = self.lite_app
         if notebook is not None:
@@ -296,7 +315,7 @@ class RepliteTab(Element):
         options = _build_options(lite_options)
 
         self.lab_src = (
-            f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+            f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
         )
 
         self.button_text = button_text
@@ -358,7 +377,7 @@ class VoiciIframe(_PromptedIframe):
         options = _build_options(lite_options)
 
         # If a notebook is provided, open it in the render view. Else, we default to the tree view.
-        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
         super().__init__(rawsource, *children, iframe_src=iframe_src, **attributes)
 
@@ -378,14 +397,13 @@ class VoiciTab(Element):
         button_text=None,
         **attributes,
     ):
-
         self.lab_src = f"{prefix}/"
 
         app_path = VoiciBase.get_full_path(notebook)
         options = _build_options(lite_options)
 
         # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
-        self.lab_src = f'{prefix}/{app_path}{f"?{options}" if options else ""}'
+        self.lab_src = f"{prefix}/{app_path}{f'?{options}' if options else ''}"
 
         self.button_text = button_text
 
@@ -415,6 +433,11 @@ class RepliteDirective(SphinxDirective):
         "height": directives.unchanged,
         "kernel": directives.unchanged,
         "execute": directives.unchanged,
+        "clear_cells_on_execute": directives.unchanged,
+        "clear_code_content_on_execute": directives.unchanged,
+        "hide_code_input": directives.unchanged,
+        "prompt_cell_position": directives.unchanged,
+        "show_banner": directives.unchanged,
         "toolbar": directives.unchanged,
         "theme": directives.unchanged,
         "prompt": directives.unchanged,
@@ -435,14 +458,69 @@ class RepliteDirective(SphinxDirective):
         search_params = search_params_parser(self.options.pop("search_params", False))
 
         # We first check the global config, and then the per-directive
-        # option. It defaults to True for backwards compatibility.
-        execute = self.options.pop("execute", str(self.env.config.replite_auto_execute))
+        # options, with reasonable defaults for backwards compatibility.
+        repl_config_mappings = {
+            "execute": "execute",
+            "clear_cells_on_execute": "clearCellsOnExecute",
+            "clear_code_content_on_execute": "clearCodeContentOnExecute",
+            "hide_code_input": "hideCodeInput",
+            "show_banner": "showBanner",
+            "prompt_cell_position": "promptCellPosition",
+        }
 
-        if execute not in ("True", "False"):
-            raise ValueError("The :execute: option must be either True or False")
+        for option in repl_config_mappings:
+            config_option = repl_config_mappings[option]
+            if option == "execute":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_auto_execute)
+                )
+            elif option == "clear_cells_on_execute":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_clear_cells_on_execute)
+                )
+            elif option == "clear_code_content_on_execute":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_clear_code_content_on_execute)
+                )
+            elif option == "hide_code_input":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_hide_code_input)
+                )
+            elif option == "show_banner":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_show_banner)
+                )
+            elif option == "prompt_cell_position":
+                value = self.options.pop(
+                    option, str(self.env.config.replite_prompt_cell_position)
+                )
+            else:
+                err_msg = (
+                    f"Unknown option {option} for Replite directive. "
+                    "Please check the documentation for valid options."
+                )
+                raise ValueError(err_msg)
 
-        if execute == "False":
-            self.options["execute"] = "0"
+            # Convert to URL parameter format (0/1) for all options
+            # except for prompt_cell_position
+            if option != "prompt_cell_position":
+                if value.lower() == "true":
+                    self.options[config_option] = "1"
+                elif value.lower() == "false":
+                    self.options[config_option] = "0"
+                else:
+                    err_msg = (
+                        f"The {option} option must be either True or False, not {value}"
+                    )
+                    raise ValueError(err_msg)
+            else:
+                # For prompt_cell_position, we need to check if the value is valid
+                if value not in ["top", "bottom", "left", "right"]:
+                    err_msg = (
+                        f"The {option} option must be one of: top, bottom, left, right"
+                    )
+                    raise ValueError(err_msg)
+                self.options[config_option] = value
 
         content = self.content
 
@@ -527,7 +605,6 @@ class _LiteDirective(SphinxDirective):
         # We do this to prevent conflicts with other files, say, in the "_contents/"
         # directory as a result of a previous failed/interrupted build.
         if source_path.parent != notebooks_dir:
-
             # We only consider conflicts if notebooks are actually referenced in
             # a directive, to prevent false posiitves from being raised.
             if hasattr(self.env, "jupyterlite_notebooks"):
@@ -537,7 +614,6 @@ class _LiteDirective(SphinxDirective):
                         existing_path.stem == target_stem
                         and existing_path != source_path
                     ):
-
                         raise RuntimeError(
                             "All notebooks marked for inclusion with JupyterLite must have a "
                             f"unique file basename. Found conflict between {source_path} and {existing_path}."
@@ -853,7 +929,7 @@ class TryExamplesDirective(SphinxDirective):
 
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
-        iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
+        iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
         # Parent container (initially hidden)
         iframe_parent_container_div_start = (
@@ -1180,6 +1256,14 @@ def setup(app):
         "replite_new_tab_button_text", "Open in a REPL", rebuild="html"
     )
 
+    # REPL configuration options
+    app.add_config_value("replite_auto_execute", True, rebuild="html")
+    app.add_config_value("replite_clear_cells_on_execute", False, rebuild="html")
+    app.add_config_value("replite_clear_code_content_on_execute", False, rebuild="html")
+    app.add_config_value("replite_hide_code_input", False, rebuild="html")
+    app.add_config_value("replite_prompt_cell_position", "bottom", rebuild="html")
+    app.add_config_value("replite_show_banner", True, rebuild="html")
+
     # Initialize NotebookLite and JupyterLite directives
     app.add_node(
         NotebookLiteIframe,
@@ -1229,7 +1313,6 @@ def setup(app):
         man=(skip, None),
     )
     app.add_directive("replite", RepliteDirective)
-    app.add_config_value("replite_auto_execute", True, rebuild="html")
 
     # Initialize Voici directive and tabbed interface
     app.add_node(
