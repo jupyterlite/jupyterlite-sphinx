@@ -166,7 +166,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ## Additional REPL interface options (JupyterLite 0.6.0+)
 
-   With `jupyterlite-core` versions 0.6.0 and later, the REPL interface comes with several additional customisation options that provide more control over the execution environment and layout:
+   With `jupyterlite-core` versions 0.6.0 and later, the REPL interface comes with several additional customization options that provide more control over the execution environment and layout:
 
    ### Clearing cells on execute
 
