@@ -175,6 +175,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```rst
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :clear_cells_on_execute: True
 
       # When you execute this cell and then enter new code,
@@ -185,6 +186,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```{eval-rst}
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :clear_cells_on_execute: True
 
       # When you execute this cell and then enter new code,
@@ -199,6 +201,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```rst
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :clear_code_content_on_execute: True
 
       # After executing this cell, its content will be cleared,
@@ -209,6 +212,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```{eval-rst}
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :clear_code_content_on_execute: True
 
       # After executing this cell, its content will be cleared,
@@ -223,6 +227,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```rst
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :hide_code_input: True
 
       # After executing this cell, the input will be hidden,
@@ -233,6 +238,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```{eval-rst}
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :hide_code_input: True
 
       # After execution, this code will be hidden
@@ -247,6 +253,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```rst
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :prompt_cell_position: top
 
       # The prompt will appear at the top of the REPL
@@ -256,6 +263,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```{eval-rst}
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :prompt_cell_position: top
 
       # The prompt will appear at the top of the REPL
@@ -269,6 +277,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```rst
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :show_banner: False
 
       # The kernel banner won't be displayed
@@ -278,6 +287,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```{eval-rst}
    .. replite::
       :kernel: xeus-python
+      :height: 600px
       :show_banner: False
 
       # The kernel banner won't be displayed
@@ -285,6 +295,7 @@ global value using an additional `:new_tab_button_text:` parameter:
    ```
 
    ### Combining options
+
    All of these options can be combined to create a customised REPL experience,
    for example:
 
