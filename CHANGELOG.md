@@ -2,6 +2,106 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.22.1
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.22.0...4e19505b62253ad1320d23672c77903e0b69da9f))
+
+### Enhancements made
+
+- allow adding a preamble for `try_examples` [#293](https://github.com/jupyterlite/jupyterlite-sphinx/pull/293) ([@keewis](https://github.com/keewis), [@martinRenou](https://github.com/martinRenou))
+
+### Maintenance and upkeep improvements
+
+- Reduce pre-commit autoupdate frequency to monthly [#322](https://github.com/jupyterlite/jupyterlite-sphinx/pull/322) ([@mfisher87](https://github.com/mfisher87), [@Carreau](https://github.com/Carreau))
+
+### Documentation improvements
+
+- DOC: Change heading level for configuration bullet. [#325](https://github.com/jupyterlite/jupyterlite-sphinx/pull/325) ([@rossbar](https://github.com/rossbar), [@martinRenou](https://github.com/martinRenou))
+
+### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-09-19&to=2026-02-16&type=c))
+
+@agriyakhetarpal ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-09-19..2026-02-16&type=Issues)) | @Carreau ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2025-09-19..2026-02-16&type=Issues)) | @keewis ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Akeewis+updated%3A2025-09-19..2026-02-16&type=Issues)) | @martinRenou ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2025-09-19..2026-02-16&type=Issues)) | @mfisher87 ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amfisher87+updated%3A2025-09-19..2026-02-16&type=Issues)) | @rossbar ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Arossbar+updated%3A2025-09-19..2026-02-16&type=Issues))
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
+## 0.22.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.21.0...3dfeb8796cf074e2f08d1d49bf7a11980c72521e))
+
+### Enhancements made
+
+- replite: Support `:showBanner: 0` [#317](https://github.com/jupyterlite/jupyterlite-sphinx/pull/317) ([@chrysn](https://github.com/chrysn))
+
+### Maintenance and upkeep improvements
+
+- Bump jupyterlite-core dependency [#318](https://github.com/jupyterlite/jupyterlite-sphinx/pull/318) ([@chrysn](https://github.com/chrysn))
+
+### Documentation improvements
+
+- doc: Explain repl's kernel parameter, fix value to avoid dialog [#316](https://github.com/jupyterlite/jupyterlite-sphinx/pull/316) ([@chrysn](https://github.com/chrysn))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-09-05&to=2025-09-19&type=c))
+
+[@chrysn](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Achrysn+updated%3A2025-09-05..2025-09-19&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-09-05..2025-09-19&type=Issues)
+
+## 0.21.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.2...a9b1502e5071749c2bce66c0ac97ad1a54352cd1))
+
+### Enhancements made
+
+- Add `jupyterlite_ignore_contents` config, mapping to `--ignore-contents` arg in JupyterLite build [#309](https://github.com/jupyterlite/jupyterlite-sphinx/pull/309) ([@mfisher87](https://github.com/mfisher87))
+
+### Maintenance and upkeep improvements
+
+- Run `black` at pre-commit time [#311](https://github.com/jupyterlite/jupyterlite-sphinx/pull/311) ([@mfisher87](https://github.com/mfisher87))
+- Gitignore `node_modules/` [#310](https://github.com/jupyterlite/jupyterlite-sphinx/pull/310) ([@mfisher87](https://github.com/mfisher87))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-06-03&to=2025-09-05&type=c))
+
+[@mfisher87](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amfisher87+updated%3A2025-06-03..2025-09-05&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-06-03..2025-09-05&type=Issues)
+
+## 0.20.2
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.1...6cc40bf3ae417a5c827ce72750b5b6790ecd0c0d))
+
+### Enhancements made
+
+- Bump jupyterlite-core dependency [#299](https://github.com/jupyterlite/jupyterlite-sphinx/pull/299) ([@martinRenou](https://github.com/martinRenou))
+
+### Maintenance and upkeep improvements
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-05-08&to=2025-06-03&type=c))
+
+[@martinRenou](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2025-05-08..2025-06-03&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-05-08..2025-06-03&type=Issues)
+
+## 0.20.1
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.20.0...637c32e24fd5fe81459cab4e0c8f9d80d0789e15))
+
+### Bugs fixed
+
+- Fix `IndexError`s when the "Examples" is the last section in a docstring [#292](https://github.com/jupyterlite/jupyterlite-sphinx/pull/292) ([@agriyakhetarpal](https://github.com/agriyakhetarpal))
+
+### Maintenance and upkeep improvements
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-04-28&to=2025-05-08&type=c))
+
+[@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-04-28..2025-05-08&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2025-04-28..2025-05-08&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-04-28..2025-05-08&type=Issues)
+
 ## 0.20.0
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.19.1...9a59d086cb22b57731d05365f7c10747ef9d2ad1))
@@ -24,8 +124,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-02-24&to=2025-04-28&type=c))
 
 [@agriyakhetarpal](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-02-24..2025-04-28&type=Issues) | [@IsabelParedes](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AIsabelParedes+updated%3A2025-02-24..2025-04-28&type=Issues) | [@pre-commit-ci](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Apre-commit-ci+updated%3A2025-02-24..2025-04-28&type=Issues) | [@steppi](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Asteppi+updated%3A2025-02-24..2025-04-28&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.19.1
 

@@ -12,6 +12,19 @@ jupyterlite_contents = ["./path/to/my/notebooks/", "my_other_notebook.ipynb"]
 
 `jupyterlite_contents` can be a string or a list of strings. Each string is expanded using the Python `glob.glob` function with its recursive option. See the [glob documentation](https://docs.python.org/3/library/glob.html#glob.glob) and the [wildcard pattern documentation](https://docs.python.org/3/library/fnmatch.html#fnmatch.fnmatch) for more details. This option supports both paths relative to the docs source directory and absolute ones.
 
+### Ignoring content
+
+You can exclude some contents from your specified contents, for example:
+
+```python
+jupyterlite_contents = ["./path/to/my/contents"]
+jupyterlite_ignore_contents = [r".*\.txt"]
+```
+
+`jupyterlite_ignore_contents` can be a string or a list of strings. Strings are used as Python regular expressions to match and exclude files from your custom content. It's best to use raw string literals for your ignore strings, otherwise you'll need to double-escape (in other words, `r".*\.txt"` is more readable than `".*\\.txt"`).
+
+Each string is passed directly to [the JupyterLite build `--ignore-contents` CLI argument](https://jupyterlite.readthedocs.io/en/stable/reference/cli.html#common-parameters).
+
 ## JupyterLite dir
 
 By default, jupyterlite-sphinx runs the `jupyter lite build` command in the docs directory, you can overwrite this behavior and ask jupyterlite to build in a given directory:
@@ -67,7 +80,7 @@ jupyterlite_config = "jupyter_lite_config.json"
 jupyterlite_overrides = "overrides.json"
 ```
 
-# Setting default button texts for the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives
+## Setting default button texts for the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives
 
 When using the `:new_tab:` option in the `JupyterLite`, `NotebookLite`, `Replite`, and `Voici` directives,
 the button text defaults to "Open as a notebook", "Open in a REPL", and "Open with Voici", respectively.

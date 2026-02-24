@@ -22,7 +22,11 @@ from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 from sphinx.parsers import RSTParser
 
-from ._try_examples import examples_to_notebook, insert_try_examples_directive
+from ._try_examples import (
+    examples_to_notebook,
+    insert_try_examples_directive,
+    new_code_cell,
+)
 
 import jupytext
 import nbformat
@@ -47,6 +51,22 @@ def skip(self, node):
 def visit_element_html(self, node):
     self.body.append(node.html())
     raise SkipNode
+
+
+def _build_options(lite_options: dict[str, str]) -> str:
+    """Concatenates options into query parameters, fixing the capitalization
+    for parameters where the necessarily lowercase docutils directive value
+    needs some uppercase letters in a query parameter."""
+
+    replacements = {
+        "showbanner": "showBanner",
+    }
+
+    lite_options = (
+        (replacements.get(key, key), value) for key, value in lite_options.items()
+    )
+
+    return "&".join([f"{key}={quote(value)}" for key, value in lite_options])
 
 
 class _PromptedIframe(Element):
@@ -128,9 +148,7 @@ class _InTab(Element):
             lite_options["path"] = notebook
             app_path = f"{self.lite_app}{self.notebooks_path}"
 
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
         self.lab_src = (
             f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
         )
@@ -172,9 +190,7 @@ class _LiteIframe(_PromptedIframe):
             lite_options["path"] = notebook
             app_path = f"{self.lite_app}{self.notebooks_path}"
 
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
 
@@ -296,9 +312,7 @@ class RepliteTab(Element):
             lite_options["path"] = notebook
             app_path = f"{self.lite_app}{self.notebooks_path}"
 
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         self.lab_src = (
             f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
@@ -360,9 +374,7 @@ class VoiciIframe(_PromptedIframe):
         **attributes,
     ):
         app_path = VoiciBase.get_full_path(notebook)
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         # If a notebook is provided, open it in the render view. Else, we default to the tree view.
         iframe_src = f"{prefix}/{app_path}{f'index.html?{options}' if options else ''}"
@@ -388,9 +400,7 @@ class VoiciTab(Element):
         self.lab_src = f"{prefix}/"
 
         app_path = VoiciBase.get_full_path(notebook)
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in lite_options.items()]
-        )
+        options = _build_options(lite_options)
 
         # If a notebook is provided, open it in a new tab. Else, we default to the tree view.
         self.lab_src = f"{prefix}/{app_path}{f'?{options}' if options else ''}"
@@ -435,6 +445,7 @@ class RepliteDirective(SphinxDirective):
         "search_params": directives.unchanged,
         "new_tab": directives.unchanged,
         "new_tab_button_text": directives.unchanged,
+        "showbanner": directives.unchanged,
     }
 
     def run(self):
@@ -892,6 +903,12 @@ class TryExamplesDirective(SphinxDirective):
 
         if notebook_unique_name is None:
             nb = examples_to_notebook(self.content, warning_text=warning_text)
+
+            preamble = self.env.config.try_examples_preamble
+            if preamble:
+                # insert after the "experimental" warning
+                nb.cells.insert(1, new_code_cell(preamble))
+
             self.content = None
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
@@ -908,9 +925,7 @@ class TryExamplesDirective(SphinxDirective):
 
         self.options["path"] = notebook_unique_name
         app_path = f"{lite_app}{notebooks_path}"
-        options = "&".join(
-            [f"{key}={quote(value)}" for key, value in self.options.items()]
-        )
+        options = _build_options(self.options)
 
         iframe_parent_div_id = uuid4()
         iframe_div_id = uuid4()
@@ -1023,6 +1038,22 @@ def inited(app: Sphinx, config):
         app.add_source_suffix(".ipynb", "jupyterlite_notebook")
 
 
+def jupyterlite_ignore_contents_args(ignore_contents):
+    """Generate `--ignore-contents` argument for each pattern.
+
+    NOTE: Unlike generating `--contents` args, we _do not_ expand globs to generate the
+    arguments. We just hand the config off to the JupyterLite build.
+    """
+    if ignore_contents is None:
+        ignore_contents = []
+    elif isinstance(ignore_contents, str):
+        ignore_contents = [ignore_contents]
+
+    return [
+        arg for pattern in ignore_contents for arg in ["--ignore-contents", pattern]
+    ]
+
+
 def jupyterlite_build(app: Sphinx, error):
     if error is not None:
         # Do not build JupyterLite
@@ -1090,6 +1121,10 @@ def jupyterlite_build(app: Sphinx, error):
 
                 contents.extend(["--contents", contents_path])
 
+        ignore_contents = jupyterlite_ignore_contents_args(
+            app.env.config.jupyterlite_ignore_contents,
+        )
+
         apps_option = []
         for liteapp in ["notebooks", "edit", "lab", "repl", "tree", "consoles"]:
             apps_option.extend(["--apps", liteapp])
@@ -1108,6 +1143,7 @@ def jupyterlite_build(app: Sphinx, error):
             *contents,
             "--contents",
             os.path.join(app.srcdir, CONTENT_DIR),
+            *ignore_contents,
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
             *apps_option,
@@ -1140,26 +1176,31 @@ def jupyterlite_build(app: Sphinx, error):
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
 
-        completed_process: CompletedProcess[bytes] = subprocess.run(
-            command, cwd=app.srcdir, check=True, **kwargs
-        )
-
-        if completed_process.returncode != 0:
+        print(f"[jupyterlite-sphinx] Command: {command}")
+        try:
+            completed_process: CompletedProcess[bytes] = subprocess.run(
+                command, cwd=app.srcdir, check=True, **kwargs
+            )
+        except subprocess.CalledProcessError:
             if app.env.config.jupyterlite_silence:
                 print(
-                    "`jupyterlite build` failed but its output has been silenced."
-                    " stdout and stderr are reproduced below.\n"
+                    "[jupyterlite-sphinx] `jupyterlite build` failed but its"
+                    " output has been silenced. stdout and stderr are reproduced below."
                 )
-                print("stdout:", completed_process.stdout.decode())
-                print("stderr:", completed_process.stderr.decode())
+                print(
+                    f"{'-' * 15} stdout {'-' * 15}",
+                    completed_process.stdout.decode(),
+                    sep="\n",
+                )
+                print(
+                    f"{'-' * 15} stderr {'-' * 15}",
+                    completed_process.stderr.decode(),
+                    sep="\n",
+                )
+                print(f"{'-' * 15} end output {'-' * 15}")
 
-            # Raise the original exception that would have occurred with check=True
-            raise subprocess.CalledProcessError(
-                returncode=completed_process.returncode,
-                cmd=command,
-                output=completed_process.stdout,
-                stderr=completed_process.stderr,
-            )
+            # raise the original error without changing the traceback
+            raise
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
@@ -1184,6 +1225,7 @@ def setup(app):
     app.add_config_value("jupyterlite_overrides", None, rebuild="html")
     app.add_config_value("jupyterlite_dir", str(app.srcdir), rebuild="html")
     app.add_config_value("jupyterlite_contents", None, rebuild="html")
+    app.add_config_value("jupyterlite_ignore_contents", None, rebuild="html")
     app.add_config_value("jupyterlite_bind_ipynb_suffix", True, rebuild="html")
     app.add_config_value("jupyterlite_silence", True, rebuild=True)
     app.add_config_value("strip_tagged_cells", False, rebuild=True)
@@ -1199,6 +1241,7 @@ def setup(app):
         default=None,
         rebuild="html",
     )
+    app.add_config_value("try_examples_preamble", default=None, rebuild="html")
 
     # Allow customising the button text for each directive (this is useful
     # only when "new_tab" is set to True)

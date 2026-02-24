@@ -1,19 +1,19 @@
 name: jupyterlite-sphinx-dev
 channels:
-    - conda-forge
+  - conda-forge
 dependencies:
-    - pip
-    - jupyter_server
-    - jupyterlab_server
-    - jupytext
-    - pydata-sphinx-theme
-    - micromamba=2.0.5
-    - myst-parser
-    - docutils
-    - sphinx
-    - black
-    - voici
-    - pip:
-        - .
-        - jupyterlite-core ==0.6.0a9
-        # - jupyterlite-xeus >=2.1.2
+  - pip
+  - jupyter_server
+  - jupyterlab_server
+  - jupyterlite-core >=0.3,<0.7
+  - jupytext
+  - pydata-sphinx-theme
+  - micromamba=2.0.5
+  - myst-parser
+  - docutils
+  - sphinx
+  - black
+  - voici
+  - pip:
+      - .
+      - jupyterlite-xeus >=2.1.2
