@@ -1101,26 +1101,30 @@ def jupyterlite_build(app: Sphinx, error):
             kwargs["stderr"] = subprocess.PIPE
 
         print(f"[jupyterlite-sphinx] Command: {command}")
-        completed_process: CompletedProcess[bytes] = subprocess.run(
-            command, cwd=app.srcdir, check=True, **kwargs
-        )
-
-        if completed_process.returncode != 0:
+        try:
+            completed_process: CompletedProcess[bytes] = subprocess.run(
+                command, cwd=app.srcdir, check=True, **kwargs
+            )
+        except subprocess.CalledProcessError:
             if app.env.config.jupyterlite_silence:
                 print(
-                    "`jupyterlite build` failed but its output has been silenced."
-                    " stdout and stderr are reproduced below.\n"
+                    "[jupyterlite-sphinx] `jupyterlite build` failed but its"
+                    " output has been silenced. stdout and stderr are reproduced below."
                 )
-                print("stdout:", completed_process.stdout.decode())
-                print("stderr:", completed_process.stderr.decode())
+                print(
+                    f"{'-' * 15} stdout {'-' * 15}",
+                    completed_process.stdout.decode(),
+                    sep="\n",
+                )
+                print(
+                    f"{'-' * 15} stderr {'-' * 15}",
+                    completed_process.stderr.decode(),
+                    sep="\n",
+                )
+                print(f"{'-' * 15} end output {'-' * 15}")
 
-            # Raise the original exception that would have occurred with check=True
-            raise subprocess.CalledProcessError(
-                returncode=completed_process.returncode,
-                cmd=command,
-                output=completed_process.stdout,
-                stderr=completed_process.stderr,
-            )
+            # raise the original error without changing the traceback
+            raise
 
         print("[jupyterlite-sphinx] JupyterLite build done")
 
