@@ -28,8 +28,12 @@ from ._try_examples import (
     new_code_cell,
 )
 
-import jupytext
 import nbformat
+
+try:
+    import jupytext
+except ImportError:
+    jupytext = None
 
 try:
     import voici
@@ -617,6 +621,11 @@ class _LiteDirective(SphinxDirective):
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
 
             if notebook_path.suffix.lower() == ".md":
+                if jupytext is None:
+                    raise ImportError(
+                        "jupyterlite-sphinx requires the jupytext package to process Markdown notebooks. "
+                        'Install it with: pip install "jupyterlite-sphinx[markdown]"'
+                    )
                 if self._target_is_stale(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
                     if notebook_is_stripped:
