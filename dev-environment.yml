@@ -15,5 +15,5 @@ dependencies:
   - black
   - voici
   - pip:
-      - .
+      - ."[markdown]"
       - jupyterlite-xeus >=2.1.2

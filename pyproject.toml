@@ -17,12 +17,14 @@ dependencies = [
     "jupyter_server",
     "jupyterlab_server",
     "jupyterlite-core >=0.2,<0.8",
-    "jupytext",
     "nbformat",
     "sphinx>=4",
 ]
 
 [project.optional-dependencies]
+markdown = ["jupytext"]
+
+[dependency-groups]
 dev = [
     "hatch",
 ]
