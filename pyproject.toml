@@ -22,11 +22,10 @@ dependencies = [
     "sphinx>=4",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "hatch",
 ]
-
 docs = [
     "myst_parser",
     "pydata-sphinx-theme",
