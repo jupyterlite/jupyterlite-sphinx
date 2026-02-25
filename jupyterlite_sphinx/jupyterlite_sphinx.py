@@ -512,39 +512,6 @@ class _LiteDirective(SphinxDirective):
 
         return source_path.stat().st_mtime > target_path.stat().st_mtime
 
-    # TODO: Jupytext support many more formats for conversion, but we only
-    # consider Markdown and IPyNB for now. If we add more formats someday,
-    # we should also consider them here.
-    def _assert_no_conflicting_nb_names(
-        self, source_path: Path, notebooks_dir: Path
-    ) -> None:
-        """Check for duplicate notebook names in the documentation sources.
-        Raises if any notebooks would conflict when converted to IPyNB."""
-        target_stem = source_path.stem
-        target_ipynb = f"{target_stem}.ipynb"
-
-        # Only look for conflicts in source directories and among referenced notebooks.
-        # We do this to prevent conflicts with other files, say, in the "_contents/"
-        # directory as a result of a previous failed/interrupted build.
-        if source_path.parent != notebooks_dir:
-
-            # We only consider conflicts if notebooks are actually referenced in
-            # a directive, to prevent false posiitves from being raised.
-            if hasattr(self.env, "jupyterlite_notebooks"):
-                for existing_nb in self.env.jupyterlite_notebooks:
-                    existing_path = Path(existing_nb)
-                    if (
-                        existing_path.stem == target_stem
-                        and existing_path != source_path
-                    ):
-
-                        raise RuntimeError(
-                            "All notebooks marked for inclusion with JupyterLite must have a "
-                            f"unique file basename. Found conflict between {source_path} and {existing_path}."
-                        )
-
-        return target_ipynb
-
     def _strip_notebook_cells(
         self, nb: nbformat.NotebookNode
     ) -> List[nbformat.NotebookNode]:
@@ -610,35 +577,36 @@ class _LiteDirective(SphinxDirective):
             notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
             os.makedirs(notebooks_dir, exist_ok=True)
 
-            self._assert_no_conflicting_nb_names(notebook_path, notebooks_dir)
-            target_name = f"{notebook_path.stem}.ipynb"
-            target_path = notebooks_dir / target_name
-
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
 
             if notebook_path.suffix.lower() == ".md":
+                target_name = str(Path(rel_filename).with_suffix(".ipynb"))
+                target_path = notebooks_dir / target_name
                 if self._target_is_stale(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
                     if notebook_is_stripped:
                         nb.cells = self._strip_notebook_cells(nb)
+                    os.makedirs(target_path.parent, exist_ok=True)
                     with open(target_path, "w", encoding="utf-8") as f:
                         nbformat.write(nb, f, version=4)
 
                 notebook = str(target_path)
                 notebook_name = target_name
             else:
-                notebook_name = notebook_path.name
+                notebook_name = rel_filename
                 target_path = notebooks_dir / notebook_name
 
                 if notebook_is_stripped:
                     nb = nbformat.read(notebook, as_version=4)
                     nb.cells = self._strip_notebook_cells(nb)
+                    os.makedirs(target_path.parent, exist_ok=True)
                     nbformat.write(nb, target_path, version=4)
                 # If notebook_is_stripped is False, then copy the notebook(s) to notebooks_dir.
                 # If it is True, then they have already been copied to notebooks_dir by the
                 # nbformat.write() function above.
                 else:
                     try:
+                        os.makedirs(target_path.parent, exist_ok=True)
                         shutil.copy(notebook, target_path)
                     except shutil.SameFileError:
                         pass
