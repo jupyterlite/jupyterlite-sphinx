@@ -28,7 +28,6 @@ markdown = ["jupytext"]
 dev = [
     "hatch",
 ]
-
 docs = [
     "myst_parser",
     "pydata-sphinx-theme",
