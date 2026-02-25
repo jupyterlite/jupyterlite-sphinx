@@ -989,6 +989,7 @@ def jupyterlite_build(app: Sphinx, error):
 
         # Expand globs in the contents strings
         contents = []
+        notebooks_dir = Path(app.srcdir) / CONTENT_DIR
         for pattern in jupyterlite_contents:
             pattern_path = Path(pattern)
 
@@ -1002,16 +1003,25 @@ def jupyterlite_build(app: Sphinx, error):
             matched_paths = base_path.glob(glob_pattern)
 
             for matched_path in matched_paths:
-                # If the matched path is absolute, we keep it as is, and
-                # if it is relative, we convert it to a path relative to
-                # the documentation source directory.
-                contents_path = (
-                    str(matched_path)
-                    if matched_path.is_absolute()
-                    else str(matched_path.relative_to(app.srcdir))
-                )
+                if matched_path.is_dir():
+                    # Copy directories into the _contents/ staging area so that
+                    # the directory name is preserved in the JupyterLite file
+                    # system. Passing --contents <dir> directly would cause
+                    # JupyterLite to treat it as a content root, placing its
+                    # files at the filesystem root rather than under <dir>/.
+                    target = notebooks_dir / matched_path.name
+                    if target.exists():
+                        shutil.rmtree(target)
+                    shutil.copytree(matched_path, target)
+                else:
+                    # For individual files, pass them directly as --contents args.
+                    contents_path = (
+                        str(matched_path)
+                        if matched_path.is_absolute()
+                        else str(matched_path.relative_to(app.srcdir))
+                    )
 
-                contents.extend(["--contents", contents_path])
+                    contents.extend(["--contents", contents_path])
 
         ignore_contents = jupyterlite_ignore_contents_args(
             app.env.config.jupyterlite_ignore_contents,
