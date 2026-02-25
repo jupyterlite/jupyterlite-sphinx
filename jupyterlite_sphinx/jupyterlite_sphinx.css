@@ -48,6 +48,25 @@
   display: none;
 }
 
+/* The iframe panel is collapsed by default and expands
+when the buttons are clicked. */
+.try_examples_outer_iframe {
+  --open-duration: 0.2s;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--open-duration) ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .try_examples_outer_iframe {
+    --open-duration: 0s;
+  }
+
+  .jupyterlite_sphinx_spinner {
+    animation: none;
+  }
+}
+
 .jupyterlite_sphinx_spinner {
   /* From https://css-loaders.com/spinner/ */
   position: absolute;

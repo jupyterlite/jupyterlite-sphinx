@@ -864,25 +864,10 @@ class TryExamplesDirective(SphinxDirective):
         iframe_div_id = uuid4()
         iframe_src = f'{prefix}/{app_path}{f"index.html?{options}" if options else ""}'
 
-        # Parent container (initially hidden)
-        iframe_parent_container_div_start = (
-            f'<div id="{iframe_parent_div_id}" '
-            f'class="try_examples_outer_iframe {example_class} hidden">'
-        )
-
-        iframe_parent_container_div_end = "</div>"
         iframe_container_div = (
             f'<div id="{iframe_div_id}" '
             f'class="jupyterlite_sphinx_iframe_container">'
             f"</div>"
-        )
-
-        # Button with the onclick event to swap embedded notebook back to examples.
-        go_back_button_html = (
-            '<button class="try_examples_button" '
-            f"onclick=\"window.tryExamplesHideIframe('{examples_div_id}',"
-            f"'{iframe_parent_div_id}')\">"
-            "Go Back</button>"
         )
 
         full_screen_button_html = (
@@ -892,32 +877,31 @@ class TryExamplesDirective(SphinxDirective):
             "Open In Tab</button>"
         )
 
-        # Button with the onclick event to swap examples with embedded notebook.
+        # Button that toggles the iframe panel open/close.
         try_it_button_html = (
             '<div class="try_examples_button_container">'
             '<button class="try_examples_button" '
+            f'aria-expanded="false" '
+            f'aria-controls="{iframe_parent_div_id}" '
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
             f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
             f"'{height}')\">"
-            f"{button_text}</button>"
-            "</div>"
+            f"{button_text}</button>" + full_screen_button_html + "</div>"
         )
         try_it_button_node = nodes.raw("", try_it_button_html, format="html")
 
         # Combine everything
-        notebook_container_html = (
-            iframe_parent_container_div_start
-            + '<div class="try_examples_button_container">'
-            + go_back_button_html
-            + full_screen_button_html
-            + "</div>"
+        iframe_panel_html = (
+            f'<div id="{iframe_parent_div_id}" '
+            f'class="try_examples_outer_iframe {example_class}">'
             + iframe_container_div
-            + iframe_parent_container_div_end
+            + "</div>"
         )
+
         content_container_node += try_it_button_node
         content_container_node += content_node
 
-        notebook_container = nodes.raw("", notebook_container_html, format="html")
+        iframe_panel_node = nodes.raw("", iframe_panel_html, format="html")
 
         # Search config file allowing for config changes without rebuilding docs.
         config_path = os.path.join(relative_path_to_root, "try_examples.json")
@@ -930,7 +914,7 @@ class TryExamplesDirective(SphinxDirective):
         )
         script_node = nodes.raw("", script_html, format="html")
 
-        return [content_container_node, notebook_container, script_node]
+        return [content_container_node, iframe_panel_node, script_node]
 
 
 def _process_docstring_examples(app: Sphinx, docname: str, source: List[str]) -> None:

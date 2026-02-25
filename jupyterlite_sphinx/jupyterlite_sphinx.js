@@ -64,7 +64,40 @@ window.tryExamplesShowIframe = (
     iframeParentContainerId,
   );
   const iframeContainer = document.getElementById(iframeContainerId);
-  var height;
+
+  // Find the toggle button to update its text to "Hide"
+  // when the iframe is shown, and to reset it when hidden
+  const toggleButton = examplesContainer.querySelector(".try_examples_button");
+
+  const isOpen = iframeParentContainer.classList.contains(
+    "try_examples_iframe_open",
+  );
+
+  if (isOpen) {
+    // To collapse the iframe panel
+    iframeParentContainer.style.maxHeight =
+      iframeParentContainer.scrollHeight + "px";
+    iframeParentContainer.offsetHeight;
+    iframeParentContainer.style.maxHeight = "0";
+    iframeParentContainer.classList.remove("try_examples_iframe_open");
+    if (toggleButton) {
+      toggleButton.setAttribute("aria-expanded", "false");
+      if (toggleButton.dataset.originalText) {
+        toggleButton.textContent = toggleButton.dataset.originalText;
+      }
+    }
+    return;
+  }
+
+  // To expand the iframe panel
+  if (toggleButton) {
+    toggleButton.setAttribute("aria-expanded", "true");
+    if (!toggleButton.dataset.originalText) {
+      toggleButton.dataset.originalText = toggleButton.textContent;
+    }
+    toggleButton.textContent = "Hide";
+  }
+  iframeParentContainer.classList.add("try_examples_iframe_open");
 
   let iframe = iframeContainer.querySelector(
     "iframe.jupyterlite_sphinx_iframe",
@@ -77,12 +110,16 @@ window.tryExamplesShowIframe = (
     const spinnerHeight = 50; // px
     const spinnerWidth = 50; // px
     spinner.classList.add("jupyterlite_sphinx_spinner");
+    spinner.setAttribute("role", "status");
+    spinner.setAttribute("aria-label", "Loading interactive example");
     iframeContainer.appendChild(spinner);
 
     const examples = examplesContainer.querySelector(".try_examples_content");
     iframe = document.createElement("iframe");
     iframe.src = iframeSrc;
+    iframe.title = "Interactive JupyterLite example";
     iframe.style.width = "100%";
+    var height;
     if (iframeHeight !== "None") {
       height = parseInt(iframeHeight);
     } else {
@@ -93,9 +130,7 @@ window.tryExamplesShowIframe = (
      * iframe extends beyond the viewport, in which case it will be centered
      * between the top of the iframe and the bottom of the viewport.
      */
-    const examplesTop = examples.getBoundingClientRect().top;
-    const viewportBottom = window.innerHeight;
-    const spinnerTop = 0.5 * Math.min(viewportBottom - examplesTop, height);
+    const spinnerTop = 0.5 * height;
     spinner.style.top = `${spinnerTop}px`;
     // Add negative margins to center the spinner
     spinner.style.marginTop = `-${spinnerHeight / 2}px`;
@@ -103,42 +138,49 @@ window.tryExamplesShowIframe = (
 
     iframe.style.height = `${height}px`;
     iframe.classList.add("jupyterlite_sphinx_iframe");
-    examplesContainer.classList.add("hidden");
-
     iframeContainer.appendChild(iframe);
-  } else {
-    examplesContainer.classList.add("hidden");
   }
-  iframeParentContainer.classList.remove("hidden");
+
+  // Animate open
+  iframeParentContainer.style.maxHeight =
+    iframeParentContainer.scrollHeight + "px";
+  // After the transition ends, we can remove the max-height
+  // as the iframe should resize freely
+  const onTransitionEnd = () => {
+    if (iframeParentContainer.classList.contains("try_examples_iframe_open")) {
+      iframeParentContainer.style.maxHeight = "none";
+    }
+    iframeParentContainer.removeEventListener("transitionend", onTransitionEnd);
+  };
+  iframeParentContainer.addEventListener("transitionend", onTransitionEnd);
 };
 
 window.tryExamplesHideIframe = (
   examplesContainerId,
   iframeParentContainerId,
 ) => {
-  const examplesContainer = document.getElementById(examplesContainerId);
-  const iframeParentContainer = document.getElementById(
+  window.tryExamplesShowIframe(
+    examplesContainerId,
+    null,
     iframeParentContainerId,
+    null,
+    null,
   );
-
-  iframeParentContainer.classList.add("hidden");
-  examplesContainer.classList.remove("hidden");
 };
 
 // this will be used by the "Open in tab" button that is present next
-// # to the "go back" button after an iframe is made visible.
+// to the toggle button.
 window.openInNewTab = (examplesContainerId, iframeParentContainerId) => {
-  const examplesContainer = document.getElementById(examplesContainerId);
   const iframeParentContainer = document.getElementById(
     iframeParentContainerId,
   );
 
-  window.open(
+  const iframe = iframeParentContainer.querySelector("iframe");
+  if (iframe) {
     // we make some assumption that there is a single iframe and the the src is what we want to open.
     // Maybe we should have tabs open JupyterLab by default.
-    iframeParentContainer.getElementsByTagName("iframe")[0].getAttribute("src"),
-  );
-  tryExamplesHideIframe(examplesContainerId, iframeParentContainerId);
+    window.open(iframe.getAttribute("src"));
+  }
 };
 
 /* Global variable for try_examples iframe minHeight. Defaults to 0 but can be
