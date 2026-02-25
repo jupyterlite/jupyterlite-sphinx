@@ -624,7 +624,7 @@ class _LiteDirective(SphinxDirective):
                 if jupytext is None:
                     raise ImportError(
                         "jupyterlite-sphinx requires the jupytext package to process Markdown notebooks. "
-                        'Install it with: pip install "jupyterlite-sphinx[markdown]"'
+                        'Install "jupyterlite-sphinx[markdown]" with your package manager of choice.'
                     )
                 if self._target_is_stale(notebook_path, target_path):
                     nb = jupytext.read(str(notebook_path))
