@@ -55,6 +55,7 @@ when the buttons are clicked. */
   max-height: 0;
   overflow: hidden;
   transition: max-height var(--open-duration) ease-in-out;
+  margin-top: 0.75rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
