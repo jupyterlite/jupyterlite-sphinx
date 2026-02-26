@@ -886,7 +886,11 @@ class TryExamplesDirective(SphinxDirective):
             f"onclick=\"window.tryExamplesShowIframe('{examples_div_id}',"
             f"'{iframe_div_id}','{iframe_parent_div_id}','{iframe_src}',"
             f"'{height}')\">"
-            f"{button_text}</button>" + full_screen_button_html + "</div>"
+            # TODO: what do we do if FontAwesome is not available? Find a unicode
+            # charactive alternative. PST includes FA so it should be fine, but
+            # we don't want to break if someone is not using PST.
+            f'{button_text} <i class="fa-solid fa-chevron-right try_examples_chevron"'
+            f' aria-hidden="true"></i></button>' + full_screen_button_html + "</div>"
         )
         try_it_button_node = nodes.raw("", try_it_button_html, format="html")
 

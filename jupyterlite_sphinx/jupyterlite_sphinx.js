@@ -65,8 +65,7 @@ window.tryExamplesShowIframe = (
   );
   const iframeContainer = document.getElementById(iframeContainerId);
 
-  // Find the toggle button to update its text to "Hide"
-  // when the iframe is shown, and to reset it when hidden
+  // Find the toggle button to update aria-expanded state
   const toggleButton = examplesContainer.querySelector(".try_examples_button");
 
   const isOpen = iframeParentContainer.classList.contains(
@@ -82,9 +81,6 @@ window.tryExamplesShowIframe = (
     iframeParentContainer.classList.remove("try_examples_iframe_open");
     if (toggleButton) {
       toggleButton.setAttribute("aria-expanded", "false");
-      if (toggleButton.dataset.originalText) {
-        toggleButton.textContent = toggleButton.dataset.originalText;
-      }
     }
     return;
   }
@@ -92,10 +88,6 @@ window.tryExamplesShowIframe = (
   // To expand the iframe panel
   if (toggleButton) {
     toggleButton.setAttribute("aria-expanded", "true");
-    if (!toggleButton.dataset.originalText) {
-      toggleButton.dataset.originalText = toggleButton.textContent;
-    }
-    toggleButton.textContent = "Hide";
   }
   iframeParentContainer.classList.add("try_examples_iframe_open");
 
