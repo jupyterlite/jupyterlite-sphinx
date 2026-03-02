@@ -27,8 +27,7 @@
   justify-content: flex-end;
 }
 
-.try_examples_outer_container,
-.try_examples_outer_iframe {
+.try_examples_outer_container {
   flex-direction: column-reverse;
   display: flex;
 }
@@ -37,8 +36,7 @@
  * set the display mode would lead to the iframe/container always visible.
  * */
 
-.try_examples_outer_container.hidden,
-.try_examples_outer_iframe.hidden {
+.try_examples_outer_container.hidden {
   display: none;
 }
 

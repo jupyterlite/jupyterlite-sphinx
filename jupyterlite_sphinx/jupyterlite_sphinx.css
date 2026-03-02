@@ -48,6 +48,41 @@
   display: none;
 }
 
+/* The iframe panel is collapsed by default and expands
+when the buttons are clicked. */
+.try_examples_outer_iframe {
+  --open-duration: 0.2s;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--open-duration) ease-in-out;
+  margin-top: 0.75rem;
+}
+
+.try_examples_chevron {
+  display: inline-block;
+  transition: transform var(--open-duration, 0.2s) ease-in-out;
+  margin-left: 0.3em;
+  font-size: 0.75em;
+}
+
+.try_examples_button[aria-expanded="true"] .try_examples_chevron {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .try_examples_outer_iframe {
+    --open-duration: 0s;
+  }
+
+  .try_examples_chevron {
+    transition: none;
+  }
+
+  .jupyterlite_sphinx_spinner {
+    animation: none;
+  }
+}
+
 .jupyterlite_sphinx_spinner {
   /* From https://css-loaders.com/spinner/ */
   position: absolute;
