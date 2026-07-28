@@ -611,7 +611,8 @@ class _LiteDirective(SphinxDirective):
 
             self.env.jupyterlite_notebooks.add(str(notebook_path))
 
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebooks_dir = Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+
             os.makedirs(notebooks_dir, exist_ok=True)
 
             self._assert_no_conflicting_nb_names(notebook_path, notebooks_dir)
@@ -843,7 +844,7 @@ class TryExamplesDirective(SphinxDirective):
                 nb.cells.insert(1, new_code_cell(preamble))
 
             self.content = None
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebooks_dir = Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
             self.env.temp_data["generated_notebooks"][
                 directive_key
@@ -1175,6 +1176,7 @@ def setup(app):
         rebuild="html",
     )
     app.add_config_value("try_examples_preamble", default=None, rebuild="html")
+    app.add_config_value("jupyterlite_content_dir", default=CONTENT_DIR, rebuild="html")
 
     # Allow customising the button text for each directive (this is useful
     # only when "new_tab" is set to True)
