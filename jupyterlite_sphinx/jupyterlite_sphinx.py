@@ -961,8 +961,13 @@ def conditional_process_examples(app, config):
 
 
 def inited(app: Sphinx, config):
+    if not app.config.jupyterlite_content_dir:
+        raise ValueError("jupyterlite_content_dir must be a non-zero string")
+    content_dir = Path(app.srcdir) / app.config.jupyterlite_content_dir
+    shutil.rmtree(content_dir, ignore_errors=True)
+        
     # Create the content dir
-    os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
+    content_dir.mkdir(exist_ok=True, parents=True)
 
     if (
         config.jupyterlite_bind_ipynb_suffix
@@ -1076,7 +1081,7 @@ def jupyterlite_build(app: Sphinx, error):
             *overrides,
             *contents,
             "--contents",
-            os.path.join(app.srcdir, CONTENT_DIR),
+            os.path.join(app.srcdir, app.env.config.jupyterlite_content_dir),
             *ignore_contents,
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
@@ -1140,7 +1145,6 @@ def jupyterlite_build(app: Sphinx, error):
 
     # Cleanup
     try:
-        shutil.rmtree(os.path.join(app.srcdir, CONTENT_DIR))
         os.remove(".jupyterlite.doit.db")
     except FileNotFoundError:
         pass
