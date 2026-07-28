@@ -611,7 +611,9 @@ class _LiteDirective(SphinxDirective):
 
             self.env.jupyterlite_notebooks.add(str(notebook_path))
 
-            notebooks_dir = Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            notebooks_dir = (
+                Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            )
 
             os.makedirs(notebooks_dir, exist_ok=True)
 
@@ -844,7 +846,9 @@ class TryExamplesDirective(SphinxDirective):
                 nb.cells.insert(1, new_code_cell(preamble))
 
             self.content = None
-            notebooks_dir = Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            notebooks_dir = (
+                Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            )
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
             self.env.temp_data["generated_notebooks"][
                 directive_key
@@ -965,7 +969,7 @@ def inited(app: Sphinx, config):
         raise ValueError("jupyterlite_content_dir must be a non-zero string")
     content_dir = Path(app.srcdir) / app.config.jupyterlite_content_dir
     shutil.rmtree(content_dir, ignore_errors=True)
-        
+
     # Create the content dir
     content_dir.mkdir(exist_ok=True, parents=True)
 
