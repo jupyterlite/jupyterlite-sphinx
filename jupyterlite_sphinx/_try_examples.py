@@ -205,14 +205,14 @@ def _process_latex(md_text):
                     # Join and wrap the equations, then reset
                     wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
                     equation_lines = []
-            elif line.startswith(" ") or line.startswith("\t"):
+            elif line.startswith((" ", "\t")):
                 equation_lines.append(line.strip())
         else:
             wrapped_lines.append(line)
 
         # If you leave the indented block, the math block ends
         if in_math_block and not (
-            line.startswith(" ") or line.startswith("\t") or line.strip() == ""
+            line.startswith((" ", "\t")) or line.strip() == ""
         ):
             in_math_block = False
             if equation_lines:
