@@ -530,22 +530,18 @@ class _LiteDirective(SphinxDirective):
         # Only look for conflicts in source directories and among referenced notebooks.
         # We do this to prevent conflicts with other files, say, in the "_contents/"
         # directory as a result of a previous failed/interrupted build.
-        if source_path.parent != notebooks_dir:
-
-            # We only consider conflicts if notebooks are actually referenced in
-            # a directive, to prevent false posiitves from being raised.
-            if hasattr(self.env, "jupyterlite_notebooks"):
-                for existing_nb in self.env.jupyterlite_notebooks:
-                    existing_path = Path(existing_nb)
-                    if (
-                        existing_path.stem == target_stem
-                        and existing_path != source_path
-                    ):
-
-                        raise RuntimeError(
-                            "All notebooks marked for inclusion with JupyterLite must have a "
-                            f"unique file basename. Found conflict between {source_path} and {existing_path}."
-                        )
+        # We only consider conflicts if notebooks are actually referenced in
+        # a directive, to prevent false posiitves from being raised.
+        if source_path.parent != notebooks_dir and hasattr(
+            self.env, "jupyterlite_notebooks"
+        ):
+            for existing_nb in self.env.jupyterlite_notebooks:
+                existing_path = Path(existing_nb)
+                if existing_path.stem == target_stem and existing_path != source_path:
+                    raise RuntimeError(
+                        "All notebooks marked for inclusion with JupyterLite must have a "
+                        f"unique file basename. Found conflict between {source_path} and {existing_path}."
+                    )
 
         return target_ipynb
 
