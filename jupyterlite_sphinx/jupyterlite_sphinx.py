@@ -1,34 +1,29 @@
-import os
-import sys
 import json
-from uuid import uuid4
-import shutil
+import os
 import re
-from typing import Dict, Any, List
-
-from pathlib import Path
-
-from urllib.parse import quote
-
+import shutil
 import subprocess
+import sys
+from pathlib import Path
 from subprocess import CompletedProcess
+from typing import Any, ClassVar
+from urllib.parse import quote
+from uuid import uuid4
 
-from docutils.parsers.rst import directives
-from docutils.nodes import SkipNode, Element
+import nbformat
 from docutils import nodes
-
+from docutils.nodes import Element, SkipNode
+from docutils.parsers.rst import directives
 from sphinx.application import Sphinx
+from sphinx.parsers import RSTParser
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
-from sphinx.parsers import RSTParser
 
 from ._try_examples import (
     examples_to_notebook,
     insert_try_examples_directive,
     new_code_cell,
 )
-
-import nbformat
 
 try:
     import jupytext
@@ -143,10 +138,11 @@ class _InTab(Element):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         app_path = self.lite_app
         if notebook is not None:
             lite_options["path"] = notebook
@@ -178,11 +174,12 @@ class _LiteIframe(_PromptedIframe):
         rawsource="",
         *children,
         prefix=JUPYTERLITE_DIR,
-        content=[],
+        content=None,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         if content:
             code_lines = ["" if not line.strip() else line for line in content]
             code = "\n".join(code_lines)
@@ -274,12 +271,13 @@ class RepliteTab(Element):
         rawsource="",
         *children,
         prefix=JUPYTERLITE_DIR,
-        content=[],
+        content=None,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         # For a new-tabbed variant, we need to ensure we process the content
         # into properly encoded code for passing it to the URL.
         if content:
@@ -355,9 +353,10 @@ class VoiciIframe(_PromptedIframe):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         app_path = VoiciBase.get_full_path(notebook)
         options = _build_options(lite_options)
 
@@ -378,10 +377,11 @@ class VoiciTab(Element):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
 
         self.lab_src = f"{prefix}/"
 
@@ -414,7 +414,7 @@ class RepliteDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "kernel": directives.unchanged,
@@ -497,7 +497,7 @@ class _LiteDirective(SphinxDirective):
     has_content = False
     optional_arguments = 1
     final_argument_whitespace = True
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "theme": directives.unchanged,
@@ -530,28 +530,24 @@ class _LiteDirective(SphinxDirective):
         # Only look for conflicts in source directories and among referenced notebooks.
         # We do this to prevent conflicts with other files, say, in the "_contents/"
         # directory as a result of a previous failed/interrupted build.
-        if source_path.parent != notebooks_dir:
-
-            # We only consider conflicts if notebooks are actually referenced in
-            # a directive, to prevent false posiitves from being raised.
-            if hasattr(self.env, "jupyterlite_notebooks"):
-                for existing_nb in self.env.jupyterlite_notebooks:
-                    existing_path = Path(existing_nb)
-                    if (
-                        existing_path.stem == target_stem
-                        and existing_path != source_path
-                    ):
-
-                        raise RuntimeError(
-                            "All notebooks marked for inclusion with JupyterLite must have a "
-                            f"unique file basename. Found conflict between {source_path} and {existing_path}."
-                        )
+        # We only consider conflicts if notebooks are actually referenced in
+        # a directive, to prevent false posiitves from being raised.
+        if source_path.parent != notebooks_dir and hasattr(
+            self.env, "jupyterlite_notebooks"
+        ):
+            for existing_nb in self.env.jupyterlite_notebooks:
+                existing_path = Path(existing_nb)
+                if existing_path.stem == target_stem and existing_path != source_path:
+                    raise RuntimeError(
+                        "All notebooks marked for inclusion with JupyterLite must have a "
+                        f"unique file basename. Found conflict between {source_path} and {existing_path}."
+                    )
 
         return target_ipynb
 
     def _strip_notebook_cells(
         self, nb: nbformat.NotebookNode
-    ) -> List[nbformat.NotebookNode]:
+    ) -> list[nbformat.NotebookNode]:
         """Strip cells based on the presence of the "jupyterlite_sphinx_strip" tag
         in the metadata. The content meant to be stripped must be inside its own cell
         cell so that the cell itself gets removed from the notebooks. This is so that
@@ -703,7 +699,7 @@ class BaseJupyterViewDirective(_LiteDirective):
     iframe_cls = None  # to be defined by subclasses
     newtab_cls = None  # to be defined by subclasses
 
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "theme": directives.unchanged,
@@ -777,7 +773,7 @@ class TryExamplesDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    option_spec = {
+    option_spec: ClassVar = {
         "height": directives.unchanged,
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
@@ -933,7 +929,7 @@ class TryExamplesDirective(SphinxDirective):
         return [content_container_node, notebook_container, script_node]
 
 
-def _process_docstring_examples(app: Sphinx, docname: str, source: List[str]) -> None:
+def _process_docstring_examples(app: Sphinx, docname: str, source: list[str]) -> None:
     source_path: os.PathLike = Path(app.env.doc2path(docname))
     if source_path.suffix == ".py":
         source[0] = insert_try_examples_directive(source[0])
@@ -1000,7 +996,7 @@ def jupyterlite_build(app: Sphinx, error):
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
 
-        jupyterlite_build_command_options: Dict[str, Any] = (
+        jupyterlite_build_command_options: dict[str, Any] = (
             app.env.config.jupyterlite_build_command_options
         )
 
@@ -1101,10 +1097,10 @@ def jupyterlite_build(app: Sphinx, error):
                 command.extend([f"--{key}", str(value)])
 
         assert all(
-            [isinstance(s, str) for s in command]
+            isinstance(s, str) for s in command
         ), f"Expected all commands arguments to be a str, got {command}"
 
-        kwargs: Dict[str, Any] = {}
+        kwargs: dict[str, Any] = {}
         if app.env.config.jupyterlite_silence:
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
