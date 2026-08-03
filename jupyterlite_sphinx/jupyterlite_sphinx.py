@@ -1097,7 +1097,7 @@ def jupyterlite_build(app: Sphinx, error):
                 command.extend([f"--{key}", str(value)])
 
         assert all(
-            [isinstance(s, str) for s in command]
+            isinstance(s, str) for s in command
         ), f"Expected all commands arguments to be a str, got {command}"
 
         kwargs: dict[str, Any] = {}
