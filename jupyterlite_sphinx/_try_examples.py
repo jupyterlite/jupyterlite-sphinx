@@ -211,9 +211,7 @@ def _process_latex(md_text):
             wrapped_lines.append(line)
 
         # If you leave the indented block, the math block ends
-        if in_math_block and not (
-            line.startswith((" ", "\t")) or line.strip() == ""
-        ):
+        if in_math_block and not (line.startswith((" ", "\t")) or line.strip() == ""):
             in_math_block = False
             if equation_lines:
                 wrapped_lines.append(f"$$ {' '.join(equation_lines)} $$")
@@ -395,7 +393,9 @@ def insert_try_examples_directive(lines, **options):
         right_index < len(lines)
         and "!! processed by numpydoc !!" in lines[right_index]
         # Sometimes the .. appears on an earlier line than !! processed by numpydoc !!
-        and not re.search(r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index])
+        and not re.search(
+            r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index]
+        )
     ):
         while right_index > 0 and lines[right_index].strip() != "..":
             right_index -= 1
