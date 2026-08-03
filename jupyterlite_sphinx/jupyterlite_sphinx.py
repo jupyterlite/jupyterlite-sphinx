@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 from subprocess import CompletedProcess
-from typing import Any
+from typing import Any, ClassVar
 from urllib.parse import quote
 from uuid import uuid4
 
@@ -414,7 +414,7 @@ class RepliteDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "kernel": directives.unchanged,
@@ -497,7 +497,7 @@ class _LiteDirective(SphinxDirective):
     has_content = False
     optional_arguments = 1
     final_argument_whitespace = True
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "theme": directives.unchanged,
@@ -703,7 +703,7 @@ class BaseJupyterViewDirective(_LiteDirective):
     iframe_cls = None  # to be defined by subclasses
     newtab_cls = None  # to be defined by subclasses
 
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "theme": directives.unchanged,
@@ -777,7 +777,7 @@ class TryExamplesDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    option_spec = {
+    option_spec: ClassVar = {
         "height": directives.unchanged,
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
