@@ -138,10 +138,11 @@ class _InTab(Element):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         app_path = self.lite_app
         if notebook is not None:
             lite_options["path"] = notebook
@@ -173,11 +174,12 @@ class _LiteIframe(_PromptedIframe):
         rawsource="",
         *children,
         prefix=JUPYTERLITE_DIR,
-        content=[],
+        content=None,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         if content:
             code_lines = ["" if not line.strip() else line for line in content]
             code = "\n".join(code_lines)
@@ -269,12 +271,13 @@ class RepliteTab(Element):
         rawsource="",
         *children,
         prefix=JUPYTERLITE_DIR,
-        content=[],
+        content=None,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         # For a new-tabbed variant, we need to ensure we process the content
         # into properly encoded code for passing it to the URL.
         if content:
@@ -350,9 +353,10 @@ class VoiciIframe(_PromptedIframe):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         app_path = VoiciBase.get_full_path(notebook)
         options = _build_options(lite_options)
 
@@ -373,10 +377,11 @@ class VoiciTab(Element):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
 
         self.lab_src = f"{prefix}/"
 
