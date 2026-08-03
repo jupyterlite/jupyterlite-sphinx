@@ -391,13 +391,14 @@ def insert_try_examples_directive(lines, **options):
         right_index += 1
 
     # Check if we've reached the end of the docstring
-    if right_index < len(lines) and "!! processed by numpydoc !!" in lines[right_index]:
+    if (
+        right_index < len(lines)
+        and "!! processed by numpydoc !!" in lines[right_index]
         # Sometimes the .. appears on an earlier line than !! processed by numpydoc !!
-        if not re.search(
-            r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index]
-        ):
-            while right_index > 0 and lines[right_index].strip() != "..":
-                right_index -= 1
+        and not re.search(r"\.\.\s+\!\! processed by numpy doc \!\!", lines[right_index])
+    ):
+        while right_index > 0 and lines[right_index].strip() != "..":
+            right_index -= 1
 
     # Add the ".. try_examples::" directive and indent the content of the Examples section
     new_lines = (
