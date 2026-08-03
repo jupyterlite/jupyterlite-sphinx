@@ -1,34 +1,29 @@
-import os
-import sys
 import json
-from uuid import uuid4
-import shutil
+import os
 import re
-from typing import Dict, Any, List
-
-from pathlib import Path
-
-from urllib.parse import quote
-
+import shutil
 import subprocess
+import sys
+from pathlib import Path
 from subprocess import CompletedProcess
+from typing import Any
+from urllib.parse import quote
+from uuid import uuid4
 
-from docutils.parsers.rst import directives
-from docutils.nodes import SkipNode, Element
+import nbformat
 from docutils import nodes
-
+from docutils.nodes import Element, SkipNode
+from docutils.parsers.rst import directives
 from sphinx.application import Sphinx
+from sphinx.parsers import RSTParser
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
-from sphinx.parsers import RSTParser
 
 from ._try_examples import (
     examples_to_notebook,
     insert_try_examples_directive,
     new_code_cell,
 )
-
-import nbformat
 
 try:
     import jupytext
@@ -551,7 +546,7 @@ class _LiteDirective(SphinxDirective):
 
     def _strip_notebook_cells(
         self, nb: nbformat.NotebookNode
-    ) -> List[nbformat.NotebookNode]:
+    ) -> list[nbformat.NotebookNode]:
         """Strip cells based on the presence of the "jupyterlite_sphinx_strip" tag
         in the metadata. The content meant to be stripped must be inside its own cell
         cell so that the cell itself gets removed from the notebooks. This is so that
@@ -933,7 +928,7 @@ class TryExamplesDirective(SphinxDirective):
         return [content_container_node, notebook_container, script_node]
 
 
-def _process_docstring_examples(app: Sphinx, docname: str, source: List[str]) -> None:
+def _process_docstring_examples(app: Sphinx, docname: str, source: list[str]) -> None:
     source_path: os.PathLike = Path(app.env.doc2path(docname))
     if source_path.suffix == ".py":
         source[0] = insert_try_examples_directive(source[0])
@@ -1000,7 +995,7 @@ def jupyterlite_build(app: Sphinx, error):
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
 
-        jupyterlite_build_command_options: Dict[str, Any] = (
+        jupyterlite_build_command_options: dict[str, Any] = (
             app.env.config.jupyterlite_build_command_options
         )
 
@@ -1104,7 +1099,7 @@ def jupyterlite_build(app: Sphinx, error):
             [isinstance(s, str) for s in command]
         ), f"Expected all commands arguments to be a str, got {command}"
 
-        kwargs: Dict[str, Any] = {}
+        kwargs: dict[str, Any] = {}
         if app.env.config.jupyterlite_silence:
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE

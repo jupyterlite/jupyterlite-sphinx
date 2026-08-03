@@ -1,6 +1,7 @@
+import re
+
 import nbformat as nbf
 from nbformat.v4 import new_code_cell, new_markdown_cell
-import re
 
 
 def examples_to_notebook(input_lines, *, warning_text=None):
