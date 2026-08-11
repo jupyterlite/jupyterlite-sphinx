@@ -5,15 +5,15 @@ dependencies:
   - pip
   - jupyter_server
   - jupyterlab_server
-  - jupyterlite-core >=0.3,<0.8
+  - jupyterlite-core >=0.3,<0.9
   - jupytext
   - pydata-sphinx-theme
-  - micromamba=2.0.5
+  - micromamba
   - myst-parser
   - docutils
   - sphinx
   - black
   - voici
   - pip:
-      - .
+      - .[markdown]
       - jupyterlite-xeus >=2.1.2
