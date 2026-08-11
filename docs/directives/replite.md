@@ -174,7 +174,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```rst
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :clear_cells_on_execute: True
 
@@ -185,7 +185,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```{eval-rst}
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :clear_cells_on_execute: True
 
@@ -200,7 +200,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```rst
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :clear_code_content_on_execute: True
 
@@ -211,7 +211,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```{eval-rst}
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :clear_code_content_on_execute: True
 
@@ -226,7 +226,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```rst
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :hide_code_input: True
 
@@ -237,7 +237,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```{eval-rst}
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :hide_code_input: True
 
@@ -252,7 +252,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```rst
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :prompt_cell_position: top
 
@@ -262,7 +262,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```{eval-rst}
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :prompt_cell_position: top
 
@@ -276,7 +276,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```rst
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :show_banner: False
 
@@ -286,7 +286,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```{eval-rst}
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :height: 600px
       :show_banner: False
 
@@ -301,7 +301,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```rst
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :prompt_cell_position: left
       :hide_code_input: True
       :show_banner: False
@@ -322,7 +322,7 @@ global value using an additional `:new_tab_button_text:` parameter:
 
    ```{eval-rst}
    .. replite::
-      :kernel: xeus-python
+      :kernel: xpython
       :prompt_cell_position: left
       :hide_code_input: True
       :show_banner: False

@@ -6,7 +6,7 @@ A Sphinx extension that provides utilities for embedding JupyterLite in your doc
 
 ```{eval-rst}
 .. replite::
-   :kernel: xeus-python
+   :kernel: xpython
    :toolbar: 0
    :theme: JupyterLab Light
    :width: 100%
