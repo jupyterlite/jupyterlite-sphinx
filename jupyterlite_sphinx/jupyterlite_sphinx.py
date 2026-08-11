@@ -607,7 +607,10 @@ class _LiteDirective(SphinxDirective):
 
             self.env.jupyterlite_notebooks.add(str(notebook_path))
 
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebooks_dir = (
+                Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            )
+
             os.makedirs(notebooks_dir, exist_ok=True)
 
             self._assert_no_conflicting_nb_names(notebook_path, notebooks_dir)
@@ -839,7 +842,9 @@ class TryExamplesDirective(SphinxDirective):
                 nb.cells.insert(1, new_code_cell(preamble))
 
             self.content = None
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebooks_dir = (
+                Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            )
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
             self.env.temp_data["generated_notebooks"][
                 directive_key
@@ -956,8 +961,13 @@ def conditional_process_examples(app, config):
 
 
 def inited(app: Sphinx, config):
+    if not app.config.jupyterlite_content_dir:
+        raise ValueError("jupyterlite_content_dir must be a non-zero string")
+    content_dir = Path(app.srcdir) / app.config.jupyterlite_content_dir
+    shutil.rmtree(content_dir, ignore_errors=True)
+
     # Create the content dir
-    os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
+    content_dir.mkdir(exist_ok=True, parents=True)
 
     if (
         config.jupyterlite_bind_ipynb_suffix
@@ -1071,7 +1081,7 @@ def jupyterlite_build(app: Sphinx, error):
             *overrides,
             *contents,
             "--contents",
-            os.path.join(app.srcdir, CONTENT_DIR),
+            os.path.join(app.srcdir, app.env.config.jupyterlite_content_dir),
             *ignore_contents,
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
@@ -1135,7 +1145,6 @@ def jupyterlite_build(app: Sphinx, error):
 
     # Cleanup
     try:
-        shutil.rmtree(os.path.join(app.srcdir, CONTENT_DIR))
         os.remove(".jupyterlite.doit.db")
     except FileNotFoundError:
         pass
@@ -1171,6 +1180,7 @@ def setup(app):
         rebuild="html",
     )
     app.add_config_value("try_examples_preamble", default=None, rebuild="html")
+    app.add_config_value("jupyterlite_content_dir", default=CONTENT_DIR, rebuild="html")
 
     # Allow customising the button text for each directive (this is useful
     # only when "new_tab" is set to True)
