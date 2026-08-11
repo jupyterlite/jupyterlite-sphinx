@@ -473,8 +473,7 @@ class RepliteDirective(SphinxDirective):
             "prompt_cell_position": "promptCellPosition",
         }
 
-        for option in repl_config_mappings:
-            config_option = repl_config_mappings[option]
+        for option, config_option in repl_config_mappings.items():
             if option == "execute":
                 value = self.options.pop(
                     option, str(self.env.config.replite_auto_execute)
