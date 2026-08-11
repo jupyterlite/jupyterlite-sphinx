@@ -1,34 +1,29 @@
-import os
-import sys
 import json
-from uuid import uuid4
-import shutil
+import os
 import re
-from typing import Dict, Any, List
-
-from pathlib import Path
-
-from urllib.parse import quote
-
+import shutil
 import subprocess
+import sys
+from pathlib import Path
 from subprocess import CompletedProcess
+from typing import Any, ClassVar
+from urllib.parse import quote
+from uuid import uuid4
 
-from docutils.parsers.rst import directives
-from docutils.nodes import SkipNode, Element
+import nbformat
 from docutils import nodes
-
+from docutils.nodes import Element, SkipNode
+from docutils.parsers.rst import directives
 from sphinx.application import Sphinx
+from sphinx.parsers import RSTParser
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
-from sphinx.parsers import RSTParser
 
 from ._try_examples import (
     examples_to_notebook,
     insert_try_examples_directive,
     new_code_cell,
 )
-
-import nbformat
 
 try:
     import jupytext
@@ -143,10 +138,11 @@ class _InTab(Element):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         app_path = self.lite_app
         if notebook is not None:
             lite_options["path"] = notebook
@@ -178,11 +174,12 @@ class _LiteIframe(_PromptedIframe):
         rawsource="",
         *children,
         prefix=JUPYTERLITE_DIR,
-        content=[],
+        content=None,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         if content:
             code_lines = ["" if not line.strip() else line for line in content]
             code = "\n".join(code_lines)
@@ -274,12 +271,13 @@ class RepliteTab(Element):
         rawsource="",
         *children,
         prefix=JUPYTERLITE_DIR,
-        content=[],
+        content=None,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         # For a new-tabbed variant, we need to ensure we process the content
         # into properly encoded code for passing it to the URL.
         if content:
@@ -355,9 +353,10 @@ class VoiciIframe(_PromptedIframe):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
         app_path = VoiciBase.get_full_path(notebook)
         options = _build_options(lite_options)
 
@@ -378,10 +377,11 @@ class VoiciTab(Element):
         *children,
         prefix=JUPYTERLITE_DIR,
         notebook=None,
-        lite_options={},
+        lite_options=None,
         button_text=None,
         **attributes,
     ):
+        lite_options = lite_options if lite_options is not None else {}
 
         self.lab_src = f"{prefix}/"
 
@@ -414,7 +414,7 @@ class RepliteDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "kernel": directives.unchanged,
@@ -497,7 +497,7 @@ class _LiteDirective(SphinxDirective):
     has_content = False
     optional_arguments = 1
     final_argument_whitespace = True
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "theme": directives.unchanged,
@@ -518,7 +518,7 @@ class _LiteDirective(SphinxDirective):
 
     def _strip_notebook_cells(
         self, nb: nbformat.NotebookNode
-    ) -> List[nbformat.NotebookNode]:
+    ) -> list[nbformat.NotebookNode]:
         """Strip cells based on the presence of the "jupyterlite_sphinx_strip" tag
         in the metadata. The content meant to be stripped must be inside its own cell
         cell so that the cell itself gets removed from the notebooks. This is so that
@@ -578,7 +578,10 @@ class _LiteDirective(SphinxDirective):
 
             self.env.jupyterlite_notebooks.add(str(notebook_path))
 
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebooks_dir = (
+                Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            )
+
             os.makedirs(notebooks_dir, exist_ok=True)
 
             notebook_is_stripped: bool = self.env.config.strip_tagged_cells
@@ -671,7 +674,7 @@ class BaseJupyterViewDirective(_LiteDirective):
     iframe_cls = None  # to be defined by subclasses
     newtab_cls = None  # to be defined by subclasses
 
-    option_spec = {
+    option_spec: ClassVar = {
         "width": directives.unchanged,
         "height": directives.unchanged,
         "theme": directives.unchanged,
@@ -745,7 +748,7 @@ class TryExamplesDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    option_spec = {
+    option_spec: ClassVar = {
         "height": directives.unchanged,
         "theme": directives.unchanged,
         "button_text": directives.unchanged,
@@ -811,7 +814,9 @@ class TryExamplesDirective(SphinxDirective):
                 nb.cells.insert(1, new_code_cell(preamble))
 
             self.content = None
-            notebooks_dir = Path(self.env.app.srcdir) / CONTENT_DIR
+            notebooks_dir = (
+                Path(self.env.app.srcdir) / self.env.config.jupyterlite_content_dir
+            )
             notebook_unique_name = f"{uuid4()}.ipynb".replace("-", "_")
             self.env.temp_data["generated_notebooks"][
                 directive_key
@@ -901,7 +906,7 @@ class TryExamplesDirective(SphinxDirective):
         return [content_container_node, notebook_container, script_node]
 
 
-def _process_docstring_examples(app: Sphinx, docname: str, source: List[str]) -> None:
+def _process_docstring_examples(app: Sphinx, docname: str, source: list[str]) -> None:
     source_path: os.PathLike = Path(app.env.doc2path(docname))
     if source_path.suffix == ".py":
         source[0] = insert_try_examples_directive(source[0])
@@ -928,8 +933,13 @@ def conditional_process_examples(app, config):
 
 
 def inited(app: Sphinx, config):
+    if not app.config.jupyterlite_content_dir:
+        raise ValueError("jupyterlite_content_dir must be a non-zero string")
+    content_dir = Path(app.srcdir) / app.config.jupyterlite_content_dir
+    shutil.rmtree(content_dir, ignore_errors=True)
+
     # Create the content dir
-    os.makedirs(os.path.join(app.srcdir, CONTENT_DIR), exist_ok=True)
+    content_dir.mkdir(exist_ok=True, parents=True)
 
     if (
         config.jupyterlite_bind_ipynb_suffix
@@ -968,7 +978,7 @@ def jupyterlite_build(app: Sphinx, error):
 
         jupyterlite_dir = str(app.env.config.jupyterlite_dir)
 
-        jupyterlite_build_command_options: Dict[str, Any] = (
+        jupyterlite_build_command_options: dict[str, Any] = (
             app.env.config.jupyterlite_build_command_options
         )
 
@@ -1053,7 +1063,7 @@ def jupyterlite_build(app: Sphinx, error):
             *overrides,
             *contents,
             "--contents",
-            os.path.join(app.srcdir, CONTENT_DIR),
+            os.path.join(app.srcdir, app.env.config.jupyterlite_content_dir),
             *ignore_contents,
             "--output-dir",
             os.path.join(app.outdir, JUPYTERLITE_DIR),
@@ -1079,10 +1089,10 @@ def jupyterlite_build(app: Sphinx, error):
                 command.extend([f"--{key}", str(value)])
 
         assert all(
-            [isinstance(s, str) for s in command]
+            isinstance(s, str) for s in command
         ), f"Expected all commands arguments to be a str, got {command}"
 
-        kwargs: Dict[str, Any] = {}
+        kwargs: dict[str, Any] = {}
         if app.env.config.jupyterlite_silence:
             kwargs["stdout"] = subprocess.PIPE
             kwargs["stderr"] = subprocess.PIPE
@@ -1117,7 +1127,6 @@ def jupyterlite_build(app: Sphinx, error):
 
     # Cleanup
     try:
-        shutil.rmtree(os.path.join(app.srcdir, CONTENT_DIR))
         os.remove(".jupyterlite.doit.db")
     except FileNotFoundError:
         pass
@@ -1153,6 +1162,7 @@ def setup(app):
         rebuild="html",
     )
     app.add_config_value("try_examples_preamble", default=None, rebuild="html")
+    app.add_config_value("jupyterlite_content_dir", default=CONTENT_DIR, rebuild="html")
 
     # Allow customising the button text for each directive (this is useful
     # only when "new_tab" is set to True)

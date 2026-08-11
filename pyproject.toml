@@ -16,7 +16,7 @@ dependencies = [
     "docutils",
     "jupyter_server",
     "jupyterlab_server",
-    "jupyterlite-core >=0.2,<0.8",
+    "jupyterlite-core >=0.2,<0.9",
     "nbformat",
     "sphinx>=4",
 ]
@@ -31,7 +31,7 @@ dev = [
 docs = [
     "myst_parser",
     "pydata-sphinx-theme",
-    "jupyterlite-xeus>=0.1.8,<4",
+    "jupyterlite-xeus>=0.1.8",
 ]
 
 [tool.hatch.version]
