@@ -2,6 +2,44 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.23.0
+
+([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.22.1...fa46e847171951ba9a9baa35dc1930cdfd7a0c20))
+
+### Enhancements made
+
+- allow configuring the path of the contents directory [#346](https://github.com/jupyterlite/jupyterlite-sphinx/pull/346) ([@keewis](https://github.com/keewis), [@agriyakhetarpal](https://github.com/agriyakhetarpal), [@martinRenou](https://github.com/martinRenou))
+- Un-flatten JupyterLite contents: preserve notebook paths and directory structure [#337](https://github.com/jupyterlite/jupyterlite-sphinx/pull/337) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@martinRenou](https://github.com/martinRenou))
+- run `jupyter lite build` with `check=False` [#332](https://github.com/jupyterlite/jupyterlite-sphinx/pull/332) ([@keewis](https://github.com/keewis), [@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Add more REPL customisation features for JupyterLite 0.6.0 and later [#290](https://github.com/jupyterlite/jupyterlite-sphinx/pull/290) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@jtpio](https://github.com/jtpio), [@martinRenou](https://github.com/martinRenou))
+
+### Bugs fixed
+
+- Fix overflow for JupyterLite iframes when added by directives used inside PST admonitions [#333](https://github.com/jupyterlite/jupyterlite-sphinx/pull/333) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@martinRenou](https://github.com/martinRenou))
+
+### Maintenance and upkeep improvements
+
+- Allow for JupyterLite 0.8.0 [#348](https://github.com/jupyterlite/jupyterlite-sphinx/pull/348) ([@jtpio](https://github.com/jtpio), [@agriyakhetarpal](https://github.com/agriyakhetarpal))
+- Unpin `jupyterlite-xeus` in docs dependency group and use latest micromamba for docs builds [#339](https://github.com/jupyterlite/jupyterlite-sphinx/pull/339) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@martinRenou](https://github.com/martinRenou))
+- Make `jupytext` an optional dependency [#336](https://github.com/jupyterlite/jupyterlite-sphinx/pull/336) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@martinRenou](https://github.com/martinRenou), [@mfisher87](https://github.com/mfisher87))
+- Use dependency groups instead of optional dependencies [#335](https://github.com/jupyterlite/jupyterlite-sphinx/pull/335) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@mfisher87](https://github.com/mfisher87))
+- Drop support for Python 3.9 [#334](https://github.com/jupyterlite/jupyterlite-sphinx/pull/334) ([@agriyakhetarpal](https://github.com/agriyakhetarpal), [@mfisher87](https://github.com/mfisher87))
+
+### Documentation improvements
+
+- Update to latest emscripten-forge [#349](https://github.com/jupyterlite/jupyterlite-sphinx/pull/349) ([@martinRenou](https://github.com/martinRenou))
+
+### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2026-02-16&to=2026-08-11&type=c))
+
+@agriyakhetarpal ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2026-02-16..2026-08-11&type=Issues)) | @jtpio ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Ajtpio+updated%3A2026-02-16..2026-08-11&type=Issues)) | @keewis ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Akeewis+updated%3A2026-02-16..2026-08-11&type=Issues)) | @martinRenou ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2026-02-16..2026-08-11&type=Issues)) | @mfisher87 ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amfisher87+updated%3A2026-02-16..2026-08-11&type=Issues))
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.22.1
 
 ([Full Changelog](https://github.com/jupyterlite/jupyterlite-sphinx/compare/v0.22.0...4e19505b62253ad1320d23672c77903e0b69da9f))
@@ -26,8 +64,6 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 ([GitHub contributors page for this release](https://github.com/jupyterlite/jupyterlite-sphinx/graphs/contributors?from=2025-09-19&to=2026-02-16&type=c))
 
 @agriyakhetarpal ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Aagriyakhetarpal+updated%3A2025-09-19..2026-02-16&type=Issues)) | @Carreau ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3ACarreau+updated%3A2025-09-19..2026-02-16&type=Issues)) | @keewis ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Akeewis+updated%3A2025-09-19..2026-02-16&type=Issues)) | @martinRenou ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3AmartinRenou+updated%3A2025-09-19..2026-02-16&type=Issues)) | @mfisher87 ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Amfisher87+updated%3A2025-09-19..2026-02-16&type=Issues)) | @rossbar ([activity](https://github.com/search?q=repo%3Ajupyterlite%2Fjupyterlite-sphinx+involves%3Arossbar+updated%3A2025-09-19..2026-02-16&type=Issues))
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.22.0
 
