@@ -4,6 +4,9 @@
 }
 
 .try_examples_button {
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
   background-color: var(--jupyter-light-primary);
   border: none;
   padding: 5px 10px;

@@ -104,3 +104,9 @@ div.admonition p.admonition-title ~ iframe.jupyterlite_sphinx_raw_iframe {
 div.admonition p.admonition-title ~ div.jupyterlite_sphinx_iframe_container {
   width: calc(100% - 2 * var(--jls-admonition-indent));
 }
+
+a.try_examples_button {
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
