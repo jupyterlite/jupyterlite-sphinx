@@ -49,8 +49,8 @@ Say you want to install NumPy, Matplotlib and ipycanvas, it can be done by creat
 ```yaml
 name: xeus-python-kernel
 channels:
-  - https://repo.mamba.pm/emscripten-forge
-  - https://repo.mamba.pm/conda-forge
+  - https://prefix.dev/emscripten-forge-4x
+  - https://prefix.dev/conda-forge
 dependencies:
   - numpy
   - matplotlib
